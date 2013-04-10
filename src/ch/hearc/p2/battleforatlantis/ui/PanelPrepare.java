@@ -7,12 +7,12 @@ import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 
 public class PanelPrepare extends JPanel
 {
-
+	private FrameMain rootFrame;
 	private Ship selectedShip;
 
-	public PanelPrepare()
+	public PanelPrepare(FrameMain rootFrame)
 	{
-
+		this.rootFrame = rootFrame;
 	}
 
 	public void select(Ship ship)
@@ -32,7 +32,7 @@ public class PanelPrepare extends JPanel
 
 	public void start()
 	{
-
+		rootFrame.startGame();
 	}
 
 }

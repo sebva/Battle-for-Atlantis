@@ -10,13 +10,14 @@ import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 
 public class PanelPlay extends JPanel
 {
-
 	private Map levelMe;
 	private Map levelOther;
+	
+	private FrameMain rootFrame;
 
-	public PanelPlay()
+	public PanelPlay(FrameMain rootFrame)
 	{
-
+		this.rootFrame = rootFrame;
 	}
 
 	public void shoot(Box location)
@@ -46,7 +47,8 @@ public class PanelPlay extends JPanel
 
 	public void endGame(boolean isWinner)
 	{
-
+		DialogEndGame.announceGameResult(this, isWinner);
+		rootFrame.endGame();
 	}
 
 	public void setActiveMap(Player pt, MapType map)

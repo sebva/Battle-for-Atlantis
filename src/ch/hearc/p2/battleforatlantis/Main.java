@@ -11,13 +11,13 @@ public class Main
 {
 
 	/**
-	 * Point d'entrée de l'application
+	 * Unique entry point of the application
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args)
 	{
-		// Configuration du Logger
+		// Logger configuration
 		Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 		log.setLevel(Level.FINEST);
 		log.setFilter(new Filter()
@@ -25,7 +25,7 @@ public class Main
 			@Override
 			public boolean isLoggable(LogRecord _arg0)
 			{
-				// Aucun filtrage
+				// No filtering applied
 				return true;
 			}
 		});
