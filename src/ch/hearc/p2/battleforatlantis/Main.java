@@ -5,6 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 
 public class Main
@@ -13,7 +16,7 @@ public class Main
 	/**
 	 * Unique entry point of the application
 	 * 
-	 * @param args
+	 * @param args Ignored
 	 */
 	public static void main(String[] args)
 	{
@@ -30,7 +33,18 @@ public class Main
 			}
 		});
 
-		new FrameMain();
+		FrameMain frameMain = new FrameMain();
+		
+		// Use the system look and feel
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		SwingUtilities.updateComponentTreeUI(frameMain);
 	}
 
 }

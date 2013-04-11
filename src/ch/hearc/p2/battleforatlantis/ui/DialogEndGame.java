@@ -9,6 +9,11 @@ import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class DialogEndGame extends JDialog
 {
+	/**
+	 * Announce the game result to the user
+	 * @param parent The JOptionPane's parent
+	 * @param isWinner true if the local player won the game
+	 */
 	public static void announceGameResult(Component parent, boolean isWinner)
 	{
 		String title, message;

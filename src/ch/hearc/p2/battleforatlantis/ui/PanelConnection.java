@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -100,7 +101,10 @@ public class PanelConnection extends JPanel
 
 	public void directConnect()
 	{
-
+		// TODO Do something with the address
+		InetAddress addr = DialogDirectConnect.promptUserForAddress(this);
+		if(addr != null)
+			rootFrame.placeShips();
 	}
 
 	public void backToMenu()

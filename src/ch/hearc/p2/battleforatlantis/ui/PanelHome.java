@@ -3,7 +3,6 @@ package ch.hearc.p2.battleforatlantis.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
