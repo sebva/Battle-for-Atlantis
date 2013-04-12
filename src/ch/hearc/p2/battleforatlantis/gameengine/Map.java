@@ -22,7 +22,7 @@ public class Map extends JPanel
 		this.height = height;
 
 		boxes = new Box[width][height];
-		setLayout(new GridLayout(height, width));
+		setLayout(new GridLayout(height, width,0,0));
 		
 		for (int i = 0; i < width; i++)
 		{
