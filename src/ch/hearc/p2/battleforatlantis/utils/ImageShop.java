@@ -29,6 +29,7 @@ public final class ImageShop
 
 	public static final Image UI_BUTTON = loadImage(UI_FOLDER + "bouton.png");
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
+	public static final Image UI_LOGO = loadImage(UI_FOLDER + "logo.png");
 
 	public enum ShipType
 	{

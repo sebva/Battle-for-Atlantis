@@ -1,6 +1,7 @@
 package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,10 +15,7 @@ import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelHome extends JPanel
-{
-	private static final int kHgap = 30;
-	private static final int kVgap = 0;
-	
+{	
 	private FrameMain rootFrame;
 	
 	private class PanelMenu extends JPanel
@@ -41,6 +39,8 @@ public class PanelHome extends JPanel
 			box.add(btnAbout);
 			
 			add(box, BorderLayout.CENTER);
+			
+			setBackground(Color.BLACK);
 		}
 
 		private void configButtonListeners()
@@ -78,10 +78,18 @@ public class PanelHome extends JPanel
 	{
 		this.rootFrame = rootFrame;
 		
-		setLayout(new BorderLayout(kHgap, kVgap));
+		setLayout(new BorderLayout());
+		
 		JLabel labelMenuImage = new JLabel(new ImageIcon(ImageShop.UI_MENU_BACKGROUND));
-		add(labelMenuImage, BorderLayout.CENTER);
+		
+		Box boxImage = Box.createVerticalBox();
+		boxImage.add(labelMenuImage);
+		boxImage.add(Box.createVerticalGlue());
+		
+		add(boxImage, BorderLayout.WEST);
 		add(new PanelMenu(), BorderLayout.EAST);
+		
+		setBackground(Color.BLACK);
 	}
 
 	public void searchPlayer()

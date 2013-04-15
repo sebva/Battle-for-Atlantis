@@ -31,7 +31,7 @@ public class DialogAbout extends JDialog
 		setResizable(false);
 		setLayout(new BorderLayout(kHgap, kVgap));
 
-		JLabel img = new JLabel(new ImageIcon(ImageShop.loadShipImage(ShipType.SHIP, 2, 1, false)));
+		JLabel img = new JLabel(new ImageIcon(ImageShop.UI_LOGO));
 		JLabel text = new JLabel(Messages.getString("DialogAbout.Text"));
 		JButton btn = new JButton(Messages.getString("DialogAbout.ButtonText"));
 

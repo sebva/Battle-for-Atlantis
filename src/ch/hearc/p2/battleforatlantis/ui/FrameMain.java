@@ -2,6 +2,7 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class FrameMain extends JFrame
 {
-	private static final int kDefaultWidth = 1200;
+	private static final int kDefaultWidth = 1550;
 	private static final int kDefaultHeight = 850;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	
