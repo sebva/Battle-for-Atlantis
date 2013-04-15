@@ -82,7 +82,7 @@ public class PanelPlay extends JPanel
 		this.rootFrame = rootFrame;
 		// TODO: Create Map that are of desired size
 		levelMe = new Map(10, 10);
-		levelOther = new Map(10, 10);
+		levelOther = new Map(8, 6);
 
 		Box boxH = Box.createHorizontalBox();
 		// TODO: Retrieve players' names
