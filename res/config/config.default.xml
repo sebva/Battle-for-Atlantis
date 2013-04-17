@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Levels>
+	    <Level type="surface" width="10" height="10">
+	        <Ship length="2" amount="3" />
+	        <Ship length="3" amount="2" />
+	        <Ship length="4" amount="2" />
+	        <Ship length="5" amount="1" />
+	    </Level>
+	    <Level type="submarine" width="8" height="6">
+	        <Ship length="2" amount="3" />
+	        <Ship length="3" amount="2" />
+	    </Level>
+	    <Level type="atlantis" width="6" height="6">
+	    	<City shape="roundedSquare" width="4" height="4" />
+		</Level>
+	</Levels>
+</Configuration>
