@@ -65,7 +65,7 @@ public class PanelPrepare extends JPanel
 
 		Box boxMenu = Box.createVerticalBox();
 
-		JButton btn = new JButton(Messages.getString("PanelPrepare.Validate"), new ImageIcon(ImageShop.UI_BUTTON));
+		CustomButton btn = new CustomButton(Messages.getString("PanelPrepare.Validate"));
 		btn.addActionListener(new ActionListener()
 		{
 			@Override

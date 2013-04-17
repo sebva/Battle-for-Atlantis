@@ -35,8 +35,8 @@ public class PanelConnection extends JPanel
 			setLayout(new BorderLayout());
 			Box box = Box.createVerticalBox();
 			
-			btnDirectConnect = new JButton(Messages.getString("PanelConnection.DirectConnect"), new ImageIcon(ImageShop.UI_BUTTON));
-			btnBack = new JButton(Messages.getString("PanelConnection.Back"), new ImageIcon(ImageShop.UI_BUTTON));
+			btnDirectConnect = new CustomButton(Messages.getString("PanelConnection.DirectConnect"));
+			btnBack = new CustomButton(Messages.getString("PanelConnection.Back"));
 			
 			configButtonListeners();
 			

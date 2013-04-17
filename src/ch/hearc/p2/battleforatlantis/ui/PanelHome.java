@@ -2,6 +2,7 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,9 +29,9 @@ public class PanelHome extends JPanel
 		{
 			Box box = Box.createVerticalBox();
 			
-			btnSearchForPlayer = new JButton(Messages.getString("PanelHome.SearchForPlayer"), new ImageIcon(ImageShop.UI_BUTTON));
-			btnSettings = new JButton(Messages.getString("PanelHome.Settings"), new ImageIcon(ImageShop.UI_BUTTON));
-			btnAbout = new JButton(Messages.getString("PanelHome.About"), new ImageIcon(ImageShop.UI_BUTTON));
+			btnSearchForPlayer = new CustomButton(Messages.getString("PanelHome.SearchForPlayer"));
+			btnSettings = new CustomButton(Messages.getString("PanelHome.Settings"));
+			btnAbout = new CustomButton(Messages.getString("PanelHome.About"));
 			
 			configButtonListeners();
 			
