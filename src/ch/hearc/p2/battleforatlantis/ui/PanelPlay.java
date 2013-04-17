@@ -94,7 +94,7 @@ public class PanelPlay extends JPanel
 		
 		Box boxHUD = Box.createVerticalBox();
 
-		JButton btnCapitulate = new JButton(Messages.getString("PanelPlay.Capitulate"));
+		JButton btnCapitulate = new CustomButton(Messages.getString("PanelPlay.Capitulate"));
 		btnCapitulate.addActionListener(new ActionListener()
 		{
 			@Override
