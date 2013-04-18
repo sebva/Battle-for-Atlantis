@@ -13,6 +13,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
+import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
@@ -44,8 +45,8 @@ public class PanelPrepare extends JPanel
 		this.rootFrame = rootFrame;
 
 		// TODO: Correct Map dimensions
-		mapSurface = new Map(10, 10);
-		mapSubmarine = new Map(8, 6);
+		mapSurface = new Map(10, 10, MapType.SURFACE);
+		mapSubmarine = new Map(8, 6, MapType.SUBMARINE);
 
 		Box box = Box.createHorizontalBox();
 

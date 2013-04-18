@@ -8,6 +8,7 @@ public class Map extends JPanel
 {
 	private int width;
 	private int height;
+	private MapType type;
 
 	Box[][] boxes;
 
@@ -16,10 +17,11 @@ public class Map extends JPanel
 	 * @param width Number of rows
 	 * @param height Number of columns
 	 */
-	public Map(int width, int height)
+	public Map(int width, int height, MapType type)
 	{
 		this.width = width;
 		this.height = height;
+		this.type = type;
 
 		boxes = new Box[width][height];
 		setLayout(new GridLayout(height, width,0,0));
@@ -28,13 +30,12 @@ public class Map extends JPanel
 		{
 			for (int j = 0; j < height; j++)
 			{
-				boxes[i][j] = new Box();
+				boxes[i][j] = new Box(this.type);
 				add(boxes[i][j]);
 			}
 		}
 		
-		
-		
+				
 	}
 
 }

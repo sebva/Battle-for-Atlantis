@@ -86,9 +86,9 @@ public class PanelHome extends JPanel
 		Box boxImage = Box.createVerticalBox();
 		boxImage.add(labelMenuImage);
 		boxImage.add(Box.createVerticalGlue());
-		
-		add(boxImage, BorderLayout.WEST);
+
 		add(new PanelMenu(), BorderLayout.EAST);
+		add(boxImage, BorderLayout.WEST);
 		
 		setBackground(Color.BLACK);
 	}
