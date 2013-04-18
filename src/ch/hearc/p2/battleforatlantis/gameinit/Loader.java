@@ -2,10 +2,7 @@ package ch.hearc.p2.battleforatlantis.gameinit;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.security.DigestInputStream;
@@ -36,7 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
+import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
 public class Loader extends DefaultHandler
 {
@@ -44,7 +41,10 @@ public class Loader extends DefaultHandler
 	private String xsd;
 	private String hash = null;
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	public List<Map> maps;
+	private List<Map> maps;
+	private List<Ship> ships;
+
+	private MapType currentLevel = null;
 
 	private static final String kDefaultConfigFile = "config/config.default.xml";
 	private static final String kXsdConfigFile = "config/config.xsd";
@@ -53,7 +53,8 @@ public class Loader extends DefaultHandler
 	public Loader() throws URISyntaxException, IOException
 	{
 		maps = new ArrayList<Map>();
-		
+		ships = new ArrayList<Ship>();
+
 		File overrideFile = new File(kOverrideConfigFile);
 		if (overrideFile.exists())
 			this.xml = kOverrideConfigFile;
@@ -114,13 +115,14 @@ public class Loader extends DefaultHandler
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
-		switch(qName)
+		switch (qName)
 		{
 			case "Level":
 			{
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
 				MapType type = MapType.valueOf(attributes.getValue("type").toUpperCase());
+				currentLevel = type;
 				maps.add(new Map(width, height, type));
 				break;
 			}
@@ -129,12 +131,20 @@ public class Loader extends DefaultHandler
 				int length = Integer.parseInt(attributes.getValue("length"));
 				int amount = Integer.parseInt(attributes.getValue("amount"));
 				
-				// TODO: parse ship type (ship, submarine) from file
-				new Ship(ShipType.SHIP, length);
+				ShipType type = null;
+				if (currentLevel.equals(MapType.SURFACE))
+					type = ShipType.SHIP;
+				else if (currentLevel.equals(MapType.SUBMARINE))
+					type = ShipType.SUBMARINE;
+
+				assert (type != null);
+				for (int i = 0; i < amount; i++)
+					ships.add(new Ship(length, type));
 				break;
 			}
 			case "City":
 			{
+				// TODO: Do something with these values
 				String shape = attributes.getValue("shape");
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
@@ -146,6 +156,8 @@ public class Loader extends DefaultHandler
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
 		log.info("endElement : " + localName + " : " + qName);
+		if ("Level".equals(qName))
+			currentLevel = null;
 	}
 
 	public void characters(char ch[], int start, int length) throws SAXException
@@ -159,18 +171,17 @@ public class Loader extends DefaultHandler
 
 	public String getHash() throws NoSuchAlgorithmException, IOException
 	{
-		if(hash != null)
+		if (hash != null)
 			return hash;
-		
-		//Change SHA1 to Algorithm of your choice according to java Specification  
+
 		MessageDigest md = MessageDigest.getInstance("SHA1");
 
-		//reads the file path & file name As a argument
 		DigestInputStream dis = new DigestInputStream(ClassLoader.getSystemResourceAsStream(xml), md);
 		BufferedInputStream bis = new BufferedInputStream(dis);
 
-		//Read the bis so SHA1 is auto calculated at dis
-		while (true) {
+		// Read the bis so SHA1 is auto calculated at dis
+		while (true)
+		{
 			int b = bis.read();
 			if (b == -1)
 				break;
@@ -182,4 +193,33 @@ public class Loader extends DefaultHandler
 		return bi.toString(16);
 	}
 
+	public Ship[] getShips()
+	{
+		Ship[] toRet = new Ship[ships.size()];
+		for (int i = 0; i < ships.size(); i++)
+			toRet[i] = ships.get(i);
+
+		return toRet;
+	}
+
+	public Map[] getMapsWithoutAtlantis()
+	{
+		Map[] toRet = new Map[maps.size() - 1];
+		for (int i = 0; i < maps.size(); i++)
+		{
+			if (maps.get(i).getType() != MapType.ATLANTIS)
+				toRet[i] = maps.get(i);
+		}
+
+		return toRet;
+	}
+
+	public Map[] getMapsWithAtlantis()
+	{
+		Map[] toRet = new Map[maps.size()];
+		for (int i = 0; i < maps.size(); i++)
+			toRet[i] = maps.get(i);
+
+		return toRet;
+	}
 }

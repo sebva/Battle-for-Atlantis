@@ -10,7 +10,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class DialogAbout extends JDialog

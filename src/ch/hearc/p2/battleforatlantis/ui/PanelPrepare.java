@@ -2,13 +2,16 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,8 +22,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
+import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelPrepare extends JPanel
@@ -45,24 +47,59 @@ public class PanelPrepare extends JPanel
 		}
 	}
 
+	private class ButtonShip extends JButton
+	{
+		private final Ship ship;
+
+		public ButtonShip(final Ship ship)
+		{
+			this.ship = ship;
+			Dimension dimension = new Dimension(300, 55);
+
+			setPreferredSize(dimension);
+			setMinimumSize(dimension);
+			setMaximumSize(dimension);
+
+			setBorderPainted(false);
+			setContentAreaFilled(false);
+			
+			addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mousePressed(MouseEvent e)
+				{
+					select(ship);
+				}
+			});
+		}
+
+		@Override
+		protected void paintComponent(Graphics g)
+		{
+			Graphics2D g2d = (Graphics2D) g;
+			int offset = 0;
+			for (Image image : ship.getImages())
+			{
+				g2d.drawImage(image, offset, 0, null);
+				offset += image.getWidth(null);
+			}
+		}
+	}
+
 	public PanelPrepare(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
 
-		// TODO: Correct Map dimensions
-		mapSurface = new Map(10, 10, MapType.SURFACE);
-		mapSubmarine = new Map(8, 6, MapType.SUBMARINE);
+		Map[] maps = rootFrame.getLocalMaps();
+		for (Map map : maps)
+		{
+			if (map.getType() == MapType.SURFACE)
+				mapSurface = map;
+			else if (map.getType() == MapType.SUBMARINE)
+				mapSubmarine = map;
+		}
 		mapSurface.setPreparationListeners();
 		mapSubmarine.setPreparationListeners();
-		
-		// TODO: Temporary hardcoded ships instanciation
-		ships = new MapElement[6];
-		ships[0] = new Ship(ShipType.SHIP, 2);
-		ships[1] = new Ship(ShipType.SHIP, 3);
-		ships[2] = new Ship(ShipType.SHIP, 4);
-		ships[3] = new Ship(ShipType.SHIP, 5);
-		ships[4] = new Ship(ShipType.SUBMARINE, 2);
-		ships[5] = new Ship(ShipType.SUBMARINE, 3);
 
 		Box box = Box.createHorizontalBox();
 
@@ -93,28 +130,27 @@ public class PanelPrepare extends JPanel
 		});
 		boxMenu.add(btn);
 
-		boxMenu.add(new JLabel(Messages.getString("PanelPrepare.Boats")));
-		/*
-		boxMenu.add(new JLabel(new ImageIcon(ImageShop.loadShipImage(ShipType.SHIP, 3, 1, false))));
-		boxMenu.add(new JLabel(new ImageIcon(ImageShop.loadShipImage(ShipType.SHIP, 2, 1, false))));
-		boxMenu.add(new JLabel(new ImageIcon(ImageShop.loadShipImage(ShipType.SHIP, 4, 1, false))));
-		*/
-		for (int i=0; i<6; i++)
+		ShipType currentType = null;
+		for (Ship ship : rootFrame.getShips())
 		{
-			boxMenu.add(ships[i]);
-			final Ship ship = (Ship)ships[i];
-			ships[i].addMouseListener(new MouseAdapter()
-			{			
-				@Override
-				public void mousePressed(MouseEvent e)
+			if (currentType == null || currentType != ship.getType())
+			{
+				currentType = ship.getType();
+				switch (currentType)
 				{
-					select(ship);
+					case SHIP:
+						boxMenu.add(new JLabel(Messages.getString("PanelPrepare.Boats")));
+						break;
+					case SUBMARINE:
+						boxMenu.add(new JLabel(Messages.getString("PanelPrepare.Submarines")));
+						break;
 				}
-			});
+			}
+			boxMenu.add(new ButtonShip(ship));
 		}
 
 		boxMenu.add(Box.createVerticalGlue());
-		
+
 		box.add(boxMenu);
 		add(box, BorderLayout.CENTER);
 	}
@@ -128,7 +164,7 @@ public class PanelPrepare extends JPanel
 		this.selectedShip = ship;
 		this.selectedShip.setBackground(Color.DARK_GRAY);
 		System.out.println("[PanelPrepare] selected ship");
-		
+
 	}
 
 	public void place(ch.hearc.p2.battleforatlantis.gameengine.Box box)
@@ -151,12 +187,12 @@ public class PanelPrepare extends JPanel
 	{
 		rootFrame.startGame();
 	}
-	
+
 	public Map getMapSurface()
 	{
 		return this.mapSurface;
 	}
-	
+
 	public Map getMapSubmarine()
 	{
 		return this.mapSubmarine;

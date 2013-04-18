@@ -3,29 +3,33 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
 
 public class Ship extends MapElement
 {
-
-	// TODO: useful ?
-	private String imagesNames[];
-
+	private Image[] images;
+	private ShipType type;
+	private Box center = null;
 	private ShipOrientation orientation = ShipOrientation.EAST;
 
-	public Ship(ShipType type, int size)
+	public Ship(int size, ShipType type)
 	{
-		// TODO: verify size validity
-		// ...
-
 		super(size);
+
+		this.type = type;
+		this.images = new Image[size];
+
+		for (int i = 0; i < size; i++)
+		{
+			images[i] = ImageShop.loadShipImage(type, size, i + 1, false);
+		}
+
 		this.displaySize = new Dimension(size * 60, 60);
 		setLayout(new GridLayout(1, size, 0, 0));
 		this.setPreferredSize(this.displaySize);
@@ -128,6 +132,16 @@ public class Ship extends MapElement
 		}
 
 		this.orientation = orientation;
+	}
+
+	public Image[] getImages()
+	{
+		return images;
+	}
+
+	public ShipType getType()
+	{
+		return type;
 	}
 
 }

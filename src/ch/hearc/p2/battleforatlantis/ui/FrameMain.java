@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import ch.hearc.p2.battleforatlantis.action.Action;
+import ch.hearc.p2.battleforatlantis.gameengine.Map;
+import ch.hearc.p2.battleforatlantis.gameengine.Ship;
+import ch.hearc.p2.battleforatlantis.gameinit.Loader;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class FrameMain extends JFrame
@@ -17,6 +20,9 @@ public class FrameMain extends JFrame
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	
 	private PanelCards cards;
+	
+	private Map[] localMaps;
+	private Ship[] ships;
 	
 	private static PanelHome panelHome;
 	private static PanelConnection panelConnection;
@@ -40,8 +46,13 @@ public class FrameMain extends JFrame
 		
 	}
 	
-	public FrameMain()
+	public FrameMain() throws Exception
 	{
+		Loader loader = new Loader();
+		loader.load();
+		localMaps = loader.getMapsWithoutAtlantis();
+		ships = loader.getShips();
+		
 		windowConfig();
 		
 		FrameMain.panelHome = new PanelHome(this);
@@ -94,6 +105,16 @@ public class FrameMain extends JFrame
 	public static PanelPrepare getPanelPrepare()
 	{
 		return FrameMain.panelPrepare;
+	}
+
+	public Map[] getLocalMaps()
+	{
+		return localMaps;
+	}
+
+	public Ship[] getShips()
+	{
+		return ships;
 	}
 
 }
