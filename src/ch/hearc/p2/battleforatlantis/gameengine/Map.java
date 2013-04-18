@@ -8,6 +8,7 @@ public class Map extends JPanel
 {
 	private int width;
 	private int height;
+
 	private MapType type;
 
 	Box[][] boxes;
@@ -30,7 +31,7 @@ public class Map extends JPanel
 		{
 			for (int j = 0; j < height; j++)
 			{
-				boxes[i][j] = new Box(this.type);
+				boxes[i][j] = new Box(this);
 				add(boxes[i][j]);
 			}
 		}
@@ -38,4 +39,8 @@ public class Map extends JPanel
 				
 	}
 
+	public MapType getType()
+	{
+		return type;
+	}
 }

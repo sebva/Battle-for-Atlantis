@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:as="http://www.oasis-open.org/committees/cam"
+ xmlns:camed="http://jcam.org.uk/editor"
+ xmlns:dblook="http://jcam.org.uk/DbLookupLists"
+ xmlns:look="http://jcam.org.uk/LookupLists"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema" version="0.1" elementFormDefault="qualified">
+  <xsd:annotation>
+    <xsd:documentation>NOTICE: Generated from CAM template by XSLT
+                    NOTICE:  This schema is designed to maximize software interoperability and uses basic XSD Schema constructs only.
+                     
+                    CAM Template Header information: 
+                    
+                    Description: No Description 
+                    Owner: Not Set 
+                    Date: 2013-04-18T19:35:23 
+                    Version: 0.1 
+                    XSD generator: v1.63 
+                    NS Mode: true 
+                    XSDOutput Mode: default
+                    NOTICE: Please refer to the original source owner schema, dictionary, and/or CAM template for updates and changes.
+                    NOTICE: For copyright, licensing and use criteria please refer to owner authority.</xsd:documentation>
+    <xsd:appinfo source="CAM">Configuration</xsd:appinfo>
+  </xsd:annotation>
+  <xsd:element name="Configuration" id="d2e37">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Levels" minOccurs="1" maxOccurs="1" id="d2e43">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Level" minOccurs="1" maxOccurs="unbounded" id="d2e49">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Ship" minOccurs="0" maxOccurs="unbounded" id="d2e93">
+                      <xsd:complexType>
+                        <xsd:simpleContent>
+                          <xsd:extension base="xsd:string">
+                            <xsd:attribute name="length" type="xsd:string" id="d2e101" use="required" />
+                            <xsd:attribute name="amount" type="xsd:string" id="d2e113" use="required" />
+                          </xsd:extension>
+                        </xsd:simpleContent>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="City" minOccurs="0" maxOccurs="1" id="d2e126">
+                      <xsd:complexType>
+                        <xsd:simpleContent>
+                          <xsd:extension base="xsd:string">
+                            <xsd:attribute name="shape" type="xsd:string" id="d2e132" use="required" />
+                            <xsd:attribute name="width" type="xsd:string" id="d2e139" use="required" />
+                            <xsd:attribute name="height" type="xsd:string" id="d2e146" use="required" />
+                          </xsd:extension>
+                        </xsd:simpleContent>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                  <xsd:attribute name="type" id="d2e57" use="required">
+                    <xsd:simpleType>
+                      <xsd:restriction base="xsd:ID">
+                        <xsd:enumeration value="surface" />
+                        <xsd:enumeration value="submarine" />
+                        <xsd:enumeration value="atlantis" />
+                      </xsd:restriction>
+                    </xsd:simpleType>
+                  </xsd:attribute>
+                  <xsd:attribute name="width" type="xsd:string" id="d2e69" use="required" />
+                  <xsd:attribute name="height" type="xsd:string" id="d2e81" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- Parent complexTypes  -->
+  <!-- Local simpleTypes (default namespace)  -->
+  <xsd:simpleType name="ShipDefinition">
+    <xsd:annotation>
+      <xsd:documentation>The type for Ship.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:simpleType name="CityDefinition">
+    <xsd:annotation>
+      <xsd:documentation>The type for City.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+</xsd:schema>
+
