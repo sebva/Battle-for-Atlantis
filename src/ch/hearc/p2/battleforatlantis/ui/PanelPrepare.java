@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -32,6 +33,8 @@ public class PanelPrepare extends JPanel
 	private Map mapSurface;
 	private Map mapSubmarine;
 	private MapElement ships[];
+	
+	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
 	 * Hack to preserve formatting. This class, extending JPanel, does nothing but add a Map (also extending JPanel) to itself. This hack is necessary in order
@@ -163,7 +166,7 @@ public class PanelPrepare extends JPanel
 		}
 		this.selectedShip = ship;
 		this.selectedShip.setBackground(Color.DARK_GRAY);
-		System.out.println("[PanelPrepare] selected ship");
+		log.info("selected ship");
 
 	}
 

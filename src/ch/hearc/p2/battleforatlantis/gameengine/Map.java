@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
@@ -21,6 +22,8 @@ public class Map extends JPanel
 
 	private MouseListener preparationListener;
 	private MouseListener gameListener;
+	
+	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
 	 * Create a map of specified dimensions
@@ -70,7 +73,7 @@ public class Map extends JPanel
 				{
 					// left button pressed
 					case MouseEvent.BUTTON1:
-						System.out.println("bouton gauche");
+						log.info("bouton gauche");
 						break;
 						
 					// Right button pressed
