@@ -18,6 +18,11 @@ public class FrameMain extends JFrame
 	
 	private PanelCards cards;
 	
+	private static PanelHome panelHome;
+	private static PanelConnection panelConnection;
+	private static PanelPrepare panelPrepare;
+	private static PanelPlay panelPlay;
+	
 	private class PanelCards extends JPanel
 	{
 		private CardLayout cardLayout;
@@ -39,12 +44,17 @@ public class FrameMain extends JFrame
 	{
 		windowConfig();
 		
+		FrameMain.panelHome = new PanelHome(this);
+		FrameMain.panelConnection = new PanelConnection(this);
+		FrameMain.panelPrepare = new PanelPrepare(this);
+		FrameMain.panelPlay = new PanelPlay(this);
+		
 		cards = new PanelCards();
 		add(cards, BorderLayout.CENTER);
-		cards.add(new PanelHome(this), PanelHome.class.getSimpleName());
-		cards.add(new PanelConnection(this), PanelConnection.class.getSimpleName());
-		cards.add(new PanelPrepare(this), PanelPrepare.class.getSimpleName());
-		cards.add(new PanelPlay(this), PanelPlay.class.getSimpleName());
+		cards.add(panelHome, PanelHome.class.getSimpleName());
+		cards.add(panelConnection, PanelConnection.class.getSimpleName());
+		cards.add(panelPrepare, PanelPrepare.class.getSimpleName());
+		cards.add(panelPlay, PanelPlay.class.getSimpleName());
 		
 		setVisible(true);
 	}
@@ -79,6 +89,11 @@ public class FrameMain extends JFrame
 	public void endGame()
 	{
 		cards.showCard(PanelHome.class.getSimpleName());
+	}
+	
+	public static PanelPrepare getPanelPrepare()
+	{
+		return FrameMain.panelPrepare;
 	}
 
 }

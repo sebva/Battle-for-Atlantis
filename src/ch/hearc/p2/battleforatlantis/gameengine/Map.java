@@ -1,8 +1,14 @@
 package ch.hearc.p2.battleforatlantis.gameengine;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+
+import ch.hearc.p2.battleforatlantis.ui.FrameMain;
+import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 
 public class Map extends JPanel
 {
@@ -13,10 +19,16 @@ public class Map extends JPanel
 
 	Box[][] boxes;
 
+	private MouseListener preparationListener;
+	private MouseListener gameListener;
+
 	/**
 	 * Create a map of specified dimensions
-	 * @param width Number of rows
-	 * @param height Number of columns
+	 * 
+	 * @param width
+	 *            Number of rows
+	 * @param height
+	 *            Number of columns
 	 */
 	public Map(int width, int height, MapType type)
 	{
@@ -24,21 +36,109 @@ public class Map extends JPanel
 		this.height = height;
 		this.type = type;
 
-		boxes = new Box[width][height];
-		setLayout(new GridLayout(height, width,0,0));
-		
-		for (int i = 0; i < width; i++)
+		boxes = new Box[height][width];
+		setLayout(new GridLayout(height, width, 0, 0));
+
+		for (int i = 0; i < height; i++)
 		{
-			for (int j = 0; j < height; j++)
+			for (int j = 0; j < width; j++)
 			{
-				boxes[i][j] = new Box(this);
+				boxes[i][j] = new Box(this, this.type, j, i);
 				add(boxes[i][j]);
 			}
 		}
-		
+
+		preparationListener = new MouseAdapter()
+		{
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
 				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				PanelPrepare panel = FrameMain.getPanelPrepare();
+				panel.place((Box)e.getComponent());
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				switch(e.getButton())
+				{
+					// left button pressed
+					case MouseEvent.BUTTON1:
+						System.out.println("bouton gauche");
+						break;
+						
+					// Right button pressed
+					case MouseEvent.BUTTON3:
+						PanelPrepare panel = FrameMain.getPanelPrepare();
+						panel.rotate();
+						break;
+				}
+			}
+		};
+
+		gameListener = new MouseAdapter()
+		{
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+
+			}
+		};
 	}
 
+	public void setPreparationListeners()
+	{
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				boxes[i][j].removeMouseListener(gameListener);
+				boxes[i][j].addMouseListener(preparationListener);
+			}
+		}
+	}
+
+	public void setGameListeners()
+	{
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				boxes[i][j].removeMouseListener(preparationListener);
+				boxes[i][j].addMouseListener(gameListener);
+			}
+		}
+	}
+	
+	public Box getBox(int x, int y)
+	{
+		if ((x>=0) && (x<this.width) && (y>=0) && (y<this.height))
+		{
+			return this.boxes[y][x];
+		}
+		else
+		{
+			return null;
+		}
+	}
 	public MapType getType()
 	{
 		return type;

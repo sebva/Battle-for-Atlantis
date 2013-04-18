@@ -7,7 +7,7 @@ public class Generator extends MapElement
 
 	public Generator()
 	{
-
+		super(1);
 	}
 
 }

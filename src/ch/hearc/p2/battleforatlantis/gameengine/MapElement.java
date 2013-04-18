@@ -1,16 +1,26 @@
 package ch.hearc.p2.battleforatlantis.gameengine;
 
+import java.awt.Dimension;
 import java.awt.Image;
 
-public abstract class MapElement
+import javax.swing.JPanel;
+
+public abstract class MapElement extends JPanel
 {
 
-	protected Image images;
-	private Box box;
+	protected Image images[];
+	protected Box center = null;
+	protected Box[] occupied;
+	protected final int wholeSize;
+	protected int touchedSize;
+	protected Dimension displaySize;
 
-	public MapElement()
+	public MapElement(int wholeSize)
 	{
-
+		this.wholeSize = wholeSize;
+		this.touchedSize = 0;
+		this.images = new Image[wholeSize];
+		this.occupied = new Box[wholeSize];
 	}
 
 	public void shoot()

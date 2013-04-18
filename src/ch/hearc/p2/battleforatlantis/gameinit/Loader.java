@@ -36,6 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
+import ch.hearc.p2.battleforatlantis.utils.ImageShop.ShipType;
 
 public class Loader extends DefaultHandler
 {
@@ -127,7 +128,9 @@ public class Loader extends DefaultHandler
 			{
 				int length = Integer.parseInt(attributes.getValue("length"));
 				int amount = Integer.parseInt(attributes.getValue("amount"));
-				new Ship();
+				
+				// TODO: parse ship type (ship, submarine) from file
+				new Ship(ShipType.SHIP, length);
 				break;
 			}
 			case "City":

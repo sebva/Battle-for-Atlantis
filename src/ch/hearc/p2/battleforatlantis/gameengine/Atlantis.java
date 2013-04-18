@@ -8,7 +8,8 @@ public class Atlantis extends MapElement
 
 	public Atlantis()
 	{
-
+		// TODO: set correct size
+		super(1);
 	}
 
 	public void generatorDestroyed()
