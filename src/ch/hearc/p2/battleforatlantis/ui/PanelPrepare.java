@@ -29,12 +29,34 @@ import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelPrepare extends JPanel
 {
+	/**
+	 * Main frame displaying the panel
+	 */
 	private FrameMain rootFrame;
+	
+	/**
+	 * Currently selected ship for placement, or null if no ship selected
+	 */
 	private Ship selectedShip = null;
+	
+	/**
+	 * Surface map for placing ships
+	 */
 	private Map mapSurface;
+	
+	/**
+	 * Submarine map for placing submarines
+	 */
 	private Map mapSubmarine;
+	
+	/**
+	 * Ships and submarines listed to be placed
+	 */
 	private MapElement ships[];
 	
+	/**
+	 * Debug logger
+	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
@@ -51,10 +73,17 @@ public class PanelPrepare extends JPanel
 		}
 	}
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param rootFrame Parent frame
+	 */
 	public PanelPrepare(FrameMain rootFrame)
 	{
+		// Input fields
 		this.rootFrame = rootFrame;
 
+		// Gather maps
 		Map[] maps = rootFrame.getLocalMaps();
 		for (Map map : maps)
 		{
@@ -63,27 +92,36 @@ public class PanelPrepare extends JPanel
 			else if (map.getType() == MapType.SUBMARINE)
 				mapSubmarine = map;
 		}
+		
+		// Set listeners on maps for preparation 
 		mapSurface.setPreparationListeners();
 		mapSubmarine.setPreparationListeners();
 
+		// Create canvas
 		Box box = Box.createHorizontalBox();
 
+		// Add surface map
 		Box boxMapSurface = Box.createVerticalBox();
 		boxMapSurface.add(Box.createVerticalGlue());
 		boxMapSurface.add(new PanelMap(mapSurface));
 		box.add(boxMapSurface);
 
+		// Add separator
 		box.add(new JSeparator(SwingConstants.VERTICAL));
 
+		// Add submarine map
 		Box boxMapSubmarine = Box.createVerticalBox();
 		boxMapSubmarine.add(Box.createVerticalGlue());
 		boxMapSubmarine.add(new PanelMap(mapSubmarine));
-
 		box.add(boxMapSubmarine);
+		
+		// Add separator
 		box.add(new JSeparator(SwingConstants.VERTICAL));
 
+		// Create menu
 		Box boxMenu = Box.createVerticalBox();
 
+		// Add "Validate" button
 		CustomButton btn = new CustomButton(Messages.getString("PanelPrepare.Validate"));
 		btn.addActionListener(new ActionListener()
 		{
@@ -95,9 +133,11 @@ public class PanelPrepare extends JPanel
 		});
 		boxMenu.add(btn);
 
+		// Add ships to menu
 		ShipType currentType = null;
 		for (Ship ship : rootFrame.getShips())
 		{
+			// Add label
 			if (currentType == null || currentType != ship.getType())
 			{
 				currentType = ship.getType();
@@ -111,6 +151,8 @@ public class PanelPrepare extends JPanel
 						break;
 				}
 			}
+			
+			// Add listener for ship selection
 			ship.addMouseListener(new MouseAdapter()
 			{				
 				@Override
@@ -119,15 +161,22 @@ public class PanelPrepare extends JPanel
 					select((Ship)e.getComponent());
 				}
 			});
+			
+			// Add ship
 			boxMenu.add(ship);
 		}
-
+		
+		// Finalize
 		boxMenu.add(Box.createVerticalGlue());
-
 		box.add(boxMenu);
 		add(box, BorderLayout.CENTER);
 	}
 
+	/**
+	 * External call for ship selection
+	 * 
+	 * @param ship Selected ship
+	 */
 	public void select(Ship ship)
 	{
 		if (this.selectedShip != null)
@@ -140,6 +189,11 @@ public class PanelPrepare extends JPanel
 
 	}
 
+	/**
+	 * External call for place ship on map
+	 * 
+	 * @param box Center of ship
+	 */
 	public void place(ch.hearc.p2.battleforatlantis.gameengine.Box box)
 	{
 		if (this.selectedShip != null)
@@ -155,6 +209,9 @@ public class PanelPrepare extends JPanel
 		}
 	}
 
+	/**
+	 * External call for rotate ship
+	 */
 	public void rotate()
 	{
 		if (this.selectedShip != null)
@@ -163,16 +220,29 @@ public class PanelPrepare extends JPanel
 		}
 	}
 
+	/**
+	 * External call for start game
+	 */
 	public void start()
 	{
 		rootFrame.startGame();
 	}
 
+	/**
+	 * Getter for surface map
+	 * 
+	 * @return Surface map
+	 */
 	public Map getMapSurface()
 	{
 		return this.mapSurface;
 	}
 
+	/**
+	 * Getter for submarine map
+	 * 
+	 * @return Submarine map
+	 */
 	public Map getMapSubmarine()
 	{
 		return this.mapSubmarine;
