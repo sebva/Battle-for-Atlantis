@@ -132,7 +132,7 @@ public class PanelPrepare extends JPanel
 	{
 		if (this.selectedShip != null)
 		{
-			selectedShip.setBackground(Color.LIGHT_GRAY);
+			selectedShip.setBackground(Color.BLACK);
 		}
 		this.selectedShip = ship;
 		this.selectedShip.setBackground(Color.DARK_GRAY);

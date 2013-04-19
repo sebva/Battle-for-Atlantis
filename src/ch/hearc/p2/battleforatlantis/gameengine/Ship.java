@@ -13,29 +13,50 @@ import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
 public class Ship extends MapElement
 {
+	/**
+	 * Images for boat display, in order rear..front
+	 */
 	private Image[] images;
+	
+	/**
+	 * Type of ship (ship, submarine)
+	 */
 	private ShipType type;
+	
+	/**
+	 * Box considered as ship's center
+	 */
 	private Box center = null;
+	
+	/**
+	 * Ship orientation, default EAST (front looks on screen's right)
+	 */
 	private ShipOrientation orientation = ShipOrientation.EAST;
 
+	/**
+	 * Default constructor for ship instanciation
+	 * 
+	 * @param size Length of ship, in boxes number
+	 * @param type Type of ship (ship, submarine)
+	 */
 	public Ship(int size, ShipType type)
 	{
+		// Call to parent constructor for standard settings
 		super(size);
 
+		// Input fields
 		this.type = type;
 		this.images = new Image[size];
 
-		for (int i = 0; i < size; i++)
-		{
-			images[i] = ImageShop.loadShipImage(type, size, i + 1, false);
-		}
-
+		// Set size of boat and display settings
 		this.displaySize = new Dimension(size * 60, 60);
 		setLayout(new GridLayout(1, size, 0, 0));
 		this.setPreferredSize(this.displaySize);
 		this.setMinimumSize(this.displaySize);
 		this.setMaximumSize(this.displaySize);
-		this.setBackground(Color.LIGHT_GRAY);
+		this.setBackground(Color.BLACK);
+		
+		// Load images corresponding to boat parts
 		for (int i = 0; i < size; i++)
 		{
 			this.images[i] = ImageShop.loadShipImage(type, size, i + 1, false);
@@ -43,14 +64,21 @@ public class Ship extends MapElement
 		}
 	}
 
+	/**
+	 * External call for ship rotation in clockwise direction
+	 */
 	public void rotate()
 	{
-		moveOut();
+		// Cancel ship rotation if ship is not currently displayed
 		if (this.center == null)
 		{
 			return;
 		}
 		
+		// Clean currently occupied boxes
+		moveOut();
+		
+		// Execute rotation with new orientation value, depending on old value
 		switch (this.orientation)
 		{
 			case EAST:
@@ -68,6 +96,9 @@ public class Ship extends MapElement
 		}
 	}
 	
+	/**
+	 * External call for clearance of all boxes that are no longer occupied by the boat
+	 */
 	public void moveOut()
 	{
 		if (this.center != null)
@@ -79,22 +110,34 @@ public class Ship extends MapElement
 		}
 	}
 
+	/**
+	 * External call for ship movement
+	 * 
+	 * @param box New box considered as boat center
+	 * @param orientation New orientation of boat
+	 */
 	public void move(Box box, ShipOrientation orientation)
 	{
+		// Conserve current orientation if arg null
 		if (orientation == null)
 		{
 			orientation = this.orientation;
 		}
 
+		// Conserve current center position if arg null
 		if (box == null)
 		{
 			box = this.center;
 		}
 
+		// Assign new center
 		this.center = box;
 
+		// Compute size of boat rear for boxes alignment
 		int rearSize = this.wholeSize / 2;
 
+		// Get the map concerned by movement
+		// TODO: modify and adapt when maps and ships are used on panel play (static method no longer good idea)
 		Map map = null;
 		switch (box.getMapType())
 		{
@@ -105,7 +148,8 @@ public class Ship extends MapElement
 				map = FrameMain.getPanelPrepare().getMapSubmarine();
 				break;
 		}
-
+		
+		// Compute positions and gather boxes hosting boat
 		for (int i = 0; i < this.wholeSize; i++)
 		{
 			switch (orientation)
@@ -125,11 +169,12 @@ public class Ship extends MapElement
 			}
 		}
 		
+		// Apply new orientation
 		this.orientation = orientation;
 
+		// Cancel and exit if ship is out of map
 		for (int i = 0; i < this.wholeSize; i++)
 		{
-
 			if (this.occupied[i] == null)
 			{
 				this.center = null;
@@ -137,19 +182,28 @@ public class Ship extends MapElement
 			}
 		}
 
+		// Set current ship as new occupier for all occupied boxes
 		for (int i = 0; i < this.wholeSize; i++)
 		{
 			this.occupied[i].setOccupier(this, this.images[i]);
 		}
-
-		this.orientation = orientation;
 	}
 
+	/**
+	 * Get images array
+	 * 
+	 * @return Images array in order rear..front
+	 */
 	public Image[] getImages()
 	{
 		return images;
 	}
 
+	/**
+	 * Get current ship type
+	 * 
+	 * @return Type of ship (ship, submarine)
+	 */
 	public ShipType getType()
 	{
 		return type;
