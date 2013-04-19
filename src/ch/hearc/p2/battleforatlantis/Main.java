@@ -49,9 +49,19 @@ public class Main
 	{
 		Properties props = new Properties();
 
+		String blueString = Settings.MENU_BORDER_COLOR.getRed() + " " 
+				+ Settings.MENU_BORDER_COLOR.getGreen() + " "
+				+ Settings.MENU_BORDER_COLOR.getBlue();
 		props.put("backgroundColor", "0 0 0");
 		props.put("backgroundColorLight", "0 0 0");
 		props.put("backgroundColorDark", "0 0 0");
+		props.put("focusCellColor", blueString);
+		props.put("windowIconRolloverColor", blueString);
+		props.put("menuSelectionBackgroundColor", blueString);
+		props.put("rolloverColor", blueString);
+		props.put("rolloverColorLight", blueString);
+		props.put("rolloverColorDark", blueString);
+		props.put("selectionForegroundColor", blueString);
 
 		NoireLookAndFeel.setCurrentTheme(props);
 
