@@ -16,7 +16,7 @@ public class CustomButton extends JButton
 	{
 		this.text = text;
 		this.dimension = new Dimension(300,55);
-		this.font = new Font("Helvetica", Font.PLAIN, 20);
+		this.font = new Font("Helvetica", Font.BOLD, 16);
 		
 		setPreferredSize(this.dimension);
 		setMinimumSize(this.dimension);
@@ -31,7 +31,7 @@ public class CustomButton extends JButton
 	{
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(ImageShop.UI_BUTTON,0,0,null);
-		g2d.setColor(Color.CYAN);
+		g2d.setColor(new Color(0, 188, 224));
 		g2d.setFont(this.font);
 		g2d.drawString(this.text, 50, 30);
 	}
