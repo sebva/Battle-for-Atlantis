@@ -12,12 +12,7 @@ import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
 public class Ship extends MapElement
-{
-	/**
-	 * Images for boat display, in order rear..front
-	 */
-	private Image[] images;
-	
+{	
 	/**
 	 * Type of ship (ship, submarine)
 	 */
