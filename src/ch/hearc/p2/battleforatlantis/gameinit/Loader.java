@@ -130,7 +130,7 @@ public class Loader extends DefaultHandler
 			{
 				int length = Integer.parseInt(attributes.getValue("length"));
 				int amount = Integer.parseInt(attributes.getValue("amount"));
-				
+
 				ShipType type = null;
 				if (currentLevel.equals(MapType.SURFACE))
 					type = ShipType.SHIP;
@@ -153,6 +153,7 @@ public class Loader extends DefaultHandler
 		}
 	}
 
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
 		log.info("endElement : " + localName + " : " + qName);
@@ -160,6 +161,7 @@ public class Loader extends DefaultHandler
 			currentLevel = null;
 	}
 
+	@Override
 	public void characters(char ch[], int start, int length) throws SAXException
 	{
 		String value = new String(ch, start, length).trim();
@@ -193,6 +195,7 @@ public class Loader extends DefaultHandler
 		return bi.toString(16);
 	}
 
+	// FIXME: think of better solution
 	public Ship[] getShips()
 	{
 		Ship[] toRet = new Ship[ships.size()];
@@ -202,6 +205,7 @@ public class Loader extends DefaultHandler
 		return toRet;
 	}
 
+	// FIXME: think of better solution
 	public Map[] getMapsWithoutAtlantis()
 	{
 		Map[] toRet = new Map[maps.size() - 1];
@@ -214,6 +218,7 @@ public class Loader extends DefaultHandler
 		return toRet;
 	}
 
+	// FIXME: think of better solution
 	public Map[] getMapsWithAtlantis()
 	{
 		Map[] toRet = new Map[maps.size()];
