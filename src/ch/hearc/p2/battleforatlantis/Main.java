@@ -1,5 +1,6 @@
 package ch.hearc.p2.battleforatlantis;
 
+import java.util.Properties;
 import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -10,14 +11,17 @@ import javax.swing.UIManager;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 
+import com.jtattoo.plaf.noire.NoireLookAndFeel;
+
 public class Main
 {
 
 	/**
 	 * Unique entry point of the application
 	 * 
-	 * @param args Ignored
-	 * @throws Exception 
+	 * @param args
+	 *            Ignored
+	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception
 	{
@@ -35,11 +39,22 @@ public class Main
 		});
 
 		FrameMain frameMain = new FrameMain();
-		
-		// Use the system look and feel
+		setLookAndFeel(frameMain);
+	}
+
+	private static void setLookAndFeel(FrameMain frameMain)
+	{
+		Properties props = new Properties();
+
+		props.put("backgroundColor", "0 0 0");
+		props.put("backgroundColorLight", "0 0 0");
+		props.put("backgroundColorDark", "0 0 0");
+
+		NoireLookAndFeel.setCurrentTheme(props);
+
 		try
 		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(NoireLookAndFeel.class.getName());
 		}
 		catch (Exception e)
 		{
@@ -47,5 +62,4 @@ public class Main
 		}
 		SwingUtilities.updateComponentTreeUI(frameMain);
 	}
-
 }

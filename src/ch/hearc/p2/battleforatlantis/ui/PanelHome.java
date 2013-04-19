@@ -40,8 +40,6 @@ public class PanelHome extends JPanel
 			box.add(btnAbout);
 			
 			add(box, BorderLayout.CENTER);
-			
-			setBackground(Color.BLACK);
 		}
 
 		private void configButtonListeners()
@@ -89,8 +87,6 @@ public class PanelHome extends JPanel
 
 		add(new PanelMenu(), BorderLayout.EAST);
 		add(boxImage, BorderLayout.WEST);
-		
-		setBackground(Color.BLACK);
 	}
 
 	public void searchPlayer()
