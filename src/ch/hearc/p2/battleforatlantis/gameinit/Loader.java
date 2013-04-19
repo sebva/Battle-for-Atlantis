@@ -35,26 +35,46 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
+/**
+ * This class loads the game's configuration from an XML file.
+ * The job is done when load() is called.
+ * The loaded elements can be be retrieved with the get methods.
+ * @author Sébastien Vaucher
+ *
+ */
 public class Loader extends DefaultHandler
 {
+	/** Path to the XML file */
 	private String xml;
+	/** Path to the XSD file */
 	private String xsd;
+	/** SHA-1 hash of the config file */
 	private String hash = null;
-	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	/** List of the maps described in the XML file */
 	private List<Map> maps;
+	/** List of the ships described in the XML file */
 	private List<Ship> ships;
 
+	/** Current Level tag being treated */
 	private MapType currentLevel = null;
 
+	/** Path to the default configuration file (in JAR) */
 	private static final String kDefaultConfigFile = "config/config.default.xml";
+	/** Path to the XML Schema (in JAR) */
 	private static final String kXsdConfigFile = "config/config.xsd";
+	/** Path to the user's XML file (in current directory */
 	private static final String kOverrideConfigFile = "config.xml";
 
-	public Loader() throws URISyntaxException, IOException
+	/**
+	 * Create a Loader with the default file paths.
+	 * @throws Exception Thrown if the config file cannot be opened.
+	 */
+	public Loader() throws Exception
 	{
 		maps = new ArrayList<Map>();
 		ships = new ArrayList<Ship>();
 
+		// If the overriding file exists, we load it, else we load the default file
 		File overrideFile = new File(kOverrideConfigFile);
 		if (overrideFile.exists())
 			this.xml = kOverrideConfigFile;
@@ -64,13 +84,22 @@ public class Loader extends DefaultHandler
 		this.xsd = kXsdConfigFile;
 	}
 
+	/**
+	 * Starts the XML parser which will fill this object's attributes.
+	 * @throws ParserConfigurationException Impossible to find a SAX parser
+	 * @throws SAXException Malformed XML file
+	 * @throws IOException Error while manipulating the file
+	 * @throws Exception The XML file does not conform to the XML Schema
+	 */
 	public void load() throws ParserConfigurationException, SAXException, IOException, Exception
 	{
+		// The XML file is not confirming to our XML Schema
 		if (!validateXmlWithXsd())
 			throw new Exception("XML File not conforming to XSD");
 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp = spf.newSAXParser();
+		// parse() blocks until the whole XML file is parsed
 		sp.parse(ClassLoader.getSystemResourceAsStream(xml), this);
 	}
 
@@ -80,27 +109,27 @@ public class Loader extends DefaultHandler
 	 * Source: http://docs.oracle.com/javase/7/docs/api/javax/xml/validation/package-summary.html
 	 * 
 	 * @return True if the document is valid
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
+	 * @throws ParserConfigurationException Impossible to find a SAX parser
+	 * @throws SAXException Malformed XML file
+	 * @throws IOException Error while manipulating the file
 	 */
 	private boolean validateXmlWithXsd() throws ParserConfigurationException, SAXException, IOException
 	{
-		// parse an XML document into a DOM tree
+		// Parse the XML document into a DOM tree
 		DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document document = parser.parse(ClassLoader.getSystemResourceAsStream(xml));
 
-		// create a SchemaFactory capable of understanding WXS schemas
+		// Create a SchemaFactory capable of understanding WXS schemas
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-		// load a WXS schema, represented by a Schema instance
+		// Load a WXS schema, represented by a Schema instance
 		Source schemaFile = new StreamSource(ClassLoader.getSystemResourceAsStream(xsd));
 		Schema schema = factory.newSchema(schemaFile);
 
-		// create a Validator instance, which can be used to validate an instance document
+		// Create a Validator instance, which can be used to validate an instance document
 		Validator validator = schema.newValidator();
 
-		// validate the DOM tree
+		// Validate the DOM tree
 		try
 		{
 			validator.validate(new DOMSource(document));
@@ -156,21 +185,16 @@ public class Loader extends DefaultHandler
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
-		log.info("endElement : " + localName + " : " + qName);
 		if ("Level".equals(qName))
 			currentLevel = null;
 	}
 
-	@Override
-	public void characters(char ch[], int start, int length) throws SAXException
-	{
-		String value = new String(ch, start, length).trim();
-		if (value.length() == 0)
-			return; // ignore white space
-
-		log.info("characters : " + new String(ch));
-	}
-
+	/**
+	 * Get the SHA-1 hash of the loaded XML file
+	 * @return The SHA-1 hash
+	 * @throws NoSuchAlgorithmException SHA-1 cannot be found
+	 * @throws IOException Error while manipulating the file
+	 */
 	public String getHash() throws NoSuchAlgorithmException, IOException
 	{
 		if (hash != null)
@@ -181,7 +205,7 @@ public class Loader extends DefaultHandler
 		DigestInputStream dis = new DigestInputStream(ClassLoader.getSystemResourceAsStream(xml), md);
 		BufferedInputStream bis = new BufferedInputStream(dis);
 
-		// Read the bis so SHA1 is auto calculated at dis
+		// Reading the BufferedInputStream fills the MessageDigest 
 		while (true)
 		{
 			int b = bis.read();
@@ -192,10 +216,15 @@ public class Loader extends DefaultHandler
 		BigInteger bi = new BigInteger(md.digest());
 		bis.close();
 		dis.close();
+		// Hexadecimal
 		return bi.toString(16);
 	}
 
-	// FIXME: think of better solution
+	/**
+	 * Get the ships loaded from the XML file
+	 * @return An array of Ship. The ships have their type attribute correctly set
+	 */
+	// FIXME: think of a better solution
 	public Ship[] getShips()
 	{
 		Ship[] toRet = new Ship[ships.size()];
@@ -205,7 +234,11 @@ public class Loader extends DefaultHandler
 		return toRet;
 	}
 
-	// FIXME: think of better solution
+	/**
+	 * Get the maps loaded from the XML, without the ones marked as type="atlantis"
+	 * @return An array of Map. The maps have their type attribute correctly set
+	 */
+	// FIXME: think of a better solution
 	public Map[] getMapsWithoutAtlantis()
 	{
 		Map[] toRet = new Map[maps.size() - 1];
@@ -218,7 +251,11 @@ public class Loader extends DefaultHandler
 		return toRet;
 	}
 
-	// FIXME: think of better solution
+	/**
+	 * Get the maps loaded from the XML
+	 * @return An array of Map. The maps have their type attribute correctly set
+	 */
+	// FIXME: think of a better solution
 	public Map[] getMapsWithAtlantis()
 	{
 		Map[] toRet = new Map[maps.size()];
