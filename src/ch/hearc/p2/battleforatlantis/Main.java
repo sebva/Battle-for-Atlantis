@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 import com.jtattoo.plaf.noire.NoireLookAndFeel;
 
@@ -37,9 +38,11 @@ public class Main
 				return true;
 			}
 		});
-
-		FrameMain frameMain = new FrameMain();
-		setLookAndFeel(frameMain);
+		
+		Settings.apply();
+		Settings.FRAME_MAIN = new FrameMain();
+		
+		setLookAndFeel(Settings.FRAME_MAIN);
 	}
 
 	private static void setLookAndFeel(FrameMain frameMain)

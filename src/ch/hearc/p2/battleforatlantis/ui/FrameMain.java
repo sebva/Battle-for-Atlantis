@@ -12,6 +12,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class FrameMain extends JFrame
 {
@@ -24,10 +25,6 @@ public class FrameMain extends JFrame
 	private Map[] localMaps;
 	private Ship[] ships;
 	
-	private static PanelHome panelHome;
-	private static PanelConnection panelConnection;
-	private static PanelPrepare panelPrepare;
-	private static PanelPlay panelPlay;
 	
 	private class PanelCards extends JPanel
 	{
@@ -55,17 +52,17 @@ public class FrameMain extends JFrame
 		
 		windowConfig();
 		
-		FrameMain.panelHome = new PanelHome(this);
-		FrameMain.panelConnection = new PanelConnection(this);
-		FrameMain.panelPrepare = new PanelPrepare(this);
-		FrameMain.panelPlay = new PanelPlay(this);
+		Settings.PANEL_HOME = new PanelHome(this);
+		Settings.PANEL_CONNECTIONS = new PanelConnection(this);
+		Settings.PANEL_PREPARE = new PanelPrepare(this);
+		Settings.PANEL_PLAY = new PanelPlay(this);
 		
 		cards = new PanelCards();
 		add(cards, BorderLayout.CENTER);
-		cards.add(panelHome, PanelHome.class.getSimpleName());
-		cards.add(panelConnection, PanelConnection.class.getSimpleName());
-		cards.add(panelPrepare, PanelPrepare.class.getSimpleName());
-		cards.add(panelPlay, PanelPlay.class.getSimpleName());
+		cards.add(Settings.PANEL_HOME, PanelHome.class.getSimpleName());
+		cards.add(Settings.PANEL_CONNECTIONS, PanelConnection.class.getSimpleName());
+		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
+		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 		
 		setVisible(true);
 	}
@@ -104,7 +101,7 @@ public class FrameMain extends JFrame
 	
 	public static PanelPrepare getPanelPrepare()
 	{
-		return FrameMain.panelPrepare;
+		return Settings.PANEL_PREPARE;
 	}
 
 	public Map[] getLocalMaps()
