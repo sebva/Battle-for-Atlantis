@@ -2,6 +2,7 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -11,7 +12,7 @@ public abstract class MapElement extends JPanel
 	/**
 	 * Image list for displaying element
 	 */
-	protected Image[] images;
+	protected BufferedImage[] images;
 	
 	/**
 	 * Box considered as center of element
@@ -48,7 +49,7 @@ public abstract class MapElement extends JPanel
 		// Input fields
 		this.wholeSize = wholeSize;
 		this.touchedSize = 0;
-		this.images = new Image[wholeSize];
+		this.images = new BufferedImage[wholeSize];
 		this.occupied = new Box[wholeSize];
 	}
 

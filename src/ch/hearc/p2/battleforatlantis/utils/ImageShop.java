@@ -1,6 +1,7 @@
 package ch.hearc.p2.battleforatlantis.utils;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -33,7 +34,7 @@ public final class ImageShop
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
 	public static final Image UI_LOGO = loadImage(UI_FOLDER + "logo.png");
 
-	public static Image loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
+	public static BufferedImage loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
 	{
 		StringBuilder filename = new StringBuilder();
 		switch (ship)
@@ -59,7 +60,7 @@ public final class ImageShop
 		return loadImage(filename.toString());
 	}
 
-	public static Image loadImage(String filename)
+	public static BufferedImage loadImage(String filename)
 	{
 		try
 		{
