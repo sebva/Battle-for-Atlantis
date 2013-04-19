@@ -27,7 +27,7 @@ public class Main
 		log.setFilter(new Filter()
 		{
 			@Override
-			public boolean isLoggable(LogRecord _arg0)
+			public boolean isLoggable(LogRecord record)
 			{
 				// No filtering applied
 				return true;

@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
@@ -47,45 +48,6 @@ public class PanelPrepare extends JPanel
 		public PanelMap(Map map)
 		{
 			add(map, BorderLayout.CENTER);
-		}
-	}
-
-	private class ButtonShip extends JButton
-	{
-		private final Ship ship;
-
-		public ButtonShip(final Ship ship)
-		{
-			this.ship = ship;
-			Dimension dimension = new Dimension(300, 55);
-
-			setPreferredSize(dimension);
-			setMinimumSize(dimension);
-			setMaximumSize(dimension);
-
-			setBorderPainted(false);
-			setContentAreaFilled(false);
-			
-			addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mousePressed(MouseEvent e)
-				{
-					select(ship);
-				}
-			});
-		}
-
-		@Override
-		protected void paintComponent(Graphics g)
-		{
-			Graphics2D g2d = (Graphics2D) g;
-			int offset = 0;
-			for (Image image : ship.getImages())
-			{
-				g2d.drawImage(image, offset, 0, null);
-				offset += image.getWidth(null);
-			}
 		}
 	}
 
@@ -149,7 +111,15 @@ public class PanelPrepare extends JPanel
 						break;
 				}
 			}
-			boxMenu.add(new ButtonShip(ship));
+			ship.addMouseListener(new MouseAdapter()
+			{				
+				@Override
+				public void mousePressed(MouseEvent e)
+				{
+					select((Ship)e.getComponent());
+				}
+			});
+			boxMenu.add(ship);
 		}
 
 		boxMenu.add(Box.createVerticalGlue());
@@ -174,7 +144,14 @@ public class PanelPrepare extends JPanel
 	{
 		if (this.selectedShip != null)
 		{
-			this.selectedShip.move(box, null);
+			if (box == null)
+			{
+				this.selectedShip.moveOut();
+			}
+			else
+			{
+				this.selectedShip.move(box, null);
+			}
 		}
 	}
 

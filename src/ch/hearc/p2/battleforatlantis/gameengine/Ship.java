@@ -45,6 +45,12 @@ public class Ship extends MapElement
 
 	public void rotate()
 	{
+		moveOut();
+		if (this.center == null)
+		{
+			return;
+		}
+		
 		switch (this.orientation)
 		{
 			case EAST:
@@ -61,8 +67,8 @@ public class Ship extends MapElement
 				break;
 		}
 	}
-
-	public void move(Box box, ShipOrientation orientation)
+	
+	public void moveOut()
 	{
 		if (this.center != null)
 		{
@@ -71,7 +77,10 @@ public class Ship extends MapElement
 				ancient.setOccupier(null, null);
 			}
 		}
+	}
 
+	public void move(Box box, ShipOrientation orientation)
+	{
 		if (orientation == null)
 		{
 			orientation = this.orientation;
@@ -115,6 +124,8 @@ public class Ship extends MapElement
 					break;
 			}
 		}
+		
+		this.orientation = orientation;
 
 		for (int i = 0; i < this.wholeSize; i++)
 		{

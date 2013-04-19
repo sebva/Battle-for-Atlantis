@@ -56,7 +56,8 @@ public class Map extends JPanel
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				
+				PanelPrepare panel = FrameMain.getPanelPrepare();
+				panel.place(null);
 			}
 
 			@Override
