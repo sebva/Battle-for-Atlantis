@@ -113,6 +113,16 @@ public class Box extends JPanel
 		this.imageOccupier = image;
 		update(getGraphics());
 	}
+	
+	/**
+	 * Get the current occupier of the box
+	 * 
+	 * @return MapElement occupier
+	 */
+	public MapElement getOccupier()
+	{
+		return this.occupier;
+	}
 
 	/**
 	 * Getter for horizontal coordinate

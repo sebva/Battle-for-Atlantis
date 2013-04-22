@@ -166,16 +166,16 @@ public class Map extends JPanel
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
+				PanelPrepare panel = FrameMain.getPanelPrepare();
 				switch(e.getButton())
 				{
 					// left button pressed
 					case MouseEvent.BUTTON1:
-						log.info("bouton gauche");
+						panel.validatePlacement();
 						break;
 						
 					// Right button pressed
 					case MouseEvent.BUTTON3:
-						PanelPrepare panel = FrameMain.getPanelPrepare();
 						panel.rotate();
 						break;
 				}

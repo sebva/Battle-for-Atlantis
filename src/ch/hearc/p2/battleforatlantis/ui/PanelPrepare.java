@@ -208,6 +208,14 @@ public class PanelPrepare extends JPanel
 			}
 		}
 	}
+	
+	/**
+	 * External call for validate placement of ship on map
+	 */
+	public void validatePlacement()
+	{
+		this.selectedShip = null;
+	}
 
 	/**
 	 * External call for rotate ship

@@ -206,7 +206,7 @@ public class Ship extends MapElement
 		// Apply new orientation
 		this.orientation = orientation;
 
-		// Cancel and exit if ship is out of map
+		// Cancel and exit if ship is out of map or if a box is already occupied
 		for (int i = 0; i < this.wholeSize; i++)
 		{
 			if (this.occupied[i] == null)
@@ -214,6 +214,11 @@ public class Ship extends MapElement
 				this.center = null;
 				return;
 			}
+			if ((this.occupied[i].getOccupier() != this) && (this.occupied[i].getOccupier() != null))
+				{
+				this.center = null;
+				return;
+				}
 		}
 
 		// Set current ship as new occupier for all occupied boxes
