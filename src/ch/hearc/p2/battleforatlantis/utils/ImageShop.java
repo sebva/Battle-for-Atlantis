@@ -72,4 +72,37 @@ public final class ImageShop
 			return null;
 		}
 	}
+	
+	/**
+	 * Rotates a squared BufferedImage clockwise. The algorithm rotates the image in-place.
+	 * @param image The image that will be rotated
+	 */
+	public static void inplaceImageRotation(BufferedImage image)
+	{
+		assert(image.getHeight() == image.getWidth());
+		
+		final int N = image.getHeight();
+		for (int n = 0; n < N - 1; n++)
+		{
+			for (int m = n + 1; m < N; m++)
+			{
+				int temp = image.getRGB(n, m);
+				image.setRGB(n, m, image.getRGB(m, n));
+				image.setRGB(m, n, temp);
+			}
+		}
+		final int lines = image.getHeight();
+		for (int line = 0; line < lines; line++)
+		{
+			int column1 = 0, column2 = image.getWidth() -1;
+			while (column1 < column2)
+			{
+				int temp = image.getRGB(column1, line);
+				image.setRGB(column1, line, image.getRGB(column2, line));
+				image.setRGB(column2, line, temp);
+				column1 ++;
+				column2 --;
+			}
+		}
+	}
 }

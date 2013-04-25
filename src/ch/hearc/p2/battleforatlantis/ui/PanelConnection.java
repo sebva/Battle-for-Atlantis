@@ -1,14 +1,12 @@
 package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,7 +14,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
 import ch.hearc.p2.battleforatlantis.net.Host;
-import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelConnection extends JPanel

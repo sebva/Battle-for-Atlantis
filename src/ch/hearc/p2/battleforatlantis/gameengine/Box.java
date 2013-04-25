@@ -4,10 +4,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import ch.hearc.p2.battleforatlantis.ui.FrameMain;
+import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Box extends JPanel
 {
@@ -15,42 +20,42 @@ public class Box extends JPanel
 	 * Discover marker, true when box has been shot by ennemy
 	 */
 	private boolean discovered = false;
-	
+
 	/**
 	 * Image for displaying box content (water)
 	 */
 	private Image imageBox;
-	
+
 	/**
 	 * Image for displaying correct part of boat in box
 	 */
 	private Image imageOccupier = null;
-	
+
 	/**
 	 * Map to which this box belong
 	 */
 	private Map map;
-	
+
 	/**
 	 * Occupier of this box, or null if not
 	 */
 	private MapElement occupier;
-	
+
 	/**
 	 * Type of box (surface, submarine, atlantis)
 	 */
 	private MapType type;
-	
+
 	/**
 	 * Dimension of box
 	 */
 	private Dimension size;
-	
+
 	/**
 	 * Horizontal coordinate of box in map (left-side is 0)
 	 */
 	private int x;
-	
+
 	/**
 	 * Vertical coordinate of box in map (upper-side is 0)
 	 */
@@ -59,10 +64,14 @@ public class Box extends JPanel
 	/**
 	 * Default constructor for box-in-map instanciation
 	 * 
-	 * @param map Map to which current box belongs
-	 * @param type Type of box to display (surface, submarine, atlantis)
-	 * @param x Horizontal coordinate of box in map (left-side is 0)
-	 * @param y Vertical coordinate of box in map (upper-side is 0)
+	 * @param map
+	 *            Map to which current box belongs
+	 * @param type
+	 *            Type of box to display (surface, submarine, atlantis)
+	 * @param x
+	 *            Horizontal coordinate of box in map (left-side is 0)
+	 * @param y
+	 *            Vertical coordinate of box in map (upper-side is 0)
 	 */
 	public Box(Map map, MapType type, int x, int y)
 	{
@@ -91,6 +100,31 @@ public class Box extends JPanel
 		setPreferredSize(this.size);
 		setMinimumSize(this.size);
 		setMaximumSize(this.size);
+
+		addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				PanelPrepare panel = FrameMain.getPanelPrepare();
+				switch (e.getButton())
+				{
+					// left button pressed
+					case MouseEvent.BUTTON1:
+						if (occupier == null)
+							return;
+						if (occupier.getClass() == Ship.class)
+							Settings.PANEL_PREPARE.shipClick((Ship) occupier);
+						break;
+
+					// Right button pressed
+					case MouseEvent.BUTTON3:
+						panel.rotate();
+						break;
+
+				}
+			}
+		});
 	}
 
 	/**
@@ -104,8 +138,10 @@ public class Box extends JPanel
 	/**
 	 * Set the current occupier of the box
 	 * 
-	 * @param occupier Element that really occupied the box
-	 * @param image Correct image to display in the box to represent part of occupier
+	 * @param occupier
+	 *            Element that really occupied the box
+	 * @param image
+	 *            Correct image to display in the box to represent part of occupier
 	 */
 	public void setOccupier(MapElement occupier, Image image)
 	{
@@ -113,7 +149,7 @@ public class Box extends JPanel
 		this.imageOccupier = image;
 		update(getGraphics());
 	}
-	
+
 	/**
 	 * Get the current occupier of the box
 	 * 
@@ -133,7 +169,7 @@ public class Box extends JPanel
 	{
 		return this.x;
 	}
-	
+
 	/**
 	 * Getter for vertical coordinate
 	 * 

@@ -2,7 +2,6 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

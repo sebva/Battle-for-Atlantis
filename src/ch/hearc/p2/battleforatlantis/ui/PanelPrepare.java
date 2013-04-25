@@ -2,26 +2,18 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
-import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
@@ -33,27 +25,22 @@ public class PanelPrepare extends JPanel
 	 * Main frame displaying the panel
 	 */
 	private FrameMain rootFrame;
-	
+
 	/**
 	 * Currently selected ship for placement, or null if no ship selected
 	 */
 	private Ship selectedShip = null;
-	
+
 	/**
 	 * Surface map for placing ships
 	 */
 	private Map mapSurface;
-	
+
 	/**
 	 * Submarine map for placing submarines
 	 */
 	private Map mapSubmarine;
-	
-	/**
-	 * Ships and submarines listed to be placed
-	 */
-	private MapElement ships[];
-	
+
 	/**
 	 * Debug logger
 	 */
@@ -76,7 +63,8 @@ public class PanelPrepare extends JPanel
 	/**
 	 * Default constructor
 	 * 
-	 * @param rootFrame Parent frame
+	 * @param rootFrame
+	 *            Parent frame
 	 */
 	public PanelPrepare(FrameMain rootFrame)
 	{
@@ -92,8 +80,8 @@ public class PanelPrepare extends JPanel
 			else if (map.getType() == MapType.SUBMARINE)
 				mapSubmarine = map;
 		}
-		
-		// Set listeners on maps for preparation 
+
+		// Set listeners on maps for preparation
 		mapSurface.setPreparationListeners();
 		mapSubmarine.setPreparationListeners();
 
@@ -114,7 +102,7 @@ public class PanelPrepare extends JPanel
 		boxMapSubmarine.add(Box.createVerticalGlue());
 		boxMapSubmarine.add(new PanelMap(mapSubmarine));
 		box.add(boxMapSubmarine);
-		
+
 		// Add separator
 		box.add(new JSeparator(SwingConstants.VERTICAL));
 
@@ -151,21 +139,11 @@ public class PanelPrepare extends JPanel
 						break;
 				}
 			}
-			
-			// Add listener for ship selection
-			ship.addMouseListener(new MouseAdapter()
-			{				
-				@Override
-				public void mousePressed(MouseEvent e)
-				{
-					select((Ship)e.getComponent());
-				}
-			});
-			
+
 			// Add ship
 			boxMenu.add(ship);
 		}
-		
+
 		// Finalize
 		boxMenu.add(Box.createVerticalGlue());
 		box.add(boxMenu);
@@ -173,26 +151,32 @@ public class PanelPrepare extends JPanel
 	}
 
 	/**
-	 * External call for ship selection
+	 * A ship has been clicked, either by its button on the right or on the map.
 	 * 
-	 * @param ship Selected ship
+	 * @param ship Clicked ship
 	 */
-	public void select(Ship ship)
+	public void shipClick(Ship ship)
 	{
-		if (this.selectedShip != null)
+		// The ship clicked is currently floating, so we validate its position
+		if (this.selectedShip == ship && ship.getCenter() != null)
+			selectedShip = null;
+		// The ship is not floating, so it's been clicked from either the button on the right
+		// or on the map (the user validated the position but is not satisfied with it).
+		else
 		{
-			selectedShip.setBackground(Color.BLACK);
+			if(selectedShip != null)
+				selectedShip.setBackground(Color.BLACK);
+			this.selectedShip = ship;
+			this.selectedShip.setBackground(Color.DARK_GRAY);
+			log.info("selected ship");
 		}
-		this.selectedShip = ship;
-		this.selectedShip.setBackground(Color.DARK_GRAY);
-		log.info("selected ship");
-
 	}
 
 	/**
 	 * External call for place ship on map
 	 * 
-	 * @param box Center of ship
+	 * @param box
+	 *            Center of ship
 	 */
 	public void place(ch.hearc.p2.battleforatlantis.gameengine.Box box)
 	{
@@ -202,19 +186,13 @@ public class PanelPrepare extends JPanel
 			{
 				this.selectedShip.moveOut();
 			}
-			else
+			// The ship is in its environment
+			else if ((selectedShip.getType() == ShipType.SHIP && box.getMapType() == MapType.SURFACE)
+					|| (selectedShip.getType() == ShipType.SUBMARINE && box.getMapType() == MapType.SUBMARINE))
 			{
 				this.selectedShip.move(box, null);
 			}
 		}
-	}
-	
-	/**
-	 * External call for validate placement of ship on map
-	 */
-	public void validatePlacement()
-	{
-		this.selectedShip = null;
 	}
 
 	/**
@@ -233,6 +211,14 @@ public class PanelPrepare extends JPanel
 	 */
 	public void start()
 	{
+		// Check that every ship has been placed
+		for (Ship ship : rootFrame.getShips())
+			if(ship.getCenter() == null)
+			{
+				JOptionPane.showMessageDialog(this, Messages.getString("PanelPrepare.ValidateErrorMessage"), Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		
 		rootFrame.startGame();
 	}
 

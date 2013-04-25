@@ -4,13 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;

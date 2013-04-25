@@ -3,6 +3,8 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Ship extends MapElement
 {
@@ -18,7 +21,7 @@ public class Ship extends MapElement
 	 * Type of ship (ship, submarine)
 	 */
 	private ShipType type;
-	
+
 	private Icon[] initialImages;
 
 	/**
@@ -63,6 +66,17 @@ public class Ship extends MapElement
 			this.initialImages[i] = new ImageIcon(ImageShop.loadShipImage(type, size, i + 1, false));
 			add(new JLabel(this.initialImages[i]));
 		}
+
+		// Add listener for ship selection
+		this.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				if (center == null)
+					Settings.PANEL_PREPARE.shipClick(Ship.this);
+			}
+		});
 	}
 
 	/**
@@ -102,32 +116,7 @@ public class Ship extends MapElement
 	private void rotateImage()
 	{
 		for (BufferedImage image : images)
-		{
-			final int N = image.getHeight();
-			for (int n = 0; n < N - 1; n++)
-			{
-				for (int m = n + 1; m < N; m++)
-				{
-					int temp = image.getRGB(n, m);
-					image.setRGB(n, m, image.getRGB(m, n));
-					image.setRGB(m, n, temp);
-				}
-			}
-			final int lines = image.getHeight();
-			for (int line = 0; line < lines; line++)
-			{
-				int column1 = 0, column2 = image.getWidth() -1;
-				while (column1 < column2)
-				{
-					int temp = image.getRGB(column1, line);
-					image.setRGB(column1, line, image.getRGB(column2, line));
-					image.setRGB(column2, line, temp);
-					column1 ++;
-					column2 --;
-				}
-			}
-
-		}
+			ImageShop.inplaceImageRotation(image);
 	}
 
 	/**
@@ -147,9 +136,12 @@ public class Ship extends MapElement
 	/**
 	 * External call for ship movement
 	 * 
-	 * @param box New box considered as boat center
-	 * @param orientation New orientation of boat
+	 * @param box
+	 *            New box considered as boat center
+	 * @param orientation
+	 *            New orientation of boat
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public void move(Box box, ShipOrientation orientation)
 	{
 		// Conserve current orientation if arg null
@@ -215,10 +207,10 @@ public class Ship extends MapElement
 				return;
 			}
 			if ((this.occupied[i].getOccupier() != this) && (this.occupied[i].getOccupier() != null))
-				{
+			{
 				this.center = null;
 				return;
-				}
+			}
 		}
 
 		// Set current ship as new occupier for all occupied boxes
@@ -236,6 +228,11 @@ public class Ship extends MapElement
 	public ShipType getType()
 	{
 		return type;
+	}
+
+	public Box getCenter()
+	{
+		return center;
 	}
 
 }
