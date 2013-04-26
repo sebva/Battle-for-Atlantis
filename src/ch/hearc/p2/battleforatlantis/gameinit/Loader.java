@@ -28,6 +28,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
@@ -52,7 +53,9 @@ public class Loader extends DefaultHandler
 	private List<Map> maps;
 	/** List of the ships described in the XML file */
 	private List<Ship> ships;
-
+	/** Atlantis **/
+	private Atlantis atlantis;
+	
 	/** Current Level tag being treated */
 	private MapType currentLevel = null;
 
@@ -150,7 +153,13 @@ public class Loader extends DefaultHandler
 				int width = Integer.parseInt(attributes.getValue("width"));
 				MapType type = MapType.valueOf(attributes.getValue("type").toUpperCase());
 				currentLevel = type;
-				maps.add(new Map(width, height, type));
+				
+				Map map = new Map(width, height, type);
+				
+				if (this.currentLevel == MapType.ATLANTIS)
+					AtlantisCreator.setMap(map);
+					
+				maps.add(map);
 				break;
 			}
 			case "Ship":
@@ -172,9 +181,15 @@ public class Loader extends DefaultHandler
 			case "City":
 			{
 				// TODO: Do something with these values
-				String shape = attributes.getValue("shape");
+				//String shape = attributes.getValue("shape");
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
+				
+				try {
+					atlantis = AtlantisCreator.generateAtlantis(width, height);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			}
 		}
@@ -261,5 +276,14 @@ public class Loader extends DefaultHandler
 			toRet[i] = maps.get(i);
 
 		return toRet;
+	}
+
+	/**
+	 * Get the atlantis generated
+	 * @return An Atlantis Object.
+	 */
+	public Atlantis getAtlantis() 
+	{
+		return this.atlantis;
 	}
 }

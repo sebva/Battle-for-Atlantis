@@ -191,4 +191,14 @@ public class Map extends JPanel
 			}
 		};
 	}
+	
+	public int getMapHeight()
+	{
+		return this.height;
+	}
+	
+	public int getMapWidth()
+	{
+		return this.width;
+	}
 }

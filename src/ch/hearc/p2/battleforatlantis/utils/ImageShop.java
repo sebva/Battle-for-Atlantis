@@ -18,6 +18,10 @@ public final class ImageShop
 	private static final String SHIPS_FOLDER = GAMEITEMS_FOLDER + "ships/";
 	private static final String SUBMARINES_FOLDER = GAMEITEMS_FOLDER + "submarines/";
 
+	private static final String KEYWORD_ATLANTIS = "atlantis";
+	private static final String KEYWORD_SHIELD = "bouclier";
+	private static final String KEYWORD_GENERATOR = "generateur";
+	private static final String KEYWORD_GENERATOR_DESTROYED = "cassé";
 	private static final String KEYWORD_SHIP = "bateau";
 	private static final String KEYWORD_SUBMARINE = "sousmarin";
 	private static final String KEYWORD_BROKEN = "cassé";
@@ -59,7 +63,39 @@ public final class ImageShop
 
 		return loadImage(filename.toString());
 	}
+	
+	public static BufferedImage loadAtlantisImage(int row, int col, boolean shieldActivated)
+	{
+		StringBuilder filename = new StringBuilder();
+		
+		filename.append(SHIPS_FOLDER);
+		filename.append(KEYWORD_ATLANTIS);
+		filename.append(SEPARATOR);
+		filename.append(row);
+		filename.append(SEPARATOR);
+		filename.append(col);
+		filename.append(SEPARATOR);
+		filename.append(shieldActivated ? KEYWORD_SHIELD : null);
+		filename.append(EXTENSION);
+		
+		return loadImage(filename.toString());
+	}
 
+	public static BufferedImage loadGeneratorImage(boolean destroyed) 
+	{
+		StringBuilder filename = new StringBuilder();
+		
+		filename.append(SHIPS_FOLDER);
+		filename.append(KEYWORD_ATLANTIS);
+		filename.append(SEPARATOR);
+		filename.append(KEYWORD_GENERATOR);
+		filename.append(SEPARATOR);
+		filename.append(destroyed ? KEYWORD_GENERATOR_DESTROYED : null);
+		filename.append(EXTENSION);
+		
+		return loadImage(filename.toString());
+	}
+	
 	public static BufferedImage loadImage(String filename)
 	{
 		try
@@ -105,4 +141,5 @@ public final class ImageShop
 			}
 		}
 	}
+
 }
