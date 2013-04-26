@@ -10,6 +10,7 @@ import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
+import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -71,6 +72,7 @@ public class FrameMain extends JFrame
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(kDefaultWidth, kDefaultHeight);
 		setTitle(kWindowTitle);
+		setIconImage(ImageShop.UI_LOGO);
 	}
 
 	public boolean sendAction(Action action)
