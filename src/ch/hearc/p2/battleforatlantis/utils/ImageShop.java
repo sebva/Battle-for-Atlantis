@@ -7,8 +7,6 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import sun.util.logging.resources.logging;
-
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
 public final class ImageShop
