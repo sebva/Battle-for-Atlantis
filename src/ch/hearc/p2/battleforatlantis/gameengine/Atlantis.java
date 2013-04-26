@@ -3,6 +3,7 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -61,8 +62,10 @@ public class Atlantis extends MapElement
 			for (int col = 0; col < height; col++)
 			{
 				this.images[(row * width) + col] = ImageShop.loadAtlantisImage(row, col, true);
-				this.initialImages[(row * width) + col] = new ImageIcon(this.images[(row * width) + col]);
-				add(new JLabel(this.initialImages[(row * width) + col]));
+				
+				// FIXME: There is a bug in one of the two following lines
+				//this.initialImages[(row * width) + col] = new ImageIcon(this.images[(row * width) + col]);
+				//add(new JLabel(this.initialImages[(row * width) + col]));
 			}
 		}
 		

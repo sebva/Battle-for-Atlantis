@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import sun.util.logging.resources.logging;
+
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
 public final class ImageShop
@@ -17,6 +19,7 @@ public final class ImageShop
 	private static final String BACKGOUNDS_FOLDER = GAMEITEMS_FOLDER + "backgrounds/";
 	private static final String SHIPS_FOLDER = GAMEITEMS_FOLDER + "ships/";
 	private static final String SUBMARINES_FOLDER = GAMEITEMS_FOLDER + "submarines/";
+	private static final String ATLANTIS_FOLDER = GAMEITEMS_FOLDER + "atlantis/";
 
 	private static final String KEYWORD_ATLANTIS = "atlantis";
 	private static final String KEYWORD_SHIELD = "bouclier";
@@ -63,43 +66,48 @@ public final class ImageShop
 
 		return loadImage(filename.toString());
 	}
-	
+
 	public static BufferedImage loadAtlantisImage(int row, int col, boolean shieldActivated)
 	{
 		StringBuilder filename = new StringBuilder();
-		
-		filename.append(SHIPS_FOLDER);
+
+		filename.append(ATLANTIS_FOLDER);
 		filename.append(KEYWORD_ATLANTIS);
 		filename.append(SEPARATOR);
 		filename.append(row);
 		filename.append(SEPARATOR);
 		filename.append(col);
-		filename.append(SEPARATOR);
-		filename.append(shieldActivated ? KEYWORD_SHIELD : null);
+		if (shieldActivated)
+		{
+			filename.append(SEPARATOR);
+			filename.append(KEYWORD_SHIELD);
+		}
 		filename.append(EXTENSION);
-		
+
 		return loadImage(filename.toString());
 	}
 
-	public static BufferedImage loadGeneratorImage(boolean destroyed) 
+	public static BufferedImage loadGeneratorImage(boolean destroyed)
 	{
 		StringBuilder filename = new StringBuilder();
-		
-		filename.append(SHIPS_FOLDER);
-		filename.append(KEYWORD_ATLANTIS);
-		filename.append(SEPARATOR);
+
+		filename.append(ATLANTIS_FOLDER);
 		filename.append(KEYWORD_GENERATOR);
-		filename.append(SEPARATOR);
-		filename.append(destroyed ? KEYWORD_GENERATOR_DESTROYED : null);
+		if (destroyed)
+		{
+			filename.append(SEPARATOR);
+			filename.append(KEYWORD_GENERATOR_DESTROYED);
+		}
 		filename.append(EXTENSION);
-		
+
 		return loadImage(filename.toString());
 	}
-	
+
 	public static BufferedImage loadImage(String filename)
 	{
 		try
 		{
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(filename);
 			return ImageIO.read(ClassLoader.getSystemResource(filename));
 		}
 		catch (IOException e)
@@ -108,15 +116,17 @@ public final class ImageShop
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Rotates a squared BufferedImage clockwise. The algorithm rotates the image in-place.
-	 * @param image The image that will be rotated
+	 * 
+	 * @param image
+	 *            The image that will be rotated
 	 */
 	public static void inplaceImageRotation(BufferedImage image)
 	{
-		assert(image.getHeight() == image.getWidth());
-		
+		assert (image.getHeight() == image.getWidth());
+
 		final int N = image.getHeight();
 		for (int n = 0; n < N - 1; n++)
 		{
@@ -130,14 +140,14 @@ public final class ImageShop
 		final int lines = image.getHeight();
 		for (int line = 0; line < lines; line++)
 		{
-			int column1 = 0, column2 = image.getWidth() -1;
+			int column1 = 0, column2 = image.getWidth() - 1;
 			while (column1 < column2)
 			{
 				int temp = image.getRGB(column1, line);
 				image.setRGB(column1, line, image.getRGB(column2, line));
 				image.setRGB(column2, line, temp);
-				column1 ++;
-				column2 --;
+				column1++;
+				column2--;
 			}
 		}
 	}
