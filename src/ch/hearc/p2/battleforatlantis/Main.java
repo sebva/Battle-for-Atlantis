@@ -60,6 +60,7 @@ public class Main
 		props.put("rolloverColorLight", blueString);
 		props.put("rolloverColorDark", blueString);
 		props.put("selectionForegroundColor", blueString);
+		props.put("logoString", "Battle for Atlantis");
 
 		NoireLookAndFeel.setCurrentTheme(props);
 

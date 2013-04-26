@@ -26,7 +26,7 @@ public class DialogAbout extends JDialog
 	{
 		super(parent, true);
 		setTitle(Messages.getString("DialogAbout.Title"));
-		setSize(500, 350);
+		setSize(450, 275);
 		setResizable(false);
 		setLayout(new BorderLayout(kHgap, kVgap));
 
