@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
@@ -40,12 +39,11 @@ public class Main
 		});
 		
 		Settings.apply();
+		setLookAndFeel();
 		Settings.FRAME_MAIN = new FrameMain();
-		
-		setLookAndFeel(Settings.FRAME_MAIN);
 	}
 
-	private static void setLookAndFeel(FrameMain frameMain)
+	private static void setLookAndFeel()
 	{
 		Properties props = new Properties();
 
@@ -73,6 +71,5 @@ public class Main
 		{
 			e.printStackTrace();
 		}
-		SwingUtilities.updateComponentTreeUI(frameMain);
 	}
 }
