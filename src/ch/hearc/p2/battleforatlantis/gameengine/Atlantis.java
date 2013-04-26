@@ -13,20 +13,34 @@ import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
 public class Atlantis extends MapElement
 {
+	// Dimensions of Atlantis
 	private int width, height;
+	
+	// Destroyable attribute
 	private boolean destroyable;
+	
+	// Initial images
 	private Icon[] initialImages;
+	
+	// Generator of the shield
 	private Generator shieldGenerator = null;
 	
+	// Positions of Atlantis
 	private int positionX;
 	private int positionY;
 	
+	// Dimensions of the Map
 	private int mapWidth;
 	private int mapHeight;
 
 	/**
 	 * Generate a new Atlantis game element
-	 * @throws Exception 
+	 * 
+	 * @param width Width of the Atlantis
+	 * @param height Height of the Atlantis
+	 * @param mapWidth Map width
+	 * @param mapHeight Map height
+	 * @throws Exception Invalid Size Map
 	 */
 	public Atlantis(int width, int height, int mapWidth, int mapHeight) throws Exception
 	{
@@ -45,7 +59,7 @@ public class Atlantis extends MapElement
 		this.mapHeight = mapHeight;
 		
 		// Some verification for Generator
-		if (width < mapWidth - 2 || height < mapHeight - 2)
+		if (width < mapWidth - 2 && height < mapHeight - 2)
 			throw new Exception("Can't create Atlantis with this size on this map. Generator can't be created.");
 		
 		// Display settings
@@ -73,6 +87,12 @@ public class Atlantis extends MapElement
 		this.destroyable = false;
 	}
 	
+	/**
+	 * Generate a new Atlantis Generator.
+	 * If already created, returns this one.
+	 * 
+	 * @return Atlantis Generator 
+	 */
 	public Generator getGenerator()
 	{
 		// Create new shield generator if necessary
@@ -133,7 +153,7 @@ public class Atlantis extends MapElement
 	}
 
 	/**
-	 * When the generator is destroyed, the atlantis is destroyable !
+	 * Indicate that the generator is destroyed, the Atlantis is destroyable !
 	 */
 	public void generatorDestroyed()
 	{
@@ -151,8 +171,9 @@ public class Atlantis extends MapElement
 	}
 	
 	/**
+	 * Get the X Position of the Atlantis (start at 0)
 	 * 
-	 * @return
+	 * @return Position X
 	 */
 	public int getPositionX()
 	{
@@ -160,8 +181,9 @@ public class Atlantis extends MapElement
 	}
 	
 	/**
+	 * Get the Y Position of the Atlantis (start at 0)
 	 * 
-	 * @return
+	 * @return Position Y
 	 */
 	public int getPositionY()
 	{

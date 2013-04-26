@@ -156,10 +156,15 @@ public class Loader extends DefaultHandler
 				
 				Map map = new Map(width, height, type);
 				
-				if (this.currentLevel == MapType.ATLANTIS)
-					AtlantisCreator.setMap(map);
-					
+				try {
+					if (this.currentLevel == MapType.ATLANTIS)
+						AtlantisCreator.setMap(map);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				maps.add(map);
+				
 				break;
 			}
 			case "Ship":
@@ -174,14 +179,14 @@ public class Loader extends DefaultHandler
 					type = ShipType.SUBMARINE;
 
 				assert (type != null);
+				
 				for (int i = 0; i < amount; i++)
 					ships.add(new Ship(length, type));
+				
 				break;
 			}
 			case "City":
 			{
-				// TODO: Do something with these values
-				//String shape = attributes.getValue("shape");
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
 				
@@ -190,6 +195,7 @@ public class Loader extends DefaultHandler
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 				break;
 			}
 		}
