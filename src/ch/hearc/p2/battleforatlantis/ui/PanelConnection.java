@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -14,14 +15,18 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
 import ch.hearc.p2.battleforatlantis.net.Host;
+import ch.hearc.p2.battleforatlantis.net.NetworkAutodiscover.NetworkAutodiscoverListener;
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
-public class PanelConnection extends JPanel
+public class PanelConnection extends JPanel implements NetworkAutodiscoverListener
 {
 	private static final int kHgap = 30;
 	private static final int kVgap = 0;
 	
 	private FrameMain rootFrame;
+	private NetworkManager networkManager;
+	private JTable players;
 	
 	private class PanelMenu extends JPanel
 	{
@@ -83,9 +88,10 @@ public class PanelConnection extends JPanel
 	public PanelConnection(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
+		networkManager = NetworkManager.getInstance();
 		
 		setLayout(new BorderLayout(kHgap, kVgap));
-		JTable players = new JTable(7, 2);
+		players = new JTable(7, 2);
 		
 		add(players, BorderLayout.CENTER);
 		add(new PanelMenu(), BorderLayout.EAST);
@@ -95,6 +101,7 @@ public class PanelConnection extends JPanel
 	public void connect(Host host)
 	{
 		rootFrame.placeShips();
+		networkManager.removeAutodiscoverListener(this);
 	}
 
 	public void directConnect()
@@ -102,12 +109,30 @@ public class PanelConnection extends JPanel
 		// TODO Do something with the address
 		InetAddress addr = DialogDirectConnect.promptUserForAddress(this);
 		if(addr != null)
+		{
 			rootFrame.placeShips();
+			networkManager.removeAutodiscoverListener(this);
+		}
 	}
 
 	public void backToMenu()
 	{
 		rootFrame.endGame();
+		networkManager.removeAutodiscoverListener(this);
+	}
+
+	@Override
+	public void hostAppeared(Host host)
+	{
+		// TODO: Show the player somewhere
+		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("New player : " + host);
+	}
+
+	@Override
+	public void hostDisappeared(Host host)
+	{
+		// TODO: Remove this player from the view
+		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("Player left : " + host);
 	}
 
 }

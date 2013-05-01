@@ -10,6 +10,7 @@ import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -69,7 +70,7 @@ public class FrameMain extends JFrame
 
 	private void windowConfig()
 	{
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(kDefaultWidth, kDefaultHeight);
 		setTitle(kWindowTitle);
 		setIconImage(ImageShop.UI_LOGO);
@@ -83,6 +84,7 @@ public class FrameMain extends JFrame
 	public void searchPlayer()
 	{
 		cards.showCard(PanelConnection.class.getSimpleName());
+		NetworkManager.getInstance().setAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
 	public void placeShips()
