@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
@@ -12,7 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTable;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.net.Host;
 import ch.hearc.p2.battleforatlantis.net.NetworkAutodiscover.NetworkAutodiscoverListener;
@@ -26,7 +31,47 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 	
 	private FrameMain rootFrame;
 	private NetworkManager networkManager;
-	private JTable players;
+	private Map<Host, PanelPlayer> players;
+	private Box boxPlayers;
+	
+	private class PanelPlayer extends JPanel
+	{
+		public PanelPlayer(final Host player)
+		{
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+			add(new JLabel(player.getName()));
+			final JButton btnConnect = new JButton(Messages.getString("PanelConnection.Connect"));
+
+			btnConnect.addActionListener(new ActionListener()
+			{
+				
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					connect(player);
+					
+				}
+			});
+			MouseAdapter mouseAdapter = new MouseAdapter()
+			{
+				
+				@Override
+				public void mouseExited(MouseEvent e)
+				{
+					btnConnect.setVisible(false);
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					btnConnect.setVisible(true);
+				}
+			};
+			addMouseListener(mouseAdapter);
+			btnConnect.addMouseListener(mouseAdapter);
+			add(btnConnect);
+		}
+	}
 	
 	private class PanelMenu extends JPanel
 	{
@@ -91,9 +136,12 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		networkManager = NetworkManager.getInstance();
 		
 		setLayout(new BorderLayout(kHgap, kVgap));
-		players = new JTable(7, 2);
+		players = new HashMap<Host, PanelPlayer>();
 		
-		add(players, BorderLayout.CENTER);
+		boxPlayers = Box.createVerticalBox();
+		boxPlayers.add(new JSeparator(SwingConstants.HORIZONTAL));
+		
+		add(boxPlayers, BorderLayout.CENTER);
 		add(new PanelMenu(), BorderLayout.EAST);
 		add(new PanelUp(), BorderLayout.NORTH);
 	}
@@ -123,15 +171,21 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 
 	@Override
 	public void hostAppeared(Host host)
-	{
-		// TODO: Show the player somewhere
+	{	
+		PanelPlayer panelPlayer = new PanelPlayer(host);
+		boxPlayers.add(panelPlayer);
+		players.put(host, panelPlayer);
+		
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("New player : " + host);
 	}
 
 	@Override
 	public void hostDisappeared(Host host)
 	{
-		// TODO: Remove this player from the view
+		PanelPlayer panelPlayer = players.get(host);
+		boxPlayers.remove(panelPlayer);
+		players.remove(host);
+		
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("Player left : " + host);
 	}
 
