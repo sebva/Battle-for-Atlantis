@@ -4,14 +4,20 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONString;
+
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 
-public class Map extends JPanel
+public class Map extends JPanel implements JSONString
 {
 	/**
 	 * Number of columns
@@ -200,5 +206,25 @@ public class Map extends JPanel
 	public int getMapWidth()
 	{
 		return this.width;
+	}
+
+	@Override
+	public String toJSONString()
+	{
+		JSONObject jo = new JSONObject();
+		jo.put("levelName", type.toString());
+		
+		Set<Ship> ships = new HashSet<>();
+		for (Box[] ext : boxes)
+		{
+			for (Box box : ext)
+			{
+				MapElement occupier = box.getOccupier();
+				if(occupier instanceof Ship)
+					ships.add((Ship)occupier);
+			}
+		}
+		jo.put("ships", new JSONArray(ships));
+		return jo.toString();
 	}
 }

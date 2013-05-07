@@ -21,10 +21,8 @@ public class ActionManager
 	/**
 	 * Execute the action described in the JSONObject
 	 * 
-	 * @param jo
-	 *            A JSONObject containing at least the action and uuid fields
-	 * @param from
-	 *            The IP address from which this action originates
+	 * @param jo A JSONObject containing at least the action and uuid fields
+	 * @param from The IP address from which this action originates
 	 */
 	public void executeAction(JSONObject jo, InetAddress from)
 	{
@@ -68,7 +66,26 @@ public class ActionManager
 				else
 					Settings.FRAME_MAIN.connectionRefused(h);
 			case "readyToPlay":
-				
+				// TODO: Send atlantis
+				break;
+			case "atlantisTransmission":
+				// TODO: Create local atlantis
+				break;
+			case "shipsPlacement":
+				// TODO: Instanciate remote ships
+				break;
+			case "fire":
+				// TODO: Fire !
+				break;
+			case "move":
+				// TODO: Move
+				break;
+			case "nextLevel":
+				// TODO: Next level
+				break;
+			case "endGame":
+				// TODO: End game
+				break;
 		}
 	}
 }

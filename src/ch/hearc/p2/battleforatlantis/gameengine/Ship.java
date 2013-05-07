@@ -11,12 +11,16 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import org.json.JSONObject;
+import org.json.JSONString;
+
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
-public class Ship extends MapElement
+public class Ship extends MapElement implements JSONString
 {
+	private int id;
 	/**
 	 * Type of ship (ship, submarine)
 	 */
@@ -42,7 +46,7 @@ public class Ship extends MapElement
 	 * @param type
 	 *            Type of ship (ship, submarine)
 	 */
-	public Ship(int size, ShipType type)
+	public Ship(int size, ShipType type, int id)
 	{
 		// Call to parent constructor for standard settings
 		super(size);
@@ -50,6 +54,7 @@ public class Ship extends MapElement
 		// Input fields
 		this.type = type;
 		this.initialImages = new Icon[size];
+		this.id = id;
 
 		// Set size of boat and display settings
 		this.displaySize = new Dimension(size * 60, 60);
@@ -233,6 +238,20 @@ public class Ship extends MapElement
 	public Box getCenter()
 	{
 		return center;
+	}
+
+	@Override
+	public String toJSONString()
+	{
+		JSONObject jo = new JSONObject();
+		jo.put("shipId", id);
+		jo.put("shipType", type.toString());
+		JSONObject center = new JSONObject();
+		center.put("x", this.center.getCoordX());
+		center.put("y", this.center.getCoordY());
+		jo.put("center", center);
+		jo.put("direction", orientation);
+		return jo.toString();
 	}
 
 }

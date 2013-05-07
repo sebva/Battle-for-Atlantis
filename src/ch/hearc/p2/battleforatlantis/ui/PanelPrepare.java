@@ -13,10 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import ch.hearc.p2.battleforatlantis.action.StartGameAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelPrepare extends JPanel
@@ -218,6 +220,11 @@ public class PanelPrepare extends JPanel
 				JOptionPane.showMessageDialog(this, Messages.getString("PanelPrepare.ValidateErrorMessage"), Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+		
+		StartGameAction sga = new StartGameAction();
+		sga.addMap(mapSurface);
+		sga.addMap(mapSubmarine);
+		NetworkManager.getInstance().send(sga);
 		
 		rootFrame.startGame();
 	}

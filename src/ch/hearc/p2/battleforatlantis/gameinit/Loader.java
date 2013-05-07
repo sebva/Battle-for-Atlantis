@@ -58,6 +58,8 @@ public class Loader extends DefaultHandler
 	
 	/** Current Level tag being treated */
 	private MapType currentLevel = null;
+	/** Current ship id */
+	private int shipId = 1;
 
 	/** Path to the default configuration file (in JAR) */
 	private static final String kDefaultConfigFile = "config/config.default.xml";
@@ -181,7 +183,7 @@ public class Loader extends DefaultHandler
 				assert (type != null);
 				
 				for (int i = 0; i < amount; i++)
-					ships.add(new Ship(length, type));
+					ships.add(new Ship(length, type, shipId++));
 				
 				break;
 			}
