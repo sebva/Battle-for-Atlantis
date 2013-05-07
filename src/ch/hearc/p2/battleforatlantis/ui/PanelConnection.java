@@ -147,9 +147,8 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 	}
 
 	public void connect(Host host)
-	{
-		rootFrame.placeShips();
-		networkManager.removeAutodiscoverListener(this);
+	{	
+		networkManager.tryConnect(host.getAddress(), rootFrame.getHashConfig());
 	}
 
 	public void directConnect()
@@ -157,10 +156,7 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		// TODO Do something with the address
 		InetAddress addr = DialogDirectConnect.promptUserForAddress(this);
 		if(addr != null)
-		{
-			rootFrame.placeShips();
-			networkManager.removeAutodiscoverListener(this);
-		}
+			networkManager.tryConnect(addr, rootFrame.getHashConfig());
 	}
 
 	public void backToMenu()

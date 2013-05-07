@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
+import ch.hearc.p2.battleforatlantis.net.Host;
 import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
@@ -25,6 +27,7 @@ public class FrameMain extends JFrame
 	
 	private Map[] localMaps;
 	private Ship[] ships;
+	private String hashConfig;
 	
 	
 	private class PanelCards extends JPanel
@@ -50,6 +53,7 @@ public class FrameMain extends JFrame
 		loader.load();
 		localMaps = loader.getMapsWithoutAtlantis();
 		ships = loader.getShips();
+		hashConfig = loader.getHash();
 		
 		windowConfig();
 		
@@ -90,11 +94,13 @@ public class FrameMain extends JFrame
 	public void placeShips()
 	{
 		cards.showCard(PanelPrepare.class.getSimpleName());
+		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
 	public void startGame()
 	{
 		cards.showCard(PanelPlay.class.getSimpleName());
+		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
 	public void endGame()
@@ -117,4 +123,20 @@ public class FrameMain extends JFrame
 		return ships;
 	}
 
+	public String getHashConfig()
+	{
+		return hashConfig;
+	}
+
+	public void connectionAttempt(Host h)
+	{
+		int result = JOptionPane.showConfirmDialog(this, String.format(Messages.getString("FrameMain.ConnectionAttemptMessage"), h.getName(), h.getAddress().toString()), Messages.getString("FrameMain.ConnectionAttemptTitle"), JOptionPane.YES_NO_OPTION);
+		boolean connectionAccepted = (result == JOptionPane.YES_OPTION);
+		NetworkManager.getInstance().connectionResponse(connectionAccepted, h);
+	}
+
+	public void connectionRefused(Host h)
+	{
+		JOptionPane.showMessageDialog(this, String.format(Messages.getString("FrameMain.ConnectionRefusedMessage"), h.getName(), h.getAddress().toString()), Messages.getString("FrameMain.ConnectionRefusedTitle"), JOptionPane.ERROR_MESSAGE);
+	}
 }
