@@ -97,7 +97,9 @@ public class PanelPrepare extends JPanel
 		box.add(boxMapSurface);
 
 		// Add separator
+		box.add(Box.createHorizontalStrut(20));
 		box.add(new JSeparator(SwingConstants.VERTICAL));
+		box.add(Box.createHorizontalStrut(20));
 
 		// Add submarine map
 		Box boxMapSubmarine = Box.createVerticalBox();
@@ -106,13 +108,16 @@ public class PanelPrepare extends JPanel
 		box.add(boxMapSubmarine);
 
 		// Add separator
+		box.add(Box.createHorizontalStrut(20));
 		box.add(new JSeparator(SwingConstants.VERTICAL));
+		box.add(Box.createHorizontalStrut(20));
 
 		// Create menu
 		Box boxMenu = Box.createVerticalBox();
 
 		// Add "Validate" button
 		CustomButton btn = new CustomButton(Messages.getString("PanelPrepare.Validate"));
+		btn.setAlignmentX(RIGHT_ALIGNMENT);
 		btn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -131,25 +136,33 @@ public class PanelPrepare extends JPanel
 			if (currentType == null || currentType != ship.getType())
 			{
 				currentType = ship.getType();
+				JLabel label = null;
 				switch (currentType)
 				{
 					case SHIP:
-						boxMenu.add(new JLabel(Messages.getString("PanelPrepare.Boats")));
+						label = new JLabel(Messages.getString("PanelPrepare.Boats"));
 						break;
 					case SUBMARINE:
-						boxMenu.add(new JLabel(Messages.getString("PanelPrepare.Submarines")));
+						label = new JLabel(Messages.getString("PanelPrepare.Submarines"));
 						break;
 				}
+				label.setAlignmentX(RIGHT_ALIGNMENT);
+				boxMenu.add(label);
 			}
 
 			// Add ship
+			ship.setAlignmentX(RIGHT_ALIGNMENT);
 			boxMenu.add(ship);
 		}
 
 		// Finalize
 		boxMenu.add(Box.createVerticalGlue());
-		box.add(boxMenu);
+		//box.add(boxMenu);
+		box.setBackground(Color.RED);
+		
+		setLayout(new BorderLayout());
 		add(box, BorderLayout.CENTER);
+		add(boxMenu, BorderLayout.EAST);
 	}
 
 	/**
