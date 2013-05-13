@@ -1,6 +1,11 @@
 package ch.hearc.p2.battleforatlantis.gameengine;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -23,43 +28,72 @@ public class Map extends JPanel implements JSONString
 	 * Number of columns
 	 */
 	private int width;
-	
+
 	/**
 	 * Number of lines
 	 */
 	private int height;
-	
+
+	/**
+	 * Preferred dimension of map in pixels
+	 */
+	private Dimension sizePreferred;
+
+	/**
+	 * Size of boxes
+	 */
+	private int sizeBox;
+
 	/**
 	 * Map type (surface, submarine, atlantis)
 	 */
 	private MapType type;
-	
+
 	/**
 	 * Array of boxes which compose the map, in order [line, column]
 	 */
 	private Box[][] boxes;
-	
+
 	/**
 	 * Listener for click on boxes in preparation panel
 	 */
 	private MouseListener preparationListener;
-	
+
 	/**
 	 * Listener for click on boxes in game panel
 	 */
 	private MouseListener gameListener;
-	
+
 	/**
 	 * Debug logger
 	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
+	 * Internal panel
+	 */
+	private InternalPanel internalPanel;
+
+	/**
+	 * Internal panel for resizing abilities
+	 */
+	private class InternalPanel extends JPanel
+	{
+		public InternalPanel()
+		{
+			setLayout(new GridLayout(height, width, 0, 0));
+		}
+	}
+
+	/**
 	 * Create a map of specified dimensions
 	 * 
-	 * @param width Number of rows
-	 * @param height Number of columns
-	 * @param type Type of map (surface, submarine, atlantis)
+	 * @param width
+	 *            Number of rows
+	 * @param height
+	 *            Number of columns
+	 * @param type
+	 *            Type of map (surface, submarine, atlantis)
 	 */
 	public Map(int width, int height, MapType type)
 	{
@@ -68,9 +102,22 @@ public class Map extends JPanel implements JSONString
 		this.height = height;
 		this.type = type;
 
+		// Sizes definition
+		this.setMaximumSize(new Dimension(60 * width, 60 * height));
+		this.setMinimumSize(new Dimension(30 * width, 30 * height));
+		this.setPreferredSize(new Dimension(60 * width, 60 * height));
+		this.sizeBox = 60;
+
+		this.internalPanel = new InternalPanel();
+		setLayout(new BorderLayout(0, 0));
+		add(this.internalPanel, BorderLayout.NORTH);
+		this.internalPanel.setPreferredSize(new Dimension(60 * width, 60 * height));
+		this.internalPanel.setMaximumSize(new Dimension(60 * width, 60 * height));
+		this.internalPanel.setMinimumSize(new Dimension(30 * width, 30 * height));
+
 		// Prepare boxes lists (internal and display)
 		boxes = new Box[height][width];
-		setLayout(new GridLayout(height, width, 0, 0));
+		// setLayout(new GridLayout(height, width, 0, 0));
 
 		// Create and add boxes
 		for (int i = 0; i < height; i++)
@@ -78,13 +125,47 @@ public class Map extends JPanel implements JSONString
 			for (int j = 0; j < width; j++)
 			{
 				boxes[i][j] = new Box(this, this.type, j, i);
-				add(boxes[i][j]);
+				this.internalPanel.add(boxes[i][j]);
 			}
 		}
 
 		// Instanciate listeners
 		instanciatePreparationListener();
 		instanciateGameListener();
+		addComponentListener(new ComponentAdapter()
+		{
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				int numberY = Map.this.height;
+				int numberX = Map.this.width;
+
+				int sizeBoxX = Map.this.getWidth() / numberX;
+				int sizeBoxY = Map.this.getHeight() / numberY;
+
+				if (sizeBoxX <= Map.this.sizeBox || sizeBoxY <= Map.this.sizeBox)
+				{
+					Map.this.sizeBox = (sizeBoxX < sizeBoxY ? sizeBoxX : sizeBoxY);
+				}
+				else
+				{
+					Map.this.sizeBox = (sizeBoxX > sizeBoxY ? sizeBoxX : sizeBoxY);
+				}
+
+				for (int i = 0; i < numberY; i++)
+				{
+					for (int j = 0; j < numberX; j++)
+					{
+						boxes[i][j].setSizeFromMap(Map.this.sizeBox);
+					}
+				}
+
+				Dimension newDimension = new Dimension(Map.this.sizeBox * numberX, Map.this.sizeBox * numberY);
+				Map.this.internalPanel.setPreferredSize(newDimension);
+				Map.this.internalPanel.setMaximumSize(newDimension);
+			}
+		});
+
 	}
 
 	/**
@@ -116,18 +197,20 @@ public class Map extends JPanel implements JSONString
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the box at specified coordinates (top-left is 0;0)
 	 * 
-	 * @param x Horizontal coordinate, starting at 0 on left side
-	 * @param y Vertical coordinate, starting at 0 on upper side
+	 * @param x
+	 *            Horizontal coordinate, starting at 0 on left side
+	 * @param y
+	 *            Vertical coordinate, starting at 0 on upper side
 	 * 
 	 * @return Box at location, or null if incorrect location
 	 */
 	public Box getBox(int x, int y)
 	{
-		if ((x>=0) && (x<this.width) && (y>=0) && (y<this.height))
+		if ((x >= 0) && (x < this.width) && (y >= 0) && (y < this.height))
 		{
 			return this.boxes[y][x];
 		}
@@ -136,7 +219,7 @@ public class Map extends JPanel implements JSONString
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the current type of map
 	 * 
@@ -146,7 +229,6 @@ public class Map extends JPanel implements JSONString
 	{
 		return type;
 	}
-
 
 	/**
 	 * Instanciate boxes listener for preparation state
@@ -166,7 +248,7 @@ public class Map extends JPanel implements JSONString
 			public void mouseEntered(MouseEvent e)
 			{
 				PanelPrepare panel = FrameMain.getPanelPrepare();
-				panel.place((Box)e.getComponent());
+				panel.place((Box) e.getComponent());
 			}
 		};
 	}
@@ -197,12 +279,12 @@ public class Map extends JPanel implements JSONString
 			}
 		};
 	}
-	
+
 	public int getMapHeight()
 	{
 		return this.height;
 	}
-	
+
 	public int getMapWidth()
 	{
 		return this.width;
@@ -213,15 +295,15 @@ public class Map extends JPanel implements JSONString
 	{
 		JSONObject jo = new JSONObject();
 		jo.put("levelName", type.toString());
-		
+
 		Set<Ship> ships = new HashSet<>();
 		for (Box[] ext : boxes)
 		{
 			for (Box box : ext)
 			{
 				MapElement occupier = box.getOccupier();
-				if(occupier instanceof Ship)
-					ships.add((Ship)occupier);
+				if (occupier instanceof Ship)
+					ships.add((Ship) occupier);
 			}
 		}
 		jo.put("ships", new JSONArray(ships));

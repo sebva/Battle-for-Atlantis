@@ -19,7 +19,7 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class FrameMain extends JFrame
 {
-	private static final int kDefaultWidth = 1800;
+	private static final int kDefaultWidth = 1600;
 	private static final int kDefaultHeight = 900;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	
@@ -69,7 +69,7 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 		
-		//cards.showCard(PanelPrepare.class.getSimpleName());
+		cards.showCard(PanelPrepare.class.getSimpleName());
 		
 		setVisible(true);
 	}

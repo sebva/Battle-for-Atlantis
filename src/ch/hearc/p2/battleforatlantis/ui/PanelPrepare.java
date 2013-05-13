@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
@@ -87,14 +89,20 @@ public class PanelPrepare extends JPanel
 		mapSurface.setPreparationListeners();
 		mapSubmarine.setPreparationListeners();
 
+		mapSurface.setAlignmentY(TOP_ALIGNMENT);
+		mapSubmarine.setAlignmentY(TOP_ALIGNMENT);
+
 		// Create canvas
 		Box box = Box.createHorizontalBox();
 
 		// Add surface map
 		Box boxMapSurface = Box.createVerticalBox();
 		boxMapSurface.add(Box.createVerticalGlue());
-		boxMapSurface.add(new PanelMap(mapSurface));
+		boxMapSurface.add(mapSurface);
+		boxMapSurface.add(Box.createVerticalGlue());
+		box.add(Box.createHorizontalGlue());
 		box.add(boxMapSurface);
+		box.add(Box.createHorizontalGlue());
 
 		// Add separator
 		box.add(Box.createHorizontalStrut(20));
@@ -104,8 +112,10 @@ public class PanelPrepare extends JPanel
 		// Add submarine map
 		Box boxMapSubmarine = Box.createVerticalBox();
 		boxMapSubmarine.add(Box.createVerticalGlue());
-		boxMapSubmarine.add(new PanelMap(mapSubmarine));
+		boxMapSubmarine.add(mapSubmarine);
+		boxMapSubmarine.add(Box.createVerticalGlue());
 		box.add(boxMapSubmarine);
+		box.add(Box.createHorizontalGlue());
 
 		// Add separator
 		box.add(Box.createHorizontalStrut(20));
@@ -157,9 +167,9 @@ public class PanelPrepare extends JPanel
 
 		// Finalize
 		boxMenu.add(Box.createVerticalGlue());
-		//box.add(boxMenu);
+		// box.add(boxMenu);
 		box.setBackground(Color.RED);
-		
+
 		setLayout(new BorderLayout());
 		add(box, BorderLayout.CENTER);
 		add(boxMenu, BorderLayout.EAST);
@@ -168,7 +178,8 @@ public class PanelPrepare extends JPanel
 	/**
 	 * A ship has been clicked, either by its button on the right or on the map.
 	 * 
-	 * @param ship Clicked ship
+	 * @param ship
+	 *            Clicked ship
 	 */
 	public void shipClick(Ship ship)
 	{
@@ -179,7 +190,7 @@ public class PanelPrepare extends JPanel
 		// or on the map (the user validated the position but is not satisfied with it).
 		else
 		{
-			if(selectedShip != null)
+			if (selectedShip != null)
 				selectedShip.setBackground(Color.BLACK);
 			this.selectedShip = ship;
 			this.selectedShip.setBackground(Color.DARK_GRAY);
@@ -228,17 +239,18 @@ public class PanelPrepare extends JPanel
 	{
 		// Check that every ship has been placed
 		for (Ship ship : rootFrame.getShips())
-			if(ship.getCenter() == null)
+			if (ship.getCenter() == null)
 			{
-				JOptionPane.showMessageDialog(this, Messages.getString("PanelPrepare.ValidateErrorMessage"), Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, Messages.getString("PanelPrepare.ValidateErrorMessage"),
+						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		
+
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
 		sga.addMap(mapSubmarine);
 		NetworkManager.getInstance().send(sga);
-		
+
 		rootFrame.startGame();
 	}
 

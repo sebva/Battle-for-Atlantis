@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -47,9 +49,19 @@ public class Box extends JPanel
 	private MapType type;
 
 	/**
-	 * Dimension of box
+	 * Preferred dimension of box
 	 */
-	private Dimension size;
+	private Dimension sizePreferred;
+
+	/**
+	 * Minimal dimension of box
+	 */
+	private Dimension sizeMinimal;
+	
+	/**
+	 * Registered dimension
+	 */
+	private int size;
 
 	/**
 	 * Horizontal coordinate of box in map (left-side is 0)
@@ -96,10 +108,12 @@ public class Box extends JPanel
 		}
 
 		// Set size of box to display on screen
-		this.size = new Dimension(60, 60);
-		setPreferredSize(this.size);
-		setMinimumSize(this.size);
-		setMaximumSize(this.size);
+		this.sizePreferred = new Dimension(60, 60);
+		this.sizeMinimal = new Dimension(30, 30);
+		setPreferredSize(this.sizePreferred);
+		setMinimumSize(this.sizeMinimal);
+		setMaximumSize(this.sizePreferred);
+		this.size = 60;
 
 		addMouseListener(new MouseAdapter()
 		{
@@ -109,7 +123,7 @@ public class Box extends JPanel
 				PanelPrepare panel = FrameMain.getPanelPrepare();
 				switch (e.getButton())
 				{
-					// left button pressed
+				// left button pressed
 					case MouseEvent.BUTTON1:
 						if (occupier == null)
 							return;
@@ -125,6 +139,24 @@ public class Box extends JPanel
 				}
 			}
 		});
+
+		
+		addComponentListener(new ComponentAdapter()
+		{
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				
+			}
+		});
+	}
+	
+	public void setSizeFromMap(int size)
+	{
+		this.size = size;
+		this.sizePreferred = new Dimension(size, size);
+		this.setPreferredSize(this.sizePreferred);
+		this.setMaximumSize(this.sizePreferred);
 	}
 
 	/**
@@ -198,10 +230,10 @@ public class Box extends JPanel
 	{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(this.imageBox, 0, 0, null);
+		g2d.drawImage(this.imageBox, 0, 0, this.size+1, this.size+1, null);
 		if (this.imageOccupier != null)
 		{
-			g2d.drawImage(this.imageOccupier, 0, 0, null);
+			g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
 		}
 	}
 
