@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
@@ -94,10 +95,9 @@ public class PanelHome extends JPanel
 	
 	public void settings()
 	{
-		// TODO: Retrieve the player's current name
-		String oldName = "Toto";
-		// TODO: Store the new player's name
-		String newName = DialogPlayerName.promptUserForName(this, oldName);
+		String newName = DialogPlayerName.promptUserForName(this, rootFrame.getPlayerName());
+		rootFrame.setPlayerName(newName);
+		NetworkManager.getInstance().localhost.setName(newName);
 	}
 
 	public void about()

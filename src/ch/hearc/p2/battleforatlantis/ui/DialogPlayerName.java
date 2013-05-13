@@ -16,11 +16,17 @@ public class DialogPlayerName
 	 */
 	public static String promptUserForName(Component parent, String oldName)
 	{
-		return JOptionPane.showInputDialog(
+		String newName = (String) JOptionPane.showInputDialog(
 				parent,
 				Messages.getString("DialogPlayerName.Message"),
 				Messages.getString("DialogPlayerName.Title"),
-				JOptionPane.QUESTION_MESSAGE);
+				JOptionPane.QUESTION_MESSAGE,
+				null, null,
+				oldName);
+		if(newName == null || "".equals(newName))
+			return oldName;
+		else
+			return newName;
 	}
 
 }

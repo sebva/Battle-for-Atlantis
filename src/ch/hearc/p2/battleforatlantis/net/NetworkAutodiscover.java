@@ -25,6 +25,11 @@ public class NetworkAutodiscover
 		{
 			jo = new JSONObject();
 			jo.put("action", "autodiscover");
+			refreshName();
+		}
+		
+		public void refreshName()
+		{
 			jo.put("playerName", nw.localhost.getName());
 		}
 
@@ -152,6 +157,11 @@ public class NetworkAutodiscover
 		if (nal == listener)
 			listener = null;
 		stopDiscovering();
+	}
+	
+	protected void refreshPlayerName()
+	{
+		kAutoDiscoverMessage.refreshName();
 	}
 
 	public Host[] getKnownHosts()

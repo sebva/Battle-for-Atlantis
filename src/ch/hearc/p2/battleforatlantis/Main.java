@@ -40,7 +40,7 @@ public class Main
 		
 		Settings.apply();
 		setLookAndFeel();
-		Settings.FRAME_MAIN = new FrameMain();
+		new FrameMain();
 	}
 
 	private static void setLookAndFeel()

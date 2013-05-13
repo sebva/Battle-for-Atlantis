@@ -172,6 +172,8 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		boxPlayers.add(panelPlayer);
 		players.put(host, panelPlayer);
 		
+		validate();
+		
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("New player : " + host);
 	}
 
@@ -181,6 +183,8 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		PanelPlayer panelPlayer = players.get(host);
 		boxPlayers.remove(panelPlayer);
 		players.remove(host);
+		
+		validate();
 		
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("Player left : " + host);
 	}

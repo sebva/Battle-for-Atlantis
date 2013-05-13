@@ -2,11 +2,13 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import ch.hearc.p2.battleforatlantis.Main;
 import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
@@ -22,12 +24,14 @@ public class FrameMain extends JFrame
 	private static final int kDefaultWidth = 1600;
 	private static final int kDefaultHeight = 900;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
+	private static final String kKeyPlayerName = "playerName";
 	
 	private PanelCards cards;
 	
 	private Map[] localMaps;
 	private Ship[] ships;
 	private String hashConfig;
+	private String playerName;
 	
 	
 	private class PanelCards extends JPanel
@@ -49,6 +53,8 @@ public class FrameMain extends JFrame
 	
 	public FrameMain() throws Exception
 	{
+		Settings.FRAME_MAIN = this;
+		
 		Loader loader = new Loader();
 		loader.load();
 		localMaps = loader.getMapsWithoutAtlantis();
@@ -56,6 +62,9 @@ public class FrameMain extends JFrame
 		hashConfig = loader.getHash();
 		
 		windowConfig();
+		
+		// Load the player's name from the Preferences
+		getPlayerName();
 		
 		Settings.PANEL_HOME = new PanelHome(this);
 		Settings.PANEL_CONNECTIONS = new PanelConnection(this);
@@ -68,8 +77,6 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_CONNECTIONS, PanelConnection.class.getSimpleName());
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
-		
-		cards.showCard(PanelPrepare.class.getSimpleName());
 		
 		setVisible(true);
 	}
@@ -132,13 +139,26 @@ public class FrameMain extends JFrame
 
 	public void connectionAttempt(Host h)
 	{
-		int result = JOptionPane.showConfirmDialog(this, String.format(Messages.getString("FrameMain.ConnectionAttemptMessage"), h.getName(), h.getAddress().toString()), Messages.getString("FrameMain.ConnectionAttemptTitle"), JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(this, String.format(Messages.getString("FrameMain.ConnectionAttemptMessage"), h.getName(), h.getAddress().getHostAddress()), Messages.getString("FrameMain.ConnectionAttemptTitle"), JOptionPane.YES_NO_OPTION);
 		boolean connectionAccepted = (result == JOptionPane.YES_OPTION);
 		NetworkManager.getInstance().connectionResponse(connectionAccepted, h);
 	}
 
 	public void connectionRefused(Host h)
 	{
-		JOptionPane.showMessageDialog(this, String.format(Messages.getString("FrameMain.ConnectionRefusedMessage"), h.getName(), h.getAddress().toString()), Messages.getString("FrameMain.ConnectionRefusedTitle"), JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, String.format(Messages.getString("FrameMain.ConnectionRefusedMessage"), h.getName(), h.getAddress().getHostAddress()), Messages.getString("FrameMain.ConnectionRefusedTitle"), JOptionPane.ERROR_MESSAGE);
+	}
+
+	public String getPlayerName()
+	{
+		if(playerName == null)
+			playerName = Preferences.userNodeForPackage(Main.class).get(kKeyPlayerName, Messages.getString("FrameMain.Player"));
+		return playerName;
+	}
+	
+	public void setPlayerName(String playerName)
+	{
+		this.playerName = playerName;
+		Preferences.userNodeForPackage(Main.class).put(kKeyPlayerName, playerName);
 	}
 }

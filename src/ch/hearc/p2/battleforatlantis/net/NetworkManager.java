@@ -62,8 +62,7 @@ public class NetworkManager
 	private NetworkManager()
 	{
 		actionManager = new ActionManager(this);
-		// TODO: Replace the name with the real one
-		localhost = new Host("Toto");
+		localhost = new Host(Settings.FRAME_MAIN.getPlayerName());
 
 		bcastAddresses = getDirectedBroadcastAddresses();
 
@@ -212,7 +211,9 @@ public class NetworkManager
 					}
 					catch (IOException e)
 					{
-						e.printStackTrace();
+						log.severe("Connexion perdue !");
+						// TODO: Notify the user
+						break;
 					}
 				}
 			}

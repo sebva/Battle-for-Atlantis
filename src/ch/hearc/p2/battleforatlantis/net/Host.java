@@ -47,6 +47,16 @@ public class Host
 	{
 		return name;
 	}
+	
+	// Only for local player !
+	public void setName(String name)
+	{
+		if(name != null && !"".equals(name))
+		{
+			this.name = name;
+			NetworkManager.getInstance().autodiscover.refreshPlayerName();
+		}
+	}
 
 	public InetAddress getAddress()
 	{
