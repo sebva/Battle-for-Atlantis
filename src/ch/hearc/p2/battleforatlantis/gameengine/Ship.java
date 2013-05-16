@@ -179,6 +179,7 @@ public class Ship extends MapElement implements JSONString
 
 		// Get the map concerned by movement
 		// TODO: modify and adapt when maps and ships are used on panel play (static method no longer good idea)
+		// FIXME: FAIL: Network received boats are put on local maps !
 		Map map = null;
 		switch (box.getMapType())
 		{
@@ -256,12 +257,26 @@ public class Ship extends MapElement implements JSONString
 		JSONObject jo = new JSONObject();
 		jo.put("shipId", id);
 		jo.put("shipType", type.toString());
+		jo.put("size", wholeSize);
 		JSONObject center = new JSONObject();
 		center.put("x", this.center.getCoordX());
 		center.put("y", this.center.getCoordY());
 		jo.put("center", center);
 		jo.put("direction", orientation);
 		return jo.toString();
+	}
+	
+	public static Ship createFromJSONObject(JSONObject jo, Box center)
+	{
+		int size = jo.getInt("size");
+		ShipType shipType = ShipType.valueOf(jo.getString("shipType"));
+		int id = jo.getInt("shipId");
+		
+		Ship ship = new Ship(size, shipType, id);
+		ShipOrientation orientation = ShipOrientation.valueOf(jo.getString("direction"));
+		ship.move(center, orientation);
+		
+		return ship;
 	}
 
 	/**

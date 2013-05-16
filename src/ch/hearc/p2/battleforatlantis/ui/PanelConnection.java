@@ -241,10 +241,6 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		add(boxPlayers, BorderLayout.CENTER);
 		add(new PanelMenu(), BorderLayout.EAST);
 		add(new PanelUp(), BorderLayout.NORTH);
-
-		this.hostAppeared(new Host("Sébastien"));
-		this.hostAppeared(new Host("Sqrt(jason)"));
-		this.hostAppeared(new Host("Johan"));
 	}
 
 	public void connect(Host host)
@@ -254,7 +250,6 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 
 	public void directConnect()
 	{
-		// TODO Do something with the address
 		InetAddress addr = DialogDirectConnect.promptUserForAddress(this);
 		if (addr != null)
 			networkManager.tryConnect(addr, rootFrame.getHashConfig());

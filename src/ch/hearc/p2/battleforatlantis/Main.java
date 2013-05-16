@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
+import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 import com.jtattoo.plaf.noire.NoireLookAndFeel;
@@ -33,8 +34,7 @@ public class Main
 			@Override
 			public boolean isLoggable(LogRecord record)
 			{
-				// No filtering applied
-				return true;
+				return !record.getSourceClassName().equals(ImageShop.class.getName());
 			}
 		});
 		

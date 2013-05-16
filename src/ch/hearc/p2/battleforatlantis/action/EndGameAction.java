@@ -2,13 +2,25 @@ package ch.hearc.p2.battleforatlantis.action;
 
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.gameengine.Box;
+import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 
 public class EndGameAction extends Action implements NetworkMessage
 {
+	public enum EndGameCause
+	{
+		ATLANTIS_DESTROYED, SURRENDERED
+	}
 	private boolean won;
+	private EndGameCause cause;
 
-	public EndGameAction()
+	public EndGameAction(boolean gameWon, EndGameCause cause)
+	{
+
+	}
+	
+	public EndGameAction(boolean gameWon, EndGameCause cause, MapType level, Box target)
 	{
 
 	}
@@ -29,10 +41,4 @@ public class EndGameAction extends Action implements NetworkMessage
 	{
 		return null;
 	}
-
-	public void setWinner(boolean isWinner)
-	{
-
-	}
-
 }

@@ -29,6 +29,7 @@ public class FrameMain extends JFrame
 	private PanelCards cards;
 	
 	private Map[] localMaps;
+	private Map[] distantMaps;
 	private Ship[] ships;
 	private String hashConfig;
 	private String playerName;
@@ -127,6 +128,16 @@ public class FrameMain extends JFrame
 	public Map[] getLocalMaps()
 	{
 		return localMaps;
+	}
+	
+	public Map[] getDistantMaps()
+	{
+		return distantMaps;
+	}
+	
+	public void setDistantMaps(Map[] maps)
+	{
+		this.distantMaps = maps;
 	}
 
 	public Ship[] getShips()

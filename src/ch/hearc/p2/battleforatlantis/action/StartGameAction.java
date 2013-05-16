@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class StartGameAction extends Action implements NetworkMessage
 {
@@ -21,12 +22,24 @@ public class StartGameAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
-		// TODO: Implement the execution
+		Map[] maps = new Map[mapSet.size()];
+		mapSet.toArray(maps);
+		Settings.FRAME_MAIN.setDistantMaps(maps);
 	}
 
 	public static StartGameAction createFromJson(JSONObject jo)
 	{
-		return null;
+		assert "shipsPlacement".equals(jo.get("action")) : "Packet wrongly routed";
+		JSONArray maps = jo.getJSONArray("levels");
+		
+		StartGameAction startGameAction = new StartGameAction();
+		
+		for(int i = 0; i < maps.length(); i++)
+		{
+			startGameAction.addMap(Map.createFromJsonObject(maps.getJSONObject(i)));
+		}
+		
+		return startGameAction;
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import org.json.JSONString;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Map extends JPanel implements JSONString
 {
@@ -308,5 +309,34 @@ public class Map extends JPanel implements JSONString
 		}
 		jo.put("ships", new JSONArray(ships));
 		return jo.toString();
+	}
+
+	public static Map createFromJsonObject(JSONObject jo)
+	{
+		MapType type = MapType.valueOf(jo.getString("levelName"));
+		
+		Map map = null;
+		
+		// Determine map size by using local map size
+		Map[] localMaps = Settings.FRAME_MAIN.getLocalMaps();
+		for (Map localmap : localMaps)
+		{
+			if(localmap.type.equals(type))
+				map = new Map(localmap.width, localmap.height, type);
+		}
+		
+		JSONArray ships = jo.getJSONArray("ships");
+		for(int i = 0; i < ships.length(); i++)
+		{
+			JSONObject jsonShip = ships.getJSONObject(i);
+			JSONObject jsonCenter = jsonShip.getJSONObject("center");
+			int x = jsonCenter.getInt("x");
+			int y = jsonCenter.getInt("y");
+			
+			// Return value ignored
+			Ship.createFromJSONObject(jsonShip, map.boxes[y][x]);
+		}
+		
+		return map;
 	}
 }

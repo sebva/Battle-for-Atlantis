@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.action.StartGameAction;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class ActionManager
@@ -72,7 +73,7 @@ public class ActionManager
 				// TODO: Create local atlantis
 				break;
 			case "shipsPlacement":
-				// TODO: Instanciate remote ships
+				StartGameAction.createFromJson(jo).execute();
 				break;
 			case "fire":
 				// TODO: Fire !

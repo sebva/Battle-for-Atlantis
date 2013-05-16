@@ -27,8 +27,8 @@ public class NetworkManager
 {
 	/** UDP and TCP port on which to listen */
 	public static final int NETWORK_PORT = 28526;
-	/** Length of the buffer for incoming UDP and TCP packet. */
-	public static final int BUFFER_LENGTH = 1000;
+	/** Length of the buffer for incoming UDP and TCP packet. For the moment, it MUST be bigger than the biggest packet */
+	public static final int BUFFER_LENGTH = 3000;
 	/** How long should we try to open the TCP socket in ms */
 	public static final int TCP_SOCKET_OPENING_TRYING_DURATION = 10000;
 	/** Host object representing ourselves */
@@ -46,7 +46,7 @@ public class NetworkManager
 	private DatagramSocket udpInSocket;
 	/** Outbound UDP socket (also for broadcasts) */
 	private DatagramSocket udpOutSocket;
-	/** TCP Socket (null until opened */ 
+	/** TCP Socket (null until opened */
 	private Socket tcpSocket = null;
 	/** TCP abstract OutputStream */
 	private OutputStream tcpOutStream;
@@ -126,6 +126,7 @@ public class NetworkManager
 
 	/**
 	 * Get the singleton instance of this class
+	 * 
 	 * @return The unique instance of NetworkManager
 	 */
 	public static NetworkManager getInstance()
@@ -175,17 +176,15 @@ public class NetworkManager
 	}
 
 	/**
-	 * Start receiving from UDP. The packet are then forwarded to ActionManager.
-	 * tcpInputStream MUST be initialized before calling this method.
+	 * Start receiving from UDP. The packet are then forwarded to ActionManager. tcpInputStream MUST be initialized before calling this method.
 	 */
 	private void startTcpReception()
 	{
 		/*
-		if (receiving)
-			return;
-
-		receiving = true;
-		*/
+		 * if (receiving) return;
+		 * 
+		 * receiving = true;
+		 */
 
 		new Thread(new Runnable()
 		{
@@ -202,7 +201,8 @@ public class NetworkManager
 						if (length < 1)
 							continue;
 
-						JSONObject jo = new JSONObject(new String(buffer, 0, length));
+						String string = new String(buffer, 0, length);
+						JSONObject jo = new JSONObject(string);
 						actionManager.executeAction(jo, tcpSocket.getInetAddress());
 					}
 					catch (JSONException e)
@@ -294,7 +294,8 @@ public class NetworkManager
 	 * 
 	 * Also verifies that the required fields are present and set the UUID.
 	 * 
-	 * @param j A message that should be sent over the network
+	 * @param j
+	 *            A message that should be sent over the network
 	 * @return The message as byte[] ready to be sent over the network
 	 */
 	private byte[] prepareJsonObjectForTransfer(JSONObject j)
@@ -307,7 +308,9 @@ public class NetworkManager
 
 	/**
 	 * Set the listener that should be called when a distant host has been detected/has left.
-	 * @param al The object that should be notified.
+	 * 
+	 * @param al
+	 *            The object that should be notified.
 	 */
 	public void setAutodiscoverListener(NetworkAutodiscoverListener al)
 	{
@@ -316,7 +319,9 @@ public class NetworkManager
 
 	/**
 	 * Remove the autodiscover listener
-	 * @param al The listener to remove
+	 * 
+	 * @param al
+	 *            The listener to remove
 	 */
 	public void removeAutodiscoverListener(NetworkAutodiscoverListener al)
 	{
@@ -325,8 +330,11 @@ public class NetworkManager
 
 	/**
 	 * Send a tryConnect packet to the remote host
-	 * @param ip The InetAddress to which this packet should be sent
-	 * @param hashConfig The cryptographic hash of the config file
+	 * 
+	 * @param ip
+	 *            The InetAddress to which this packet should be sent
+	 * @param hashConfig
+	 *            The cryptographic hash of the config file
 	 */
 	public void tryConnect(InetAddress ip, final String hashConfig)
 	{
@@ -335,16 +343,18 @@ public class NetworkManager
 	}
 
 	/**
-	 * Send a tryConnect packet to the remote host.
-	 * If the connection is accepted, PanelPrepare will be shown to the user.
-	 * @param accepted True if the connection is accepted (the game should start)
-	 * @param h The Host to which this packet should be sent
+	 * Send a tryConnect packet to the remote host. If the connection is accepted, PanelPrepare will be shown to the user.
+	 * 
+	 * @param accepted
+	 *            True if the connection is accepted (the game should start)
+	 * @param h
+	 *            The Host to which this packet should be sent
 	 */
 	public void connectionResponse(boolean accepted, Host h)
 	{
 		NetworkMessage networkMessage = NetworkMessages.connectionResponse(localhost.getUuid().toString(), accepted, localhost.getName());
 		send(networkMessage, h.getAddress());
-		if(accepted)
+		if (accepted)
 		{
 			Settings.FRAME_MAIN.placeShips();
 			startTcpConnection(h);
@@ -352,9 +362,10 @@ public class NetworkManager
 	}
 
 	/**
-	 * Initialize the TCP connection with a remote host.
-	 * This method has to be called by the remote host at the same time.
-	 * @param h The remote Host
+	 * Initialize the TCP connection with a remote host. This method has to be called by the remote host at the same time.
+	 * 
+	 * @param h
+	 *            The remote Host
 	 */
 	protected void startTcpConnection(Host h)
 	{
@@ -391,7 +402,7 @@ public class NetworkManager
 				tcpSocket = new Socket(distantHost.getAddress(), NETWORK_PORT);
 				tcpInStream = tcpSocket.getInputStream();
 				tcpOutStream = tcpSocket.getOutputStream();
-				
+
 				send(message);
 				startTcpReception();
 				succeded = true;
@@ -409,7 +420,7 @@ public class NetworkManager
 				}
 			}
 		}
-		
+
 		log.info("TCP Connection successful");
 	}
 
@@ -421,7 +432,7 @@ public class NetworkManager
 		try
 		{
 			ServerSocket serverSocket = new ServerSocket(NETWORK_PORT);
-			//serverSocket.setSoTimeout(5000);
+			// serverSocket.setSoTimeout(5000);
 			tcpSocket = serverSocket.accept();
 			log.info("ServerSocket.accept()");
 			serverSocket.close();
@@ -435,5 +446,10 @@ public class NetworkManager
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public Host getDistantHost()
+	{
+		return distantHost;
 	}
 }
