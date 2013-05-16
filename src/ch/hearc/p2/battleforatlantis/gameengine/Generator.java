@@ -93,4 +93,11 @@ public class Generator extends MapElement
 	{
 		return distanceY;
 	}
+
+	@Override
+	protected void setCurrentSize(int width, int height)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

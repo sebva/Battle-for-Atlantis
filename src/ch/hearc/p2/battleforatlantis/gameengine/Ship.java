@@ -2,14 +2,14 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -26,7 +26,7 @@ public class Ship extends MapElement implements JSONString
 	 */
 	private ShipType type;
 
-	private Icon[] initialImages;
+	private Image[] initialImages;
 
 	/**
 	 * Box considered as ship's center
@@ -37,6 +37,11 @@ public class Ship extends MapElement implements JSONString
 	 * Ship orientation, default EAST (front looks on screen's right)
 	 */
 	private ShipOrientation orientation = ShipOrientation.EAST;
+	
+	/**
+	 * Color of background
+	 */
+	private Color backgroundColor;
 
 	/**
 	 * Default constructor for ship instanciation
@@ -53,23 +58,18 @@ public class Ship extends MapElement implements JSONString
 
 		// Input fields
 		this.type = type;
-		this.initialImages = new Icon[size];
+		this.initialImages = new Image[size];
 		this.id = id;
 
 		// Set size of boat and display settings
-		this.displaySize = new Dimension(size * 60, 60);
-		setLayout(new GridLayout(1, size, 0, 0));
-		this.setPreferredSize(this.displaySize);
-		this.setMinimumSize(this.displaySize);
-		this.setMaximumSize(this.displaySize);
-		this.setBackground(Color.BLACK);
+		this.setInitialSize(size * 60, 60);
+		this.backgroundColor = new Color(0, 0, 0);
 
 		// Load images corresponding to boat parts
 		for (int i = 0; i < size; i++)
 		{
 			this.images[i] = ImageShop.loadShipImage(type, size, i + 1, false);
-			this.initialImages[i] = new ImageIcon(ImageShop.loadShipImage(type, size, i + 1, false));
-			add(new JLabel(this.initialImages[i]));
+			this.initialImages[i] = ImageShop.loadShipImage(type, size, i + 1, false);
 		}
 
 		// Add listener for ship selection
@@ -80,6 +80,16 @@ public class Ship extends MapElement implements JSONString
 			{
 				if (center == null)
 					Settings.PANEL_PREPARE.shipClick(Ship.this);
+			}
+		});
+
+		this.addComponentListener(new ComponentAdapter()
+		{
+
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				setCurrentSize(getWidth(), getHeight());
 			}
 		});
 	}
@@ -252,6 +262,45 @@ public class Ship extends MapElement implements JSONString
 		jo.put("center", center);
 		jo.put("direction", orientation);
 		return jo.toString();
+	}
+
+	/**
+	 * Paint method for displaying ship in menus
+	 */
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		int w = currentSize.width;
+		int h = currentSize.height;
+		
+		g2d.setColor(this.backgroundColor);
+		g2d.fillRect(getWidth() - w, 0, w, h);
+
+		for (int i = 0; i < wholeSize; i++)
+		{
+			g2d.drawImage(this.initialImages[i], getWidth() - w + i * w / wholeSize, 0, w / wholeSize, h, null);
+		}
+	}
+
+	@Override
+	protected void setCurrentSize(int width, int height)
+	{
+		int min = width / wholeSize;
+		if (height < min)
+		{
+			min = height;
+		}
+		
+		this.currentSize = new Dimension(min * wholeSize, min);
+	}
+	
+	public void setBackgroundColor(Color color)
+	{
+		this.backgroundColor = color;
+		repaint();
 	}
 
 }

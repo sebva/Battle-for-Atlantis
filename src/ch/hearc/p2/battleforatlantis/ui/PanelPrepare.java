@@ -143,10 +143,12 @@ public class PanelPrepare extends JPanel
 		for (Ship ship : rootFrame.getShips())
 		{
 			// Add label
+			/*
 			if (currentType == null || currentType != ship.getType())
 			{
 				currentType = ship.getType();
 				JLabel label = null;
+				
 				switch (currentType)
 				{
 					case SHIP:
@@ -158,7 +160,7 @@ public class PanelPrepare extends JPanel
 				}
 				label.setAlignmentX(RIGHT_ALIGNMENT);
 				boxMenu.add(label);
-			}
+			}*/
 
 			// Add ship
 			ship.setAlignmentX(RIGHT_ALIGNMENT);
@@ -185,15 +187,19 @@ public class PanelPrepare extends JPanel
 	{
 		// The ship clicked is currently floating, so we validate its position
 		if (this.selectedShip == ship && ship.getCenter() != null)
+		{
+			selectedShip.setBackgroundColor(Color.DARK_GRAY);
 			selectedShip = null;
+		}
+		
 		// The ship is not floating, so it's been clicked from either the button on the right
 		// or on the map (the user validated the position but is not satisfied with it).
 		else
 		{
 			if (selectedShip != null)
-				selectedShip.setBackground(Color.BLACK);
+				selectedShip.setBackgroundColor(Color.BLACK);
 			this.selectedShip = ship;
-			this.selectedShip.setBackground(Color.DARK_GRAY);
+			this.selectedShip.setBackgroundColor(Color.BLUE);
 			log.info("selected ship");
 		}
 	}

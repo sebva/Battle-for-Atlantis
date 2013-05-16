@@ -60,11 +60,11 @@ public class Atlantis extends MapElement
 			throw new Exception("Can't create Atlantis with this size on this map. Generator can't be created.");
 		
 		// Display settings
-		this.displaySize = new Dimension(width * 60, height * 60);
+		this.preferredSize = new Dimension(width * 60, height * 60);
 		setLayout(new GridLayout(height, width, 0, 0));
-		this.setPreferredSize(this.displaySize);
-		this.setMinimumSize(this.displaySize);
-		this.setMaximumSize(this.displaySize);
+		this.setPreferredSize(this.preferredSize);
+		this.setMinimumSize(this.preferredSize);
+		this.setMaximumSize(this.preferredSize);
 		this.setBackground(Color.WHITE);
 
 		// Load images corresponding to boat parts
@@ -185,6 +185,13 @@ public class Atlantis extends MapElement
 	public int getPositionY()
 	{
 		return this.positionY;
+	}
+
+	@Override
+	protected void setCurrentSize(int width, int height)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }
