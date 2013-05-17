@@ -79,7 +79,7 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 		
-		//cards.showCard(PanelPrepare.class.getSimpleName());
+		cards.showCard(PanelPrepare.class.getSimpleName());
 		
 		setVisible(true);
 	}

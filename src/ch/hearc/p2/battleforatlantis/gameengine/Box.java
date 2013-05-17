@@ -221,6 +221,14 @@ public class Box extends JPanel
 	{
 		return this.type;
 	}
+	
+	/**
+	 * Getter for map in which this box is placed
+	 */
+	public Map getMap()
+	{
+		return this.map;
+	}
 
 	/**
 	 * Paint method for displaying box and part of element eventually contained in it

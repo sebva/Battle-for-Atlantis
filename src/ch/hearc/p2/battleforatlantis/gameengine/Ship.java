@@ -180,7 +180,8 @@ public class Ship extends MapElement implements JSONString
 		// Get the map concerned by movement
 		// TODO: modify and adapt when maps and ships are used on panel play (static method no longer good idea)
 		// FIXME: FAIL: Network received boats are put on local maps !
-		Map map = null;
+		//Map map = null;
+		/*
 		switch (box.getMapType())
 		{
 			case SURFACE:
@@ -189,7 +190,8 @@ public class Ship extends MapElement implements JSONString
 			case SUBMARINE:
 				map = FrameMain.getPanelPrepare().getMapSubmarine();
 				break;
-		}
+		}*/
+		Map map = box.getMap();
 
 		// Compute positions and gather boxes hosting boat
 		for (int i = 0; i < this.wholeSize; i++)
