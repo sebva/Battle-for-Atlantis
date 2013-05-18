@@ -33,6 +33,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
  * This class loads the game's configuration from an XML file.
@@ -192,11 +193,18 @@ public class Loader extends DefaultHandler
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
 				
+				Settings.ATLANTIS_WIDTH = width;
+				Settings.ATLANTIS_HEIGHT = height;
+				
+				/*
+				 * A générer au début de la partie, puisqu'une seule atlantis est générée et transmise à l'adversaire
+				 * 
 				try {
 					atlantis = AtlantisCreator.generateAtlantis(width, height);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				*/
 				
 				break;
 			}

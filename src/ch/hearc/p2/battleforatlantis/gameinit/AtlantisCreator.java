@@ -58,7 +58,10 @@ public class AtlantisCreator
 			throw new Exception("[AtlantisCreator::generateAtlantis] Can't instanciate Atlantis object without a map.");
 		
 		if (AtlantisCreator.atlantis == null)
+		{
 			AtlantisCreator.atlantis = new Atlantis(width, height, map.getMapWidth(), map.getMapHeight());
+			AtlantisCreator.atlantis.generatePosition();
+		}
 		
 		return AtlantisCreator.atlantis;
 	}
@@ -75,6 +78,16 @@ public class AtlantisCreator
 			throw new Exception("[AtlantisCreator::setMap] Map Type is not the Atlantis Level");
 		
 		AtlantisCreator.map = map;
+	}
+	
+	/**
+	 * Retrieve the Atlantis Level Map
+	 * 
+	 * @return Atlantis Level Map
+	 */
+	public static Map getMap() 
+	{
+		return AtlantisCreator.map;
 	}
 
 	/**

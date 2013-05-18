@@ -47,10 +47,6 @@ public class Atlantis extends MapElement
 		this.width = width;
 		this.height = height;
 		
-		// Position of Atlantis
-		positionX = (int)(Math.random() * (mapWidth - this.width));
-		positionY = (int)(Math.random() * (mapHeight - this.height));
-		
 		// Size of map
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
@@ -82,6 +78,16 @@ public class Atlantis extends MapElement
 		
 		// By default, the Atlantis is not destroyable (shield generator is running)
 		this.destroyable = false;
+	}
+	
+	/**
+	 * Generate random position for the Atlantis
+	 */
+	public void generatePosition()
+	{
+		// Position of Atlantis
+		positionX = (int)(Math.random() * (mapWidth - this.width));
+		positionY = (int)(Math.random() * (mapHeight - this.height));
 	}
 	
 	/**
@@ -185,6 +191,19 @@ public class Atlantis extends MapElement
 	public int getPositionY()
 	{
 		return this.positionY;
+	}
+	
+	/**
+	 * Set the X and Y position of the Atlantis.
+	 * Used when Atlantis is retrieved by other player
+	 * 
+	 * @param positionX Position in X
+	 * @param positionY Position in Y
+	 */
+	public void setPosition(int positionX, int positionY)
+	{
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 
 	@Override

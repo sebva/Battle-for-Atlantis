@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import ch.hearc.p2.battleforatlantis.Main;
 import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
+import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
 import ch.hearc.p2.battleforatlantis.net.Host;
@@ -30,10 +31,10 @@ public class FrameMain extends JFrame
 	
 	private Map[] localMaps;
 	private Map[] distantMaps;
+	private Map atlantis;
 	private Ship[] ships;
 	private String hashConfig;
 	private String playerName;
-	
 	
 	private class PanelCards extends JPanel
 	{
@@ -128,6 +129,28 @@ public class FrameMain extends JFrame
 	public Map[] getLocalMaps()
 	{
 		return localMaps;
+	}
+	
+	public Map getMapByType(MapType type, boolean isLocalMap)
+	{
+		// Special case for Atlantis Map
+		if (type == MapType.ATLANTIS)
+			return atlantis;
+		
+		// Local or distant Map List
+		Map[] mapList = (isLocalMap) ? localMaps : distantMaps;
+		
+		// List each map
+		for(Map map:mapList)
+		{
+			// Check type asked
+			if (map.getType().equals(type))
+			{
+				return map;
+			}
+		}
+		
+		return null;
 	}
 	
 	public Map[] getDistantMaps()

@@ -27,6 +27,9 @@ public class Settings
 	public static PanelPrepare PANEL_PREPARE;
 	public static PanelPlay PANEL_PLAY;
 	
+	public static int ATLANTIS_WIDTH;
+	public static int ATLANTIS_HEIGHT;
+	
 	public static Color MENU_BORDER_COLOR = new Color(0, 188, 224);
 	
 	/**
