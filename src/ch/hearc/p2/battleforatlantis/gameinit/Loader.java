@@ -28,7 +28,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
@@ -55,7 +54,7 @@ public class Loader extends DefaultHandler
 	/** List of the ships described in the XML file */
 	private List<Ship> ships;
 	/** Atlantis **/
-	private Atlantis atlantis;
+	private Map atlantis;
 	
 	/** Current Level tag being treated */
 	private MapType currentLevel = null;
@@ -159,10 +158,16 @@ public class Loader extends DefaultHandler
 				
 				Map map = new Map(width, height, type);
 				
-				try {
+				try
+				{
 					if (this.currentLevel == MapType.ATLANTIS)
+					{
 						AtlantisCreator.setMap(map);
-				} catch (Exception e) {
+						this.atlantis = map;
+					}
+				}
+				catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 
@@ -298,7 +303,7 @@ public class Loader extends DefaultHandler
 	 * Get the atlantis generated
 	 * @return An Atlantis Object.
 	 */
-	public Atlantis getAtlantis() 
+	public Map getAtlantis() 
 	{
 		return this.atlantis;
 	}

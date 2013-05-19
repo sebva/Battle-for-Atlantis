@@ -43,11 +43,11 @@ public class AtlantisTransmissionAction extends Action
 		
 		// Row and column number to load Atlantis parts images
 		int row = 0;
-		int col = 0;
 		
 		// Run through the atlantis width
 		for (int x = this.atlantis.getPositionX(); x < this.atlantis.getPositionX() + Settings.ATLANTIS_WIDTH; x++)
 		{
+			int col = 0;
 			// Run through the atlantis height
 			for (int y = this.atlantis.getPositionY(); y < this.atlantis.getPositionY() + Settings.ATLANTIS_HEIGHT; y++)
 			{
@@ -107,9 +107,6 @@ public class AtlantisTransmissionAction extends Action
 		return null;
 	}
 
-	/**
-	 * @return 
-	 */
 	@Override
 	public JSONObject getJson()
 	{

@@ -6,7 +6,10 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.action.AtlantisTransmissionAction;
 import ch.hearc.p2.battleforatlantis.action.StartGameAction;
+import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
+import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class ActionManager
@@ -67,10 +70,18 @@ public class ActionManager
 				else
 					Settings.FRAME_MAIN.connectionRefused(h);
 			case "readyToPlay":
-				// TODO: Send atlantis
+				try
+				{
+					Atlantis atlantis = AtlantisCreator.generateAtlantis(Settings.ATLANTIS_WIDTH, Settings.ATLANTIS_HEIGHT);
+					nw.send(new AtlantisTransmissionAction(atlantis));
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 				break;
 			case "atlantisTransmission":
-				// TODO: Create local atlantis
+				AtlantisTransmissionAction.createFromJson(jo).execute();
 				break;
 			case "shipsPlacement":
 				StartGameAction.createFromJson(jo).execute();

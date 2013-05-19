@@ -60,6 +60,7 @@ public class FrameMain extends JFrame
 		Loader loader = new Loader();
 		loader.load();
 		localMaps = loader.getMapsWithoutAtlantis();
+		atlantis = loader.getAtlantis();
 		ships = loader.getShips();
 		hashConfig = loader.getHash();
 		
@@ -80,7 +81,7 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 		
-		cards.showCard(PanelPrepare.class.getSimpleName());
+		//cards.showCard(PanelPrepare.class.getSimpleName());
 		
 		setVisible(true);
 	}
