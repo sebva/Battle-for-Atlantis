@@ -64,16 +64,19 @@ public class ActionManager
 				Host h = new Host(jo.getString("playerName"), from, UUID.fromString(jo.getString("uuid")));
 				if (jo.getBoolean("connectionAccepted"))
 				{
-					Settings.FRAME_MAIN.placeShips();
+					Settings.FRAME_MAIN.placeShips(h);
 					nw.startTcpConnection(h);
 				}
 				else
 					Settings.FRAME_MAIN.connectionRefused(h);
+				break;
 			case "readyToPlay":
 				try
 				{
 					Atlantis atlantis = AtlantisCreator.generateAtlantis(Settings.ATLANTIS_WIDTH, Settings.ATLANTIS_HEIGHT);
-					nw.send(new AtlantisTransmissionAction(atlantis));
+					AtlantisTransmissionAction atlantisTransmissionAction = new AtlantisTransmissionAction(atlantis);
+					atlantisTransmissionAction.execute();
+					nw.send(atlantisTransmissionAction);
 				}
 				catch (Exception e)
 				{

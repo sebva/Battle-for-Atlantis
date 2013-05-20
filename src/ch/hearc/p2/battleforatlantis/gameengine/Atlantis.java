@@ -81,6 +81,22 @@ public class Atlantis extends MapElement
 	}
 	
 	/**
+	 * Generate a new Atlantis game element
+	 * 
+	 * @param width Width of the Atlantis
+	 * @param height Height of the Atlantis
+	 * @param mapWidth Map width
+	 * @param mapHeight Map height
+	 * @param generator The Atlantis' generator (received over the network)
+	 * @throws Exception Invalid Size Map
+	 */
+	public Atlantis(int width, int height, int mapWidth, int mapHeight, Generator generator) throws Exception
+	{
+		this(width, height, mapWidth, mapHeight);
+		this.shieldGenerator = generator;
+	}
+	
+	/**
 	 * Generate random position for the Atlantis
 	 */
 	public void generatePosition()
@@ -103,12 +119,17 @@ public class Atlantis extends MapElement
 		{
 			int generatorPositionX = 0;
 			int generatorPositionY = 0; 
-			boolean isPlaced = false;
+			
+			/* FIXME: The switch doesn't cover all the possibilities, and so
+			 * an infinite loop may occur, thus blocking the TCP reception thread.
+			 * When fixed, remember to set isPlaced to false again ! 
+			 */
+			boolean isPlaced = true;
 			
 			while (isPlaced == false)
 			{
 				// Choose position
-				switch ((int)(Math.random() * 3))
+				switch ((int)(Math.random() * 4.0)) // *4.0 because (int) floors the result
 				{
 					case 0:
 						// If we've some place for the top

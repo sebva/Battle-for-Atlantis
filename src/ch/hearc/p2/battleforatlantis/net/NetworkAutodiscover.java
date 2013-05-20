@@ -79,7 +79,7 @@ public class NetworkAutodiscover
 					}
 				}
 			}
-		}).start();
+		}, "Autodiscover sending thread").start();
 		// Starting the cleaning Thread
 		new Thread(new Runnable()
 		{
@@ -113,7 +113,7 @@ public class NetworkAutodiscover
 					}
 				}
 			}
-		}).start();
+		}, "Autodiscover cleaning thread").start();
 	}
 
 	private void stopDiscovering()

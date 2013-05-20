@@ -172,7 +172,7 @@ public class NetworkManager
 					}
 				}
 			}
-		}).start();
+		}, "UDP Reception Thread").start();
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class NetworkManager
 					}
 				}
 			}
-		}).start();
+		}, "TCP Reception Thread").start();
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class NetworkManager
 		send(networkMessage, h.getAddress());
 		if (accepted)
 		{
-			Settings.FRAME_MAIN.placeShips();
+			Settings.FRAME_MAIN.placeShips(h);
 			startTcpConnection(h);
 		}
 	}

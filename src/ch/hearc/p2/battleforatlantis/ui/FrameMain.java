@@ -35,6 +35,7 @@ public class FrameMain extends JFrame
 	private Ship[] ships;
 	private String hashConfig;
 	private String playerName;
+	private String distantPlayerName;
 	
 	private class PanelCards extends JPanel
 	{
@@ -72,14 +73,12 @@ public class FrameMain extends JFrame
 		Settings.PANEL_HOME = new PanelHome(this);
 		Settings.PANEL_CONNECTIONS = new PanelConnection(this);
 		Settings.PANEL_PREPARE = new PanelPrepare(this);
-		Settings.PANEL_PLAY = new PanelPlay(this);
 		
 		cards = new PanelCards();
 		add(cards, BorderLayout.CENTER);
 		cards.add(Settings.PANEL_HOME, PanelHome.class.getSimpleName());
 		cards.add(Settings.PANEL_CONNECTIONS, PanelConnection.class.getSimpleName());
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
-		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 		
 		//cards.showCard(PanelPrepare.class.getSimpleName());
 		
@@ -105,16 +104,28 @@ public class FrameMain extends JFrame
 		NetworkManager.getInstance().setAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
-	public void placeShips()
+	public void placeShips(Host h)
 	{
+		this.distantPlayerName = h.getName();
 		cards.showCard(PanelPrepare.class.getSimpleName());
 		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
 	public void startGame()
 	{
+		if(distantMaps != null)
+			showGame();
+		else
+			; // TODO: Wait for other player
+		
+	}
+	
+	private void showGame()
+	{
+		Settings.PANEL_PLAY = new PanelPlay(this);
+		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
+		
 		cards.showCard(PanelPlay.class.getSimpleName());
-		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 	}
 
 	public void endGame()
@@ -197,5 +208,10 @@ public class FrameMain extends JFrame
 	{
 		this.playerName = playerName;
 		Preferences.userNodeForPackage(Main.class).put(kKeyPlayerName, playerName);
+	}
+
+	public String getDistantPlayerName()
+	{
+		return distantPlayerName;
 	}
 }

@@ -4,12 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -49,20 +46,6 @@ public class PanelPrepare extends JPanel
 	 * Debug logger
 	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
-	/**
-	 * Hack to preserve formatting. This class, extending JPanel, does nothing but add a Map (also extending JPanel) to itself. This hack is necessary in order
-	 * to maintain the Boxes composing the Map together.
-	 * 
-	 * @author Sébastien Vaucher
-	 */
-	private class PanelMap extends JPanel
-	{
-		public PanelMap(Map map)
-		{
-			add(map, BorderLayout.CENTER);
-		}
-	}
 
 	/**
 	 * Default constructor

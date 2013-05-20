@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import org.json.JSONObject;
 import org.json.JSONString;
 
-import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -156,7 +155,6 @@ public class Ship extends MapElement implements JSONString
 	 * @param orientation
 	 *            New orientation of boat
 	 */
-	@SuppressWarnings("incomplete-switch")
 	public void move(Box box, ShipOrientation orientation)
 	{
 		// Conserve current orientation if arg null

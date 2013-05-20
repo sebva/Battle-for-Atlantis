@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameengine.Box;
+import ch.hearc.p2.battleforatlantis.gameengine.Generator;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
@@ -80,17 +81,22 @@ public class AtlantisTransmissionAction extends Action
 		
 		// Get position X and Y for Atlantis in the Map
 		int positionX = atlantisInformation.getJSONObject("northWest").getInt("x");
-		int positionY = atlantisInformation.getJSONObject("northWest").getInt("y");;
+		int positionY = atlantisInformation.getJSONObject("northWest").getInt("y");
 		
-		Atlantis atlantis;
+		int generatorPositionX = atlantisInformation.getJSONObject("generator").getInt("x");
+		int generatorPositionY = atlantisInformation.getJSONObject("generator").getInt("y");
+
+		Generator generator = new Generator(generatorPositionX, generatorPositionY);
+		
 		try
 		{
 			// Create Atlantis with user game configuration
-			atlantis = new Atlantis(
+			Atlantis atlantis = new Atlantis(
 					Settings.ATLANTIS_WIDTH, 
 					Settings.ATLANTIS_HEIGHT, 
 					AtlantisCreator.getMap().getWidth(), 
-					AtlantisCreator.getMap().getHeight()
+					AtlantisCreator.getMap().getHeight(),
+					generator
 			);
 			
 			// Set position with retrieved JSON information
@@ -123,7 +129,7 @@ public class AtlantisTransmissionAction extends Action
 		// Indicates coordinates for the Shield Generator
 		JSONObject generator = new JSONObject();
 		generator.put("x", atlantis.getGenerator().getPositionX());
-		generator.put("x", atlantis.getGenerator().getPositionY());
+		generator.put("y", atlantis.getGenerator().getPositionY());
 		
 		// Add the coordinates to the message to transmit
 		atlantisJo.put("northWest", northWest);
