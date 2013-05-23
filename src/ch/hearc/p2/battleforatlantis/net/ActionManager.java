@@ -7,6 +7,10 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.action.AtlantisTransmissionAction;
+import ch.hearc.p2.battleforatlantis.action.EndGameAction;
+import ch.hearc.p2.battleforatlantis.action.MoveAction;
+import ch.hearc.p2.battleforatlantis.action.NextLevelAction;
+import ch.hearc.p2.battleforatlantis.action.ShootAction;
 import ch.hearc.p2.battleforatlantis.action.StartGameAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
@@ -90,16 +94,16 @@ public class ActionManager
 				StartGameAction.createFromJson(jo).execute();
 				break;
 			case "fire":
-				// TODO: Fire !
+				ShootAction.createFromJson(jo).execute();
 				break;
 			case "move":
-				// TODO: Move
+				MoveAction.createFromJson(jo).execute();
 				break;
 			case "nextLevel":
-				// TODO: Next level
+				NextLevelAction.createFromJson(jo).execute();
 				break;
 			case "endGame":
-				// TODO: End game
+				EndGameAction.createFromJson(jo).execute();
 				break;
 		}
 	}
