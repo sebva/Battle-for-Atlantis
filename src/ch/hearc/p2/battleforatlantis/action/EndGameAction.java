@@ -66,7 +66,7 @@ public class EndGameAction extends Action implements NetworkMessage
 		jo.put("victory", won);
 		jo.put("cause", cause.name());
 		
-		jo.putOpt("level", mapType.name());
+		jo.putOpt("level", mapType);
 		jo.putOpt("target", box);
 		
 		return jo;
