@@ -10,10 +10,29 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class MoveAction extends Action implements NetworkMessage
 {
+	/**
+	 * Ship making the action
+	 */
 	private Ship ship;
+	
+	/**
+	 * Box on which the operation is performed. 
+	 * Represents the center of the boat
+	 */
 	private Box center;
+	
+	/**
+	 * Orientation of the ship
+	 */
 	private ShipOrientation orientation;
 
+	/**
+	 * MoveAction representing the movement of a ship
+	 * 
+	 * @param ship Ship making the action
+	 * @param center Box representing the center of the ship
+	 * @param orientation Orientation of the ship
+	 */
 	public MoveAction(Ship ship, Box center, ShipOrientation orientation)
 	{
 		this.ship = ship;
@@ -21,21 +40,31 @@ public class MoveAction extends Action implements NetworkMessage
 		this.orientation = orientation;
 	}
 
+	/**
+	 * Performs the movement
+	 */
 	@Override
 	public void execute()
 	{
 		ship.move(center, orientation);
 	}
-
+	
+	/**
+	 * Make the movement action from a request received by the player
+	 * 
+	 * @param jo JSON Object received by the player
+	 * @return The MoveAction corresponding to the request
+	 */
 	public static MoveAction createFromJson(JSONObject jo)
 	{
 		assert "move".equals(jo.getString("action")) : "This is not a MoveAction";
 		
+		// Get the information from the JSON Object
 		int shipId = jo.getInt("shipId");
 		JSONObject center = jo.getJSONObject("center");
 		ShipOrientation orientation = ShipOrientation.valueOf(jo.getString("direction"));
 		
-		// Get the actual ship
+		// Get the current ship
 		Ship finalShip = null;
 		for(Ship ship : Settings.FRAME_MAIN.getShips())
 		{
@@ -45,14 +74,20 @@ public class MoveAction extends Action implements NetworkMessage
 				break;
 			}
 		}
-		if(finalShip != null)
+		
+		if (finalShip != null)
 			throw new RuntimeException("The ship with ID " + shipId + " does not exist");
 		
+		// Get the center box of the ship
 		Box centerBox = Settings.PANEL_PLAY.getCurrentLevel(true).getBox(center);
 		
+		// Return the MoveAction corresponding to the request
 		return new MoveAction(finalShip, centerBox, orientation);
 	}
 
+	/**
+	 * Create a JSON Object to communicate the action to the opposing player
+	 */
 	@Override
 	public JSONObject getJson()
 	{

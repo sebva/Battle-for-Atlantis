@@ -10,17 +10,29 @@ public class NextLevelAction extends Action implements NetworkMessage
 {
 	private MapType map;
 	
+	/**
+	 * NextLevelAction representing the passage to a new level
+	 */
 	public NextLevelAction(MapType map)
 	{
 		this.map = map;
 	}
 
+	/**
+	 * Move to the next level map
+	 */
 	@Override
 	public void execute()
 	{
 		Settings.PANEL_PLAY.setActiveMap(map, false);
 	}
 
+	/**
+	 * Make the next level action from a request received by the player
+	 * 
+	 * @param jo JSON Object received by the player
+	 * @return The NextLevelAction corresponding to the request
+	 */
 	public static NextLevelAction createFromJson(JSONObject jo)
 	{
 		assert("nextLevel".equals(jo.getString("action")));
@@ -30,6 +42,9 @@ public class NextLevelAction extends Action implements NetworkMessage
 		return new NextLevelAction(map);
 	}
 
+	/**
+	 * Create a JSON Object to communicate the action to the opposing player
+	 */
 	@Override
 	public JSONObject getJson()
 	{

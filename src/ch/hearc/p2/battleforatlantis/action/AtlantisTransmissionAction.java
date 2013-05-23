@@ -42,13 +42,15 @@ public class AtlantisTransmissionAction extends Action
 		// Retrieve Atlantis Map
 		Map atlantisMap = Settings.FRAME_MAIN.getMapByType(MapType.ATLANTIS, true);
 		
-		// Row and column number to load Atlantis parts images
+		// Row number to load Atlantis parts images
 		int row = 0;
 		
 		// Run through the atlantis width
 		for (int x = this.atlantis.getPositionX(); x < this.atlantis.getPositionX() + Settings.ATLANTIS_WIDTH; x++)
 		{
+			// Column number to load Atlantis parts images
 			int col = 0;
+			
 			// Run through the atlantis height
 			for (int y = this.atlantis.getPositionY(); y < this.atlantis.getPositionY() + Settings.ATLANTIS_HEIGHT; y++)
 			{
@@ -64,12 +66,12 @@ public class AtlantisTransmissionAction extends Action
 			row++;
 		}
 	}
-
+	
 	/**
-	 * Create new AtlantisTransmissionAction with Atlantis received
+	 * Make the AtlantisTransmission action from a request received by the player
 	 * 
-	 * @param jo JSON Object
-	 * @return AtlantisTransmissionAction Object
+	 * @param jo JSON Object received by the player
+	 * @return The AtlantisTransmissionAction corresponding to the request
 	 */
 	public static AtlantisTransmissionAction createFromJson(JSONObject jo) 
 	{
@@ -113,6 +115,9 @@ public class AtlantisTransmissionAction extends Action
 		return null;
 	}
 
+	/**
+	 * Create a JSON Object to communicate the Atlantis to the opposing player
+	 */
 	@Override
 	public JSONObject getJson()
 	{
