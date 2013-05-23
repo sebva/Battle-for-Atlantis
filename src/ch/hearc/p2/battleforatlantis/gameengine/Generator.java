@@ -100,4 +100,10 @@ public class Generator extends MapElement
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void shoot(Box target)
+	{
+		// TODO: Deactivate generator
+	}
 }

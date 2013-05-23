@@ -2,6 +2,7 @@ package ch.hearc.p2.battleforatlantis.action;
 
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 
 public abstract class Action implements NetworkMessage
@@ -21,4 +22,9 @@ public abstract class Action implements NetworkMessage
 	
 	@Override
 	public abstract JSONObject getJson();
+	
+	public void send()
+	{
+		NetworkManager.getInstance().send(this);
+	}
 }

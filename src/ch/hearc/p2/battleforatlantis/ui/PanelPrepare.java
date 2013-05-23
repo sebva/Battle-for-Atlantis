@@ -217,7 +217,7 @@ public class PanelPrepare extends JPanel
 	{
 		if (this.selectedShip != null)
 		{
-			this.selectedShip.rotate();
+			this.selectedShip.rotate(true);
 		}
 	}
 

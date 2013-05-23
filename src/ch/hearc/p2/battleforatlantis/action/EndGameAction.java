@@ -40,7 +40,7 @@ public class EndGameAction extends Action implements NetworkMessage
 	{
 		if(shoot != null)
 			shoot.execute();
-		Settings.PANEL_PLAY.endGame(won);
+		Settings.PANEL_PLAY.endGame(won, true);
 	}
 
 	public static EndGameAction createFromJson(JSONObject jo)

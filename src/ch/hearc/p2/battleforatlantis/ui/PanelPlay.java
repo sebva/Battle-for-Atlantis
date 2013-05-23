@@ -14,10 +14,17 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import ch.hearc.p2.battleforatlantis.action.EndGameAction;
+import ch.hearc.p2.battleforatlantis.action.EndGameAction.EndGameCause;
+import ch.hearc.p2.battleforatlantis.action.MoveAction;
+import ch.hearc.p2.battleforatlantis.action.NextLevelAction;
+import ch.hearc.p2.battleforatlantis.action.ShootAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
+import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
+import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 /**
@@ -166,7 +173,7 @@ public class PanelPlay extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				endGame(false);
+				endGame(false, false);
 			}
 		});
 		boxHUD.add(btnCapitulate);
@@ -189,7 +196,8 @@ public class PanelPlay extends JPanel
 	 */
 	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
-
+		location.shoot();
+		new ShootAction(location).send();
 	}
 
 	/**
@@ -199,7 +207,8 @@ public class PanelPlay extends JPanel
 	 */
 	public void rotate(Ship ship, boolean clockwise)
 	{
-
+		ship.rotate(clockwise);
+		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
 	/**
@@ -208,23 +217,48 @@ public class PanelPlay extends JPanel
 	 */
 	public void place(Ship ship, boolean forward)
 	{
-
+		ship.place(forward);
+		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
 	/**
-	 * Called when the local player asks to go to the next level 
+	 * Called when a player asks to go to the next level 
 	 */
-	public void nextLevel()
+	public void nextLevel(boolean local)
 	{
-
+		MapType oldMap = local ? currentLocalMap.getType() : currentDistantMap.getType();
+		
+		MapType newMap = null;
+		switch (oldMap)
+		{
+			case SUBMARINE:
+				newMap = MapType.ATLANTIS;
+				break;
+			case SURFACE:
+				newMap = MapType.SUBMARINE;
+				break;
+			default:
+				// Should not happen
+				throw new RuntimeException("nextLevel requested, but player is at latest level");
+		}
+		
+		setActiveMap(newMap, local);
+		
+		new NextLevelAction(newMap).send();
 	}
 
 	/**
 	 * The game is finished
 	 * @param isWinner True when the local player is the winner
+	 * @param fromNetwork True if this call comes from the network
 	 */
-	public void endGame(boolean isWinner)
+	public void endGame(boolean isWinner, boolean fromNetwork)
 	{
+		if(!fromNetwork)
+		{
+			EndGameCause cause = isWinner ? EndGameCause.ATLANTIS_DESTROYED : EndGameCause.SURRENDERED;
+			new EndGameAction(isWinner, cause);
+		}
 		DialogEndGame.announceGameResult(this, isWinner);
 		rootFrame.endGame();
 	}
@@ -232,12 +266,21 @@ public class PanelPlay extends JPanel
 	/**
 	 * Like nextLevel(), but more generic because the Player to which
 	 * the level change applies can be set as well as the destination MapType
-	 * @param pt The Player to which this applies
 	 * @param map The MapType to be shown on the Player's map
+	 * @param local True if this applies to the local player
 	 */
-	public void setActiveMap(Player pt, MapType map)
+	public void setActiveMap(MapType map, boolean local)
 	{
-
+		if(local)
+		{
+			levelsMe.showMap(map);
+			currentLocalMap = rootFrame.getMapByType(map, true);
+		}
+		else
+		{
+			levelsOther.showMap(map);
+			currentDistantMap = rootFrame.getMapByType(map, false);
+		}
 	}
 	
 	public Map getCurrentLevel(boolean local)

@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import javax.swing.Icon;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Atlantis extends MapElement
 {
@@ -232,6 +233,15 @@ public class Atlantis extends MapElement
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void shoot(Box target)
+	{
+		if(destroyable)
+			Settings.PANEL_PLAY.endGame(true, false);
+		else
+			; // TODO: Uncover without destroying
 	}
 
 }

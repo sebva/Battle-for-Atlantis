@@ -167,7 +167,8 @@ public class Box extends JPanel implements JSONString
 	 */
 	public void shoot()
 	{
-
+		if(occupier != null)
+			occupier.shoot(this);
 	}
 
 	/**

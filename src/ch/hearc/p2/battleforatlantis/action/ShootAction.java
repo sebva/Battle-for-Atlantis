@@ -19,7 +19,7 @@ public class ShootAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
-		Settings.PANEL_PLAY.shoot(target);
+		target.shoot();
 	}
 
 	public static ShootAction createFromJson(JSONObject jo)

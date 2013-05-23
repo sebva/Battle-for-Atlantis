@@ -66,10 +66,7 @@ public abstract class MapElement extends JLabel
 	/**
 	 * External call for shoot on element
 	 */
-	public void shoot()
-	{
-
-	}
+	abstract public void shoot(Box target);
 
 	/**
 	 * Set the initial size of element

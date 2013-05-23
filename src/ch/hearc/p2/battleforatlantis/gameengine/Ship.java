@@ -36,7 +36,7 @@ public class Ship extends MapElement implements JSONString
 	 * Ship orientation, default EAST (front looks on screen's right)
 	 */
 	private ShipOrientation orientation = ShipOrientation.EAST;
-	
+
 	/**
 	 * Color of background
 	 */
@@ -94,9 +94,9 @@ public class Ship extends MapElement implements JSONString
 	}
 
 	/**
-	 * External call for ship rotation in clockwise direction
+	 * External call for ship rotation
 	 */
-	public void rotate()
+	public void rotate(boolean clockwise)
 	{
 		// Cancel ship rotation if ship is not currently displayed
 		if (this.center == null)
@@ -107,30 +107,57 @@ public class Ship extends MapElement implements JSONString
 		// Clean currently occupied boxes
 		moveOut();
 
-		rotateImage();
+		rotateImage(clockwise);
 
-		// Execute rotation with new orientation value, depending on old value
-		switch (this.orientation)
+		if (clockwise)
 		{
-			case EAST:
-				move(null, ShipOrientation.SOUTH);
-				break;
-			case SOUTH:
-				move(null, ShipOrientation.WEST);
-				break;
-			case WEST:
-				move(null, ShipOrientation.NORTH);
-				break;
-			case NORTH:
-				move(null, ShipOrientation.EAST);
-				break;
+			// Execute rotation with new orientation value, depending on old value
+			switch (this.orientation)
+			{
+				case EAST:
+					move(null, ShipOrientation.SOUTH);
+					break;
+				case SOUTH:
+					move(null, ShipOrientation.WEST);
+					break;
+				case WEST:
+					move(null, ShipOrientation.NORTH);
+					break;
+				case NORTH:
+					move(null, ShipOrientation.EAST);
+					break;
+			}
+		}
+		else
+		{
+			// Execute rotation with new orientation value, depending on old value
+			switch (this.orientation)
+			{
+				case EAST:
+					move(null, ShipOrientation.NORTH);
+					break;
+				case SOUTH:
+					move(null, ShipOrientation.EAST);
+					break;
+				case WEST:
+					move(null, ShipOrientation.SOUTH);
+					break;
+				case NORTH:
+					move(null, ShipOrientation.WEST);
+					break;
+			}
 		}
 	}
 
-	private void rotateImage()
+	private void rotateImage(boolean clockwise)
 	{
+		int iterations = clockwise ? 1 : 3;
+
 		for (BufferedImage image : images)
-			ImageShop.inplaceImageRotation(image);
+		{
+			for (int i = 1; i <= iterations; i++)
+				ImageShop.inplaceImageRotation(image);
+		}
 	}
 
 	/**
@@ -178,17 +205,11 @@ public class Ship extends MapElement implements JSONString
 		// Get the map concerned by movement
 		// TODO: modify and adapt when maps and ships are used on panel play (static method no longer good idea)
 		// FIXME: FAIL: Network received boats are put on local maps !
-		//Map map = null;
+		// Map map = null;
 		/*
-		switch (box.getMapType())
-		{
-			case SURFACE:
-				map = FrameMain.getPanelPrepare().getMapSurface();
-				break;
-			case SUBMARINE:
-				map = FrameMain.getPanelPrepare().getMapSubmarine();
-				break;
-		}*/
+		 * switch (box.getMapType()) { case SURFACE: map = FrameMain.getPanelPrepare().getMapSurface(); break; case SUBMARINE: map =
+		 * FrameMain.getPanelPrepare().getMapSubmarine(); break; }
+		 */
 		Map map = box.getMap();
 
 		// Compute positions and gather boxes hosting boat
@@ -235,7 +256,7 @@ public class Ship extends MapElement implements JSONString
 			this.occupied[i].setOccupier(this, this.images[i]);
 		}
 	}
-	
+
 	public int getId()
 	{
 		return id;
@@ -270,17 +291,17 @@ public class Ship extends MapElement implements JSONString
 		jo.put("direction", orientation);
 		return jo.toString();
 	}
-	
+
 	public static Ship createFromJSONObject(JSONObject jo, Box center)
 	{
 		int size = jo.getInt("size");
 		ShipType shipType = ShipType.valueOf(jo.getString("shipType"));
 		int id = jo.getInt("shipId");
-		
+
 		Ship ship = new Ship(size, shipType, id);
 		ShipOrientation orientation = ShipOrientation.valueOf(jo.getString("direction"));
 		ship.move(center, orientation);
-		
+
 		return ship;
 	}
 
@@ -292,10 +313,10 @@ public class Ship extends MapElement implements JSONString
 	{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		int w = currentSize.width;
 		int h = currentSize.height;
-		
+
 		g2d.setColor(this.backgroundColor);
 		g2d.fillRect(getWidth() - w, 0, w, h);
 
@@ -313,14 +334,50 @@ public class Ship extends MapElement implements JSONString
 		{
 			min = height;
 		}
-		
+
 		this.currentSize = new Dimension(min * wholeSize, min);
 	}
-	
+
 	public void setBackgroundColor(Color color)
 	{
 		this.backgroundColor = color;
 		repaint();
 	}
 
+	public void place(boolean forward)
+	{
+		int x = center.getCoordX();
+		int y = center.getCoordY();
+		
+		int modifier = forward ? 1 : -1;
+		
+		switch(orientation)
+		{
+			case EAST:
+				x += modifier;
+				break;
+			case NORTH:
+				y -= modifier;
+				break;
+			case SOUTH:
+				y += modifier;
+				break;
+			case WEST:
+				x -= modifier;
+				break;
+		}
+		
+		move(center.getMap().getBox(x, y), orientation);
+	}
+
+	public ShipOrientation getOrientation()
+	{
+		return orientation;
+	}
+	
+	@Override
+	public void shoot(Box target)
+	{
+		// TODO: Destroy according to param
+	}
 }
