@@ -107,8 +107,6 @@ public class Ship extends MapElement implements JSONString
 		// Clean currently occupied boxes
 		moveOut();
 
-		rotateImage(clockwise);
-
 		if (clockwise)
 		{
 			// Execute rotation with new orientation value, depending on old value
@@ -149,9 +147,32 @@ public class Ship extends MapElement implements JSONString
 		}
 	}
 
-	private void rotateImage(boolean clockwise)
+	private void rotateImage(ShipOrientation oldOrientation, ShipOrientation newOrientation)
 	{
-		int iterations = clockwise ? 1 : 3;
+		if(oldOrientation.equals(newOrientation))
+			return;
+		
+		int iterations = 0;
+		
+		if(
+				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.SOUTH) ||
+				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.NORTH) ||
+				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.WEST) ||
+				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.EAST))
+			iterations = 2;
+		else if(
+				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.EAST) ||
+				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.SOUTH) ||
+				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.WEST) ||
+				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.NORTH))
+			iterations = 1;
+		else if(
+				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.WEST) ||
+				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.SOUTH) ||
+				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.EAST) ||
+				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.NORTH))
+			iterations = 3;
+		
 
 		for (BufferedImage image : images)
 		{
@@ -196,6 +217,12 @@ public class Ship extends MapElement implements JSONString
 			box = this.center;
 		}
 
+		// Image rotation
+		if(!this.orientation.equals(orientation))
+		{
+			rotateImage(this.orientation, orientation);
+		}
+		
 		// Assign new center
 		this.center = box;
 
@@ -378,6 +405,8 @@ public class Ship extends MapElement implements JSONString
 	@Override
 	public void shoot(Box target)
 	{
-		// TODO: Destroy according to param
+		// TODO: Remplace temp code
+		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, 1, true);
+		target.setImage(img);
 	}
 }

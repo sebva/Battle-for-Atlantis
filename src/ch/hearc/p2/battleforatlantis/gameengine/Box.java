@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.json.JSONString;
 
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
+import ch.hearc.p2.battleforatlantis.ui.PanelPlay;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -123,22 +124,31 @@ public class Box extends JPanel implements JSONString
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				PanelPrepare panel = FrameMain.getPanelPrepare();
-				switch (e.getButton())
+				PanelPlay panelPlay = Settings.PANEL_PLAY;
+				if(panelPlay == null)
 				{
-				// left button pressed
-					case MouseEvent.BUTTON1:
-						if (occupier == null)
-							return;
-						if (occupier.getClass() == Ship.class)
-							Settings.PANEL_PREPARE.shipClick((Ship) occupier);
-						break;
-
-					// Right button pressed
-					case MouseEvent.BUTTON3:
-						panel.rotate();
-						break;
-
+					PanelPrepare panelPrepare = FrameMain.getPanelPrepare();
+					switch (e.getButton())
+					{
+					// left button pressed
+						case MouseEvent.BUTTON1:
+							if (occupier == null)
+								return;
+							if (occupier.getClass() == Ship.class)
+								Settings.PANEL_PREPARE.shipClick((Ship) occupier);
+							break;
+	
+						// Right button pressed
+						case MouseEvent.BUTTON3:
+							panelPrepare.rotate();
+							break;
+	
+					}
+				}
+				else
+				{
+					if(e.getButton() == MouseEvent.BUTTON1)
+						panelPlay.shoot(Box.this);
 				}
 			}
 		});
@@ -232,6 +242,12 @@ public class Box extends JPanel implements JSONString
 	public Map getMap()
 	{
 		return this.map;
+	}
+	
+	protected void setImage(Image img)
+	{
+		this.imageOccupier = img;
+		repaint();
 	}
 
 	/**

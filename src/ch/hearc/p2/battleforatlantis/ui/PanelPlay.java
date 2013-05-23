@@ -2,9 +2,11 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -21,10 +23,7 @@ import ch.hearc.p2.battleforatlantis.action.NextLevelAction;
 import ch.hearc.p2.battleforatlantis.action.ShootAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
-import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
-import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
-import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 /**
@@ -43,6 +42,8 @@ public class PanelPlay extends JPanel
 	
 	private Map currentLocalMap;
 	private Map currentDistantMap;
+	private final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private PanelPlayerView distantPlayerView;
 
 	/**
 	 * The Panel that shows the maps as well as some stats relative to this map.
@@ -82,6 +83,7 @@ public class PanelPlay extends JPanel
 	public class PanelMaps extends JPanel
 	{
 		private CardLayout cards;
+		private Map atlantis;
 
 		/**
 		 * 
@@ -93,8 +95,9 @@ public class PanelPlay extends JPanel
 			cards = new CardLayout();
 			setLayout(cards);
 			for (Map map : maps)
-				add(map, map.getType().toString());
-			add(atlantis, atlantis.getType().toString());
+				add(map, map.getType().name());
+			
+			this.atlantis = atlantis;
 
 			showMap(MapType.SURFACE);
 		}
@@ -105,6 +108,9 @@ public class PanelPlay extends JPanel
 		 */
 		public void showMap(MapType type)
 		{
+			if(type == MapType.ATLANTIS && getComponentCount() <= 2)
+				add(atlantis, atlantis.getType().name());
+			
 			cards.show(this, type.toString());
 		}
 	}
@@ -151,8 +157,10 @@ public class PanelPlay extends JPanel
 	{
 		this.rootFrame = rootFrame;
 
-		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), rootFrame.getMapByType(MapType.ATLANTIS, true));
-		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), rootFrame.getMapByType(MapType.ATLANTIS, true));
+		// FIXME: /!\ Swing does not permit a JPanel to be in two places at the same time !
+		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, true);
+		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
+		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
 		
 		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, true);
 		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, false);
@@ -161,7 +169,8 @@ public class PanelPlay extends JPanel
 
 		boxH.add(new PanelPlayerView(rootFrame.getPlayerName(), true));
 		boxH.add(new JSeparator(SwingConstants.VERTICAL));
-		boxH.add(new PanelPlayerView(rootFrame.getDistantPlayerName(), false));
+		distantPlayerView = new PanelPlayerView(rootFrame.getDistantPlayerName(), false);
+		boxH.add(distantPlayerView);
 
 		boxH.add(new JSeparator(SwingConstants.VERTICAL));
 
@@ -177,6 +186,17 @@ public class PanelPlay extends JPanel
 			}
 		});
 		boxHUD.add(btnCapitulate);
+		
+		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
+		btnNextLevel.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				nextLevel();
+			}
+		});
+		boxHUD.add(btnNextLevel);
 
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.ConquestProgress")));
 		boxHUD.add(new PanelProgress());
@@ -224,9 +244,11 @@ public class PanelPlay extends JPanel
 	/**
 	 * Called when a player asks to go to the next level 
 	 */
-	public void nextLevel(boolean local)
+	public void nextLevel()
 	{
-		MapType oldMap = local ? currentLocalMap.getType() : currentDistantMap.getType();
+		log.info("Next level");
+		
+		MapType oldMap = currentLocalMap.getType();
 		
 		MapType newMap = null;
 		switch (oldMap)
@@ -242,7 +264,7 @@ public class PanelPlay extends JPanel
 				throw new RuntimeException("nextLevel requested, but player is at latest level");
 		}
 		
-		setActiveMap(newMap, local);
+		setActiveMap(newMap, true);
 		
 		new NextLevelAction(newMap).send();
 	}
@@ -257,7 +279,7 @@ public class PanelPlay extends JPanel
 		if(!fromNetwork)
 		{
 			EndGameCause cause = isWinner ? EndGameCause.ATLANTIS_DESTROYED : EndGameCause.SURRENDERED;
-			new EndGameAction(isWinner, cause);
+			new EndGameAction(!isWinner, cause).send();
 		}
 		DialogEndGame.announceGameResult(this, isWinner);
 		rootFrame.endGame();
@@ -272,15 +294,27 @@ public class PanelPlay extends JPanel
 	public void setActiveMap(MapType map, boolean local)
 	{
 		if(local)
-		{
-			levelsMe.showMap(map);
+
 			currentLocalMap = rootFrame.getMapByType(map, true);
-		}
 		else
-		{
-			levelsOther.showMap(map);
 			currentDistantMap = rootFrame.getMapByType(map, false);
+		
+		if(MapType.ATLANTIS == currentDistantMap.getType() &&
+				MapType.ATLANTIS == currentLocalMap.getType())
+		{
+			// We play on one panel
+			for(Component c : distantPlayerView.getComponents())
+				distantPlayerView.remove(c);
+			remove(distantPlayerView);
+			local = true;
 		}
+		
+		if(local)
+			levelsMe.showMap(map);
+		else
+			levelsOther.showMap(map);
+		
+		validate();	
 	}
 	
 	public Map getCurrentLevel(boolean local)
