@@ -33,6 +33,9 @@ public class PanelPlay extends JPanel
 	private PanelMaps levelsMe;
 	/** The PanelMaps displaying distant maps */
 	private PanelMaps levelsOther;
+	
+	private Map currentLocalMap;
+	private Map currentDistantMap;
 
 	/**
 	 * The Panel that shows the maps as well as some stats relative to this map.
@@ -143,6 +146,9 @@ public class PanelPlay extends JPanel
 
 		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), rootFrame.getMapByType(MapType.ATLANTIS, true));
 		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), rootFrame.getMapByType(MapType.ATLANTIS, true));
+		
+		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, true);
+		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, false);
 
 		Box boxH = Box.createHorizontalBox();
 
@@ -181,7 +187,7 @@ public class PanelPlay extends JPanel
 	 * Called when the remote player shoots on a particular box
 	 * @param location The reference to the Box that is targeted
 	 */
-	public void shoot(Box location)
+	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
 
 	}
@@ -232,6 +238,11 @@ public class PanelPlay extends JPanel
 	public void setActiveMap(Player pt, MapType map)
 	{
 
+	}
+	
+	public Map getCurrentLevel(boolean local)
+	{
+		return local ? currentLocalMap : currentDistantMap;
 	}
 
 }

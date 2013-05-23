@@ -219,6 +219,16 @@ public class Map extends JPanel implements JSONString
 			return null;
 		}
 	}
+	
+	/**
+	 * Get the box associated by the x and y attributes of the JSONObject
+	 * @param jo A JSONObject containing x and y
+	 * @return Box at location, or null
+	 */
+	public Box getBox(JSONObject jo)
+	{
+		return getBox(jo.optInt("x", -1), jo.optInt("y", -1));
+	}
 
 	/**
 	 * Get the current type of map

@@ -235,6 +235,11 @@ public class Ship extends MapElement implements JSONString
 			this.occupied[i].setOccupier(this, this.images[i]);
 		}
 	}
+	
+	public int getId()
+	{
+		return id;
+	}
 
 	/**
 	 * Get current ship type

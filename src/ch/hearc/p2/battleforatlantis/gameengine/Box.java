@@ -11,12 +11,15 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import org.json.JSONObject;
+import org.json.JSONString;
+
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
-public class Box extends JPanel
+public class Box extends JPanel implements JSONString
 {
 	/**
 	 * Discover marker, true when box has been shot by ennemy
@@ -243,6 +246,15 @@ public class Box extends JPanel
 		{
 			g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
 		}
+	}
+
+	@Override
+	public String toJSONString()
+	{
+		JSONObject jo = new JSONObject();
+		jo.put("x", x);
+		jo.put("y", y);
+		return jo.toString();
 	}
 
 }
