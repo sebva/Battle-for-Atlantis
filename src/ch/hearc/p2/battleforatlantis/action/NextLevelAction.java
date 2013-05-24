@@ -24,7 +24,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
-		Settings.PANEL_PLAY.setActiveMap(map, false);
+		Settings.PANEL_PLAY.setActiveMap(map, true);
 	}
 
 	/**

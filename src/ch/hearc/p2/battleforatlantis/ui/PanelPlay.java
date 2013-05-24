@@ -312,7 +312,7 @@ public class PanelPlay extends JPanel
 				throw new RuntimeException("nextLevel requested, but player is at latest level");
 		}
 		
-		setActiveMap(newMap, true);
+		setActiveMap(newMap, false);
 		
 		new NextLevelAction(newMap).send();
 	}
