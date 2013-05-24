@@ -114,10 +114,7 @@ public class FrameMain extends JFrame
 	public void startGame()
 	{
 		if(distantMaps != null)
-			showGame();
-		else
-			; // TODO: Wait for other player
-		
+			showGame();		
 	}
 	
 	private void showGame()

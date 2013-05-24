@@ -17,10 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.net.NetworkAutodiscover.NetworkAutodiscoverListener;
+import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class NetworkManager
@@ -75,7 +78,7 @@ public class NetworkManager
 		catch (SocketException e)
 		{
 			log.severe("Impossible to open the input UDP socket\n" + e.toString());
-			// TODO: The best thing to do is close the program
+			fatalError(e.getLocalizedMessage());
 		}
 		try
 		{
@@ -85,7 +88,7 @@ public class NetworkManager
 		catch (SocketException e)
 		{
 			log.severe("Impossible to open the output UDP socket\n" + e.toString());
-			// TODO: The best thing to do is close the program
+			fatalError(e.getLocalizedMessage());
 		}
 
 		autodiscover = new NetworkAutodiscover(this);
@@ -212,7 +215,7 @@ public class NetworkManager
 					catch (IOException e)
 					{
 						log.severe("Connexion perdue !");
-						// TODO: Notify the user
+						fatalError(e.getLocalizedMessage());
 						break;
 					}
 				}
@@ -383,6 +386,7 @@ public class NetworkManager
 			// UUIDs are equal !
 			case 0:
 				log.severe("The UUIDs are equal !");
+				fatalError(Messages.getString("The UUIDs are equal"));
 				return;
 		}
 	}
@@ -451,5 +455,11 @@ public class NetworkManager
 	public Host getDistantHost()
 	{
 		return distantHost;
+	}
+	
+	private void fatalError(String message)
+	{
+		JOptionPane.showMessageDialog(Settings.FRAME_MAIN, Messages.getString("NetworkManager.FatalErrorMessage") + "\n\n" + message, Messages.getString("NetworkManager.FatalErrorTitle"), JOptionPane.ERROR_MESSAGE);
+		System.exit(-1);
 	}
 }
