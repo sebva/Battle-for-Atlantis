@@ -30,7 +30,7 @@ public class FrameMain extends JFrame
 	private PanelCards cards;
 	
 	private Map[] localMaps;
-	private Map[] distantMaps;
+	private Map[] distantMaps = null;
 	private Map atlantis;
 	private Ship[] ships;
 	private String hashConfig;

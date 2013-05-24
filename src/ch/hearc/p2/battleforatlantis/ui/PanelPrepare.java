@@ -47,6 +47,8 @@ public class PanelPrepare extends JPanel
 	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+	private DialogWait dialogWait;
+
 	/**
 	 * Default constructor
 	 * 
@@ -234,11 +236,18 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-
+		
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
 		sga.addMap(mapSubmarine);
 		NetworkManager.getInstance().send(sga);
+		
+		if(rootFrame.getDistantMaps() == null)
+		{
+			dialogWait = new DialogWait(Messages.getString("PanelPrepare.WaitingForShips"), rootFrame);
+			// Blocking
+			dialogWait.setVisible(true);
+		}
 
 		rootFrame.startGame();
 	}
@@ -263,4 +272,9 @@ public class PanelPrepare extends JPanel
 		return this.mapSubmarine;
 	}
 
+	public void dismissWaitDialog()
+	{
+		if(dialogWait != null)
+			dialogWait.dispose();
+	}
 }

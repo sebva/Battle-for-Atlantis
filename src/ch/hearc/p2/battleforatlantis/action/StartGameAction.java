@@ -34,6 +34,8 @@ public class StartGameAction extends Action implements NetworkMessage
 		Map[] maps = new Map[mapSet.size()];
 		mapSet.toArray(maps);
 		Settings.FRAME_MAIN.setDistantMaps(maps);
+		
+		Settings.PANEL_PREPARE.dismissWaitDialog();
 	}
 	
 	/**
