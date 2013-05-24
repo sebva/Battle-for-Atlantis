@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
@@ -25,7 +26,9 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
+import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
  * The Panel where the game takes place.
@@ -50,6 +53,9 @@ public class PanelPlay extends JPanel
 	private int effectiveShots;
 	/** Shots in water **/ 
 	private int waterShots;
+	
+	/** Progression of the player **/
+	private final PanelProgress panelProgress;
 	
 	private Map currentLocalMap;
 	private Map currentDistantMap;
@@ -132,14 +138,51 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelProgress extends JPanel
 	{
+		java.util.Map<Ship, Integer> progressValueList = new HashMap<Ship, Integer>();
+		java.util.Map<Ship, JProgressBar> progressBarList = new HashMap<Ship, JProgressBar>();
+		//TODO
 		public PanelProgress()
 		{
-			// TODO: Remove and replace temporary code
-			setLayout(new GridLayout(2, 2));
-			add(new JProgressBar());
-			add(new JLabel("Porte-avions"));
-			add(new JProgressBar());
-			add(new JLabel("Croiseur"));
+			// Get ship list
+			Ship[] shipList = Settings.FRAME_MAIN.getShips();
+			
+			// Grid for progress
+			setLayout(new GridLayout(shipList.length, 2));
+			
+			// For each MapElement to destroy by the player
+			for (int i = 0; i < shipList.length; i++)
+			{
+				// Create a ProgressBar
+				JProgressBar currentBar = new JProgressBar();
+				
+				// Save values
+				progressValueList.put(shipList[i], 0);
+				progressBarList.put(shipList[i], currentBar);
+				
+				// Add the ProgressBar to the current line
+				add(currentBar);
+				
+				if (shipList[i].getType() == ShipType.SHIP)
+				{
+					add(new JLabel(Messages.getString("Ship.Size" + shipList[i].getWholeSize())));
+				}
+				else
+				{
+					add(new JLabel(Messages.getString("Submarine.Size" + shipList[i].getWholeSize())));
+				}
+			}
+		}
+		
+		/**
+		 * Indicates a progression (shot effective)
+		 * 
+		 * @param occupier Element shot
+		 */
+		public void addProgress(Ship occupier)
+		{
+			Integer value = progressValueList.get(occupier);
+			progressValueList.put(occupier, new Integer(value + 1));
+			progressBarList.get(occupier).setValue((occupier.getWholeSize() / (value+1)) * 100);
 		}
 	}
 
@@ -225,9 +268,11 @@ public class PanelPlay extends JPanel
 		boxHUD.add(btnNextLevel);
 
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.ConquestProgress")));
-		boxHUD.add(new PanelProgress());
 		boxHUD.add(new JSeparator(SwingConstants.HORIZONTAL));
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.Stats")));
+		
+		panelProgress = new PanelProgress();
+		boxHUD.add(panelProgress);
 		
 		panelStats = new PanelStats();
 		boxHUD.add(panelStats);
@@ -250,7 +295,14 @@ public class PanelPlay extends JPanel
 		
 		// If we shot a ship
 		if (occupier != null)
+		{
 			effectiveShots++;
+			
+			if (occupier instanceof Ship)
+			{
+				this.panelProgress.addProgress((Ship) occupier);
+			}
+		}
 		// Or shot nothing
 		else
 			waterShots++;

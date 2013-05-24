@@ -86,4 +86,14 @@ public abstract class MapElement extends JLabel
 	 */
 	protected abstract void setCurrentSize(int width, int height);
 
+	/**
+	 * Get the size of the element
+	 * 
+	 * @return Size of the element
+	 */
+	public int getWholeSize()
+	{
+		return this.wholeSize;
+	}
+
 }

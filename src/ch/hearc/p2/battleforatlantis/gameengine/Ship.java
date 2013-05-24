@@ -19,12 +19,20 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Ship extends MapElement implements JSONString
 {
+	/**
+	 * ID of the ship. 
+	 * Used to identify the ships of the player
+	 */
 	private int id;
+	
 	/**
 	 * Type of ship (ship, submarine)
 	 */
 	private ShipType type;
 
+	/**
+	 * Images list of the ship
+	 */
 	private Image[] initialImages;
 
 	/**
@@ -43,12 +51,10 @@ public class Ship extends MapElement implements JSONString
 	private Color backgroundColor;
 
 	/**
-	 * Default constructor for ship instanciation
+	 * Default constructor for ship instantiation
 	 * 
-	 * @param size
-	 *            Length of ship, in boxes number
-	 * @param type
-	 *            Type of ship (ship, submarine)
+	 * @param size Length of ship, in boxes number
+	 * @param type Type of ship (ship, submarine)
 	 */
 	public Ship(int size, ShipType type, int id)
 	{
@@ -82,9 +88,9 @@ public class Ship extends MapElement implements JSONString
 			}
 		});
 
+		// Add listener for ship resizing
 		this.addComponentListener(new ComponentAdapter()
 		{
-
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
@@ -95,6 +101,8 @@ public class Ship extends MapElement implements JSONString
 
 	/**
 	 * External call for ship rotation
+	 * 
+	 * @param clockwise Indicates if it's a clockwise rotation
 	 */
 	public void rotate(boolean clockwise)
 	{
@@ -147,6 +155,12 @@ public class Ship extends MapElement implements JSONString
 		}
 	}
 
+	/**
+	 * Call for ship rotation
+	 * 
+	 * @param oldOrientation Old orientation of the ship
+	 * @param newOrientation New orientation of the ship
+	 */
 	private void rotateImage(ShipOrientation oldOrientation, ShipOrientation newOrientation)
 	{
 		if(oldOrientation.equals(newOrientation))
@@ -173,9 +187,10 @@ public class Ship extends MapElement implements JSONString
 				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.NORTH))
 			iterations = 3;
 		
-
+		// Make rotation for each image
 		for (BufferedImage image : images)
 		{
+			// Make the number of rotations indicated in iteration variable
 			for (int i = 1; i <= iterations; i++)
 				ImageShop.inplaceImageRotation(image);
 		}
@@ -198,10 +213,8 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * External call for ship movement
 	 * 
-	 * @param box
-	 *            New box considered as boat center
-	 * @param orientation
-	 *            New orientation of boat
+	 * @param box New box considered as boat center
+	 * @param orientation New orientation of boat
 	 */
 	public void move(Box box, ShipOrientation orientation)
 	{
@@ -284,6 +297,11 @@ public class Ship extends MapElement implements JSONString
 		}
 	}
 
+	/**
+	 * Get ID of the ship
+	 * 
+	 * @return ID of the ship
+	 */
 	public int getId()
 	{
 		return id;
@@ -299,11 +317,19 @@ public class Ship extends MapElement implements JSONString
 		return type;
 	}
 
+	/**
+	 * Get center box of the ship
+	 * 
+	 * @return Center box
+	 */
 	public Box getCenter()
 	{
 		return center;
 	}
-
+	
+	/**
+	 * Create a JSON Object to communicate the ship to the opposing player
+	 */
 	@Override
 	public String toJSONString()
 	{
@@ -319,6 +345,12 @@ public class Ship extends MapElement implements JSONString
 		return jo.toString();
 	}
 
+	/**
+	 * Make the ship from a request received by the player
+	 * 
+	 * @param jo JSON Object received by the player
+	 * @return The ship corresponding to the request
+	 */
 	public static Ship createFromJSONObject(JSONObject jo, Box center)
 	{
 		int size = jo.getInt("size");
@@ -357,10 +389,9 @@ public class Ship extends MapElement implements JSONString
 	protected void setCurrentSize(int width, int height)
 	{
 		int min = width / wholeSize;
+		
 		if (height < min)
-		{
 			min = height;
-		}
 
 		this.currentSize = new Dimension(min * wholeSize, min);
 	}
@@ -397,15 +428,22 @@ public class Ship extends MapElement implements JSONString
 		move(center.getMap().getBox(x, y), orientation);
 	}
 
+	/**
+	 * Get orientation of the ship
+	 * 
+	 * @return
+	 */
 	public ShipOrientation getOrientation()
 	{
 		return orientation;
 	}
 	
+	/**
+	 * Shoot on the ship
+	 */
 	@Override
 	public void shoot(Box target)
 	{
-		// TODO: Remplace temp code
 		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, 1, true);
 		target.setImage(img);
 	}

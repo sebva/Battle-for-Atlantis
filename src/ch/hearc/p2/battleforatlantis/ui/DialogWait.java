@@ -6,6 +6,7 @@ import java.awt.Frame;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.utils.Messages;
@@ -18,6 +19,10 @@ public class DialogWait extends JDialog
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
+		// Remove the entire title bar
+		setUndecorated(true);
+		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+			
 		setSize(350, 200);
 		
 		setLayout(new BorderLayout());
