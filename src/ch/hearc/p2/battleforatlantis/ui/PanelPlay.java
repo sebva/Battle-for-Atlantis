@@ -296,7 +296,7 @@ public class PanelPlay extends JPanel
 	{
 		log.info("Next level");
 		
-		MapType oldMap = currentLocalMap.getType();
+		MapType oldMap = currentDistantMap.getType();
 		
 		MapType newMap = null;
 		switch (oldMap)
