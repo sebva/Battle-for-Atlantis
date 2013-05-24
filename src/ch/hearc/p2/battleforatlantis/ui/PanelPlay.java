@@ -22,6 +22,7 @@ import ch.hearc.p2.battleforatlantis.action.MoveAction;
 import ch.hearc.p2.battleforatlantis.action.NextLevelAction;
 import ch.hearc.p2.battleforatlantis.action.ShootAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
+import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
@@ -40,10 +41,21 @@ public class PanelPlay extends JPanel
 	/** The PanelMaps displaying distant maps */
 	private PanelMaps levelsOther;
 	
+	/** Stats of the shots made **/
+	private PanelStats panelStats;
+	
+	/** Total shots **/
+	private int totalShots;
+	/** Shots in ships **/
+	private int effectiveShots;
+	/** Shots in water **/ 
+	private int waterShots;
+	
 	private Map currentLocalMap;
 	private Map currentDistantMap;
 	private final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private PanelPlayerView distantPlayerView;
+	
 
 	/**
 	 * The Panel that shows the maps as well as some stats relative to this map.
@@ -136,15 +148,29 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelStats extends JPanel
 	{
+		private JLabel labelTotalShots;
+		private JLabel labelEffectiveShots;
+		private JLabel labelWaterShots;
+
 		public PanelStats()
 		{
 			Box box = Box.createVerticalBox();
-			// TODO: Retrieve correct statistics
-			box.add(new JLabel("14 " + Messages.getString("PanelPlay.TotalShots")));
-			box.add(new JLabel("11 " + Messages.getString("PanelPlay.EffectiveShots")));
-			box.add(new JLabel("3 " + Messages.getString("PanelPlay.WaterShots")));
+			
+			labelTotalShots = new JLabel("");
+			box.add(labelTotalShots);
+			labelEffectiveShots = new JLabel("");
+			box.add(labelEffectiveShots);
+			labelWaterShots = new JLabel("");
+			box.add(labelWaterShots);
 
 			add(box, BorderLayout.CENTER);
+		}
+		
+		public void refresh()
+		{
+			labelTotalShots.setText(totalShots + " " + Messages.getString("PanelPlay.TotalShots"));
+			labelEffectiveShots.setText(effectiveShots + " " + Messages.getString("PanelPlay.EffectiveShots"));
+			labelWaterShots.setText(waterShots + " " + Messages.getString("PanelPlay.WaterShots"));
 		}
 	}
 
@@ -202,7 +228,10 @@ public class PanelPlay extends JPanel
 		boxHUD.add(new PanelProgress());
 		boxHUD.add(new JSeparator(SwingConstants.HORIZONTAL));
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.Stats")));
-		boxHUD.add(new PanelStats());
+		
+		panelStats = new PanelStats();
+		boxHUD.add(panelStats);
+		
 		boxHUD.add(Box.createVerticalGlue());
 
 		boxH.add(boxHUD);
@@ -216,7 +245,26 @@ public class PanelPlay extends JPanel
 	 */
 	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
+		// Get occupier of the box shot
+		MapElement occupier = location.getOccupier();
+		
+		// If we shot a ship
+		if (occupier != null)
+			effectiveShots++;
+		// Or shot nothing
+		else
+			waterShots++;
+		
+		// Count total shots
+		totalShots++;
+		
+		// Refresh the stats pannel
+		panelStats.refresh();
+		
+		// Made the shot at the box location
 		location.shoot();
+		
+		// Send the shot to the opponent
 		new ShootAction(location).send();
 	}
 
