@@ -18,6 +18,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.net.NetworkManager;
+import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelPrepare extends JPanel
@@ -129,23 +130,11 @@ public class PanelPrepare extends JPanel
 		{
 			// Add label
 			/*
-			if (currentType == null || currentType != ship.getType())
-			{
-				currentType = ship.getType();
-				JLabel label = null;
-				
-				switch (currentType)
-				{
-					case SHIP:
-						label = new JLabel(Messages.getString("PanelPrepare.Boats"));
-						break;
-					case SUBMARINE:
-						label = new JLabel(Messages.getString("PanelPrepare.Submarines"));
-						break;
-				}
-				label.setAlignmentX(RIGHT_ALIGNMENT);
-				boxMenu.add(label);
-			}*/
+			 * if (currentType == null || currentType != ship.getType()) { currentType = ship.getType(); JLabel label = null;
+			 * 
+			 * switch (currentType) { case SHIP: label = new JLabel(Messages.getString("PanelPrepare.Boats")); break; case SUBMARINE: label = new
+			 * JLabel(Messages.getString("PanelPrepare.Submarines")); break; } label.setAlignmentX(RIGHT_ALIGNMENT); boxMenu.add(label); }
+			 */
 
 			// Add ship
 			ship.setAlignmentX(RIGHT_ALIGNMENT);
@@ -173,10 +162,11 @@ public class PanelPrepare extends JPanel
 		// The ship clicked is currently floating, so we validate its position
 		if (this.selectedShip == ship && ship.getCenter() != null)
 		{
+			SoundManager.getInstance().playPlace(selectedShip.getCenter().getMapType());
 			selectedShip.setBackgroundColor(Color.DARK_GRAY);
 			selectedShip = null;
 		}
-		
+
 		// The ship is not floating, so it's been clicked from either the button on the right
 		// or on the map (the user validated the position but is not satisfied with it).
 		else
@@ -236,13 +226,13 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		
+
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
 		sga.addMap(mapSubmarine);
 		NetworkManager.getInstance().send(sga);
-		
-		if(rootFrame.getDistantMaps() == null)
+
+		if (rootFrame.getDistantMaps() == null)
 		{
 			dialogWait = new DialogWait(Messages.getString("PanelPrepare.WaitingForShips"), rootFrame);
 			// Blocking
@@ -274,7 +264,7 @@ public class PanelPrepare extends JPanel
 
 	public void dismissWaitDialog()
 	{
-		if(dialogWait != null)
+		if (dialogWait != null)
 			dialogWait.dispose();
 	}
 }
