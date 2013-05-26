@@ -2,6 +2,8 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
@@ -34,6 +36,7 @@ public class FrameMain extends JFrame
 	private Map[] distantMaps = null;
 	private Map atlantis;
 	private Ship[] ships;
+	private Set<Ship> distantShips;
 	private String hashConfig;
 	private String playerName;
 	private String distantPlayerName;
@@ -58,6 +61,7 @@ public class FrameMain extends JFrame
 	public FrameMain() throws Exception
 	{
 		Settings.FRAME_MAIN = this;
+		distantShips = new HashSet<>();
 
 		Loader loader = new Loader();
 		loader.load();
@@ -182,6 +186,11 @@ public class FrameMain extends JFrame
 	public Ship[] getShips()
 	{
 		return ships;
+	}
+	
+	public Set<Ship> getDistantShips()
+	{
+		return distantShips;
 	}
 
 	public String getHashConfig()

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
 public final class ImageShop
@@ -18,6 +19,7 @@ public final class ImageShop
 	private static final String SHIPS_FOLDER = GAMEITEMS_FOLDER + "ships/";
 	private static final String SUBMARINES_FOLDER = GAMEITEMS_FOLDER + "submarines/";
 	private static final String ATLANTIS_FOLDER = GAMEITEMS_FOLDER + "atlantis/";
+	private static final String ARROWS_FOLDER = GAMEITEMS_FOLDER + "arrows/";
 
 	private static final String KEYWORD_ATLANTIS = "atlantis";
 	private static final String KEYWORD_SHIELD = "bouclier";
@@ -111,7 +113,7 @@ public final class ImageShop
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(filename);
 			return ImageIO.read(ClassLoader.getSystemResource(filename));
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning("IOException while loading Image at: " + filename + "\nDetails: " + e.getLocalizedMessage());
 			return null;
@@ -151,6 +153,17 @@ public final class ImageShop
 				column2--;
 			}
 		}
+	}
+
+	public static BufferedImage loadPlaceArrow(ShipOrientation imageOrientation)
+	{
+		StringBuilder filename = new StringBuilder();
+		filename.append(ARROWS_FOLDER);
+		filename.append(imageOrientation.toString().toLowerCase());
+		filename.append(EXTENSION);
+		
+		String string = filename.toString();
+		return loadImage(string);
 	}
 
 }

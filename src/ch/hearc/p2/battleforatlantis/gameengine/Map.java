@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
 
+import ch.hearc.p2.battleforatlantis.gameengine.ShipControl.ShipControlType;
 import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -73,6 +74,11 @@ public class Map extends JPanel implements JSONString
 	 * Internal panel
 	 */
 	private InternalPanel internalPanel;
+	
+	/**
+	 * Indicated if this map is a local map. For Atlantis, it should set to true
+	 */
+	private boolean isLocal;
 
 	/**
 	 * Internal panel for resizing abilities
@@ -95,12 +101,13 @@ public class Map extends JPanel implements JSONString
 	 * @param type
 	 *            Type of map (surface, submarine, atlantis)
 	 */
-	public Map(int width, int height, MapType type)
+	public Map(int width, int height, MapType type, boolean isLocal)
 	{
 		// Input fields
 		this.width = width;
 		this.height = height;
 		this.type = type;
+		this.isLocal = isLocal;
 
 		// Sizes definition
 		this.setMaximumSize(new Dimension(60 * width, 60 * height));
@@ -299,6 +306,69 @@ public class Map extends JPanel implements JSONString
 	{
 		return this.width;
 	}
+	
+	public boolean isLocal()
+	{
+		return isLocal;
+	}
+	
+	public void addShipControls()
+	{
+		Set<Ship> ships = new HashSet<>();
+		
+		for (Box[] line : boxes)
+		{
+			for (Box box : line)
+			{
+				MapElement mapElement = box.getOccupier();
+				if(mapElement instanceof Ship)
+					ships.add((Ship) mapElement);
+				else if(mapElement instanceof ShipControl)
+				{
+					box.setOccupier(null, null);
+					mapElement = null;
+				}
+			}
+		}
+		
+		for (Ship ship : ships)
+		{
+			if(ship.isTouched())
+				continue;
+			
+			Box[] occupied = ship.getOccupied();
+			
+			Box first = occupied[0];
+			Box last = occupied[occupied.length -1];
+			
+			Box forwardControl = null, backwardControl = null;
+			
+			switch(ship.getOrientation())
+			{
+				case EAST:
+					forwardControl = getBox(last.getCoordX() +1, last.getCoordY());
+					backwardControl = getBox(first.getCoordX() -1, first.getCoordY());
+					break;
+				case NORTH:
+					forwardControl = getBox(last.getCoordX(), last.getCoordY() -1);
+					backwardControl = getBox(first.getCoordX(), first.getCoordY() +1);
+					break;
+				case SOUTH:
+					forwardControl = getBox(last.getCoordX(), last.getCoordY() +1);
+					backwardControl = getBox(first.getCoordX(), first.getCoordY() -1);
+					break;
+				case WEST:
+					forwardControl = getBox(last.getCoordX() -1, last.getCoordY());
+					backwardControl = getBox(first.getCoordX() +1, first.getCoordY());
+					break;
+			}
+			
+			if(forwardControl != null && forwardControl.getOccupier() == null)
+				new ShipControl(ship, forwardControl, ShipControlType.PLACE_FORWARD);
+			if(backwardControl != null && backwardControl.getOccupier() == null)
+				new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
+		}
+	}
 
 	@Override
 	public String toJSONString()
@@ -331,7 +401,7 @@ public class Map extends JPanel implements JSONString
 		for (Map localmap : localMaps)
 		{
 			if(localmap.type.equals(type))
-				map = new Map(localmap.width, localmap.height, type);
+				map = new Map(localmap.width, localmap.height, type, false);
 		}
 		
 		JSONArray ships = jo.getJSONArray("ships");
@@ -342,8 +412,7 @@ public class Map extends JPanel implements JSONString
 			int x = jsonCenter.getInt("x");
 			int y = jsonCenter.getInt("y");
 			
-			// Return value ignored
-			Ship.createFromJSONObject(jsonShip, map.boxes[y][x]);
+			Settings.FRAME_MAIN.getDistantShips().add(Ship.createFromJSONObject(jsonShip, map.boxes[y][x]));
 		}
 		
 		return map;

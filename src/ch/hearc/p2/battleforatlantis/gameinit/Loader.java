@@ -156,7 +156,7 @@ public class Loader extends DefaultHandler
 				MapType type = MapType.valueOf(attributes.getValue("type").toUpperCase());
 				currentLevel = type;
 				
-				Map map = new Map(width, height, type);
+				Map map = new Map(width, height, type, true);
 				
 				try
 				{

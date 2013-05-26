@@ -46,6 +46,7 @@ public class MoveAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
+		ship.moveOut();
 		ship.move(center, orientation);
 	}
 	
@@ -66,7 +67,7 @@ public class MoveAction extends Action implements NetworkMessage
 		
 		// Get the current ship
 		Ship finalShip = null;
-		for(Ship ship : Settings.FRAME_MAIN.getShips())
+		for(Ship ship : Settings.FRAME_MAIN.getDistantShips())
 		{
 			if(ship.getId() == shipId)
 			{
@@ -75,8 +76,7 @@ public class MoveAction extends Action implements NetworkMessage
 			}
 		}
 		
-		if (finalShip != null)
-			throw new RuntimeException("The ship with ID " + shipId + " does not exist");
+		assert finalShip != null : "The ship with ID " + shipId + " does not exist";
 		
 		// Get the center box of the ship
 		Box centerBox = Settings.PANEL_PLAY.getCurrentLevel(true).getBox(center);

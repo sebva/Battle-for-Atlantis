@@ -138,8 +138,8 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelProgress extends JPanel
 	{
-		java.util.Map<Ship, Integer> progressValueList = new HashMap<Ship, Integer>();
-		java.util.Map<Ship, JProgressBar> progressBarList = new HashMap<Ship, JProgressBar>();
+		private java.util.Map<Ship, Integer> progressValueList = new HashMap<Ship, Integer>();
+		private java.util.Map<Ship, JProgressBar> progressBarList = new HashMap<Ship, JProgressBar>();
 		//TODO
 		public PanelProgress()
 		{
@@ -180,8 +180,13 @@ public class PanelPlay extends JPanel
 		 */
 		public void addProgress(Ship occupier)
 		{
-			Integer value = progressValueList.get(occupier);
-			progressValueList.put(occupier, new Integer(value + 1));
+			int value;
+			if(progressValueList.containsKey(occupier))
+				value = progressValueList.get(occupier);
+			else
+				value = 0;
+			
+			progressValueList.put(occupier, value + 1);
 			progressBarList.get(occupier).setValue((occupier.getWholeSize() / (value+1)) * 100);
 		}
 	}
@@ -225,8 +230,10 @@ public class PanelPlay extends JPanel
 	public PanelPlay(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
-
-		// FIXME: /!\ Swing does not permit a JPanel to be in two places at the same time !
+		
+		for (Map map : rootFrame.getLocalMaps())
+			map.addShipControls();
+		
 		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, true);
 		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
 		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
@@ -300,7 +307,8 @@ public class PanelPlay extends JPanel
 			
 			if (occupier instanceof Ship)
 			{
-				this.panelProgress.addProgress((Ship) occupier);
+				// FIXME: NullPointerException in the following method call !
+				//this.panelProgress.addProgress((Ship) occupier);
 			}
 		}
 		// Or shot nothing
@@ -327,7 +335,10 @@ public class PanelPlay extends JPanel
 	 */
 	public void rotate(Ship ship, boolean clockwise)
 	{
+		if(!ship.rotationPossible())
+			return;
 		ship.rotate(clockwise);
+		ship.getCenter().getMap().addShipControls();
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
@@ -337,7 +348,9 @@ public class PanelPlay extends JPanel
 	 */
 	public void place(Ship ship, boolean forward)
 	{
+		ship.moveOut();
 		ship.place(forward);
+		ship.getCenter().getMap().addShipControls();
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 

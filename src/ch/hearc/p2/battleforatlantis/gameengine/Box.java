@@ -89,7 +89,7 @@ public class Box extends JPanel implements JSONString
 	 * @param y
 	 *            Vertical coordinate of box in map (upper-side is 0)
 	 */
-	public Box(Map map, MapType type, int x, int y)
+	public Box(final Map map, MapType type, int x, int y)
 	{
 		// Input fields
 		this.type = type;
@@ -147,8 +147,23 @@ public class Box extends JPanel implements JSONString
 				}
 				else
 				{
-					if(e.getButton() == MouseEvent.BUTTON1)
-						panelPlay.shoot(Box.this);
+					if(!map.isLocal())
+					{
+						if(e.getButton() == MouseEvent.BUTTON1)
+							panelPlay.shoot(Box.this);
+					}
+					else
+					{
+						if(occupier instanceof Ship)
+						{
+							if(e.getButton() == MouseEvent.BUTTON1)
+								panelPlay.rotate((Ship) occupier, true);
+							else if(e.getButton() == MouseEvent.BUTTON3)
+								panelPlay.rotate((Ship) occupier, false);
+						}
+						else if(occupier instanceof ShipControl)
+							((ShipControl) occupier).execute();
+					}
 				}
 			}
 		});
@@ -177,6 +192,9 @@ public class Box extends JPanel implements JSONString
 	 */
 	public void shoot()
 	{
+		if(discovered)
+			return;
+		discovered = true;
 		if(occupier != null)
 			occupier.shoot(this);
 	}
@@ -247,7 +265,7 @@ public class Box extends JPanel implements JSONString
 	protected void setImage(Image img)
 	{
 		this.imageOccupier = img;
-		repaint();
+		update(getGraphics());
 	}
 
 	/**

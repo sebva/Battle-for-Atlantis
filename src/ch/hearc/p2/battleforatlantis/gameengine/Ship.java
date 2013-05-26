@@ -283,7 +283,7 @@ public class Ship extends MapElement implements JSONString
 				this.center = null;
 				return;
 			}
-			if ((this.occupied[i].getOccupier() != this) && (this.occupied[i].getOccupier() != null))
+			if ((this.occupied[i].getOccupier() != this) && (this.occupied[i].getOccupier() instanceof Ship))
 			{
 				this.center = null;
 				return;
@@ -444,7 +444,15 @@ public class Ship extends MapElement implements JSONString
 	@Override
 	public void shoot(Box target)
 	{
+		touchedSize ++;
+		
 		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, 1, true);
 		target.setImage(img);
+	}
+
+	public boolean rotationPossible()
+	{
+		// TODO: Implement this method
+		return true;
 	}
 }

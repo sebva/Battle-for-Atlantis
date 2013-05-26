@@ -227,6 +227,7 @@ public class PanelPrepare extends JPanel
 				return;
 			}
 
+
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
 		sga.addMap(mapSubmarine);
