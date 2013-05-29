@@ -20,11 +20,10 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 public class Ship extends MapElement implements JSONString
 {
 	/**
-	 * ID of the ship. 
-	 * Used to identify the ships of the player
+	 * ID of the ship. Used to identify the ships of the player
 	 */
 	private int id;
-	
+
 	/**
 	 * Type of ship (ship, submarine)
 	 */
@@ -53,8 +52,10 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Default constructor for ship instantiation
 	 * 
-	 * @param size Length of ship, in boxes number
-	 * @param type Type of ship (ship, submarine)
+	 * @param size
+	 *            Length of ship, in boxes number
+	 * @param type
+	 *            Type of ship (ship, submarine)
 	 */
 	public Ship(int size, ShipType type, int id)
 	{
@@ -102,7 +103,8 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * External call for ship rotation
 	 * 
-	 * @param clockwise Indicates if it's a clockwise rotation
+	 * @param clockwise
+	 *            Indicates if it's a clockwise rotation
 	 */
 	public void rotate(boolean clockwise)
 	{
@@ -158,35 +160,31 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Call for ship rotation
 	 * 
-	 * @param oldOrientation Old orientation of the ship
-	 * @param newOrientation New orientation of the ship
+	 * @param oldOrientation
+	 *            Old orientation of the ship
+	 * @param newOrientation
+	 *            New orientation of the ship
 	 */
 	private void rotateImage(ShipOrientation oldOrientation, ShipOrientation newOrientation)
 	{
-		if(oldOrientation.equals(newOrientation))
+		if (oldOrientation.equals(newOrientation))
 			return;
-		
+
 		int iterations = 0;
-		
-		if(
-				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.SOUTH) ||
-				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.NORTH) ||
-				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.WEST) ||
-				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.EAST))
+
+		if (oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.SOUTH) || oldOrientation.equals(ShipOrientation.SOUTH)
+				&& newOrientation.equals(ShipOrientation.NORTH) || oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.WEST)
+				|| oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.EAST))
 			iterations = 2;
-		else if(
-				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.EAST) ||
-				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.SOUTH) ||
-				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.WEST) ||
-				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.NORTH))
+		else if (oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.EAST) || oldOrientation.equals(ShipOrientation.EAST)
+				&& newOrientation.equals(ShipOrientation.SOUTH) || oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.WEST)
+				|| oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.NORTH))
 			iterations = 1;
-		else if(
-				oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.WEST) ||
-				oldOrientation.equals(ShipOrientation.WEST) && newOrientation.equals(ShipOrientation.SOUTH) ||
-				oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.EAST) ||
-				oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.NORTH))
+		else if (oldOrientation.equals(ShipOrientation.NORTH) && newOrientation.equals(ShipOrientation.WEST) || oldOrientation.equals(ShipOrientation.WEST)
+				&& newOrientation.equals(ShipOrientation.SOUTH) || oldOrientation.equals(ShipOrientation.SOUTH) && newOrientation.equals(ShipOrientation.EAST)
+				|| oldOrientation.equals(ShipOrientation.EAST) && newOrientation.equals(ShipOrientation.NORTH))
 			iterations = 3;
-		
+
 		// Make rotation for each image
 		for (BufferedImage image : images)
 		{
@@ -213,8 +211,10 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * External call for ship movement
 	 * 
-	 * @param box New box considered as boat center
-	 * @param orientation New orientation of boat
+	 * @param box
+	 *            New box considered as boat center
+	 * @param orientation
+	 *            New orientation of boat
 	 */
 	public void move(Box box, ShipOrientation orientation)
 	{
@@ -231,11 +231,11 @@ public class Ship extends MapElement implements JSONString
 		}
 
 		// Image rotation
-		if(!this.orientation.equals(orientation))
+		if (!this.orientation.equals(orientation))
 		{
 			rotateImage(this.orientation, orientation);
 		}
-		
+
 		// Assign new center
 		this.center = box;
 
@@ -243,13 +243,6 @@ public class Ship extends MapElement implements JSONString
 		int rearSize = this.wholeSize / 2;
 
 		// Get the map concerned by movement
-		// TODO: modify and adapt when maps and ships are used on panel play (static method no longer good idea)
-		// FIXME: FAIL: Network received boats are put on local maps !
-		// Map map = null;
-		/*
-		 * switch (box.getMapType()) { case SURFACE: map = FrameMain.getPanelPrepare().getMapSurface(); break; case SUBMARINE: map =
-		 * FrameMain.getPanelPrepare().getMapSubmarine(); break; }
-		 */
 		Map map = box.getMap();
 
 		// Compute positions and gather boxes hosting boat
@@ -326,7 +319,7 @@ public class Ship extends MapElement implements JSONString
 	{
 		return center;
 	}
-	
+
 	/**
 	 * Create a JSON Object to communicate the ship to the opposing player
 	 */
@@ -348,7 +341,8 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Make the ship from a request received by the player
 	 * 
-	 * @param jo JSON Object received by the player
+	 * @param jo
+	 *            JSON Object received by the player
 	 * @return The ship corresponding to the request
 	 */
 	public static Ship createFromJSONObject(JSONObject jo, Box center)
@@ -389,7 +383,7 @@ public class Ship extends MapElement implements JSONString
 	protected void setCurrentSize(int width, int height)
 	{
 		int min = width / wholeSize;
-		
+
 		if (height < min)
 			min = height;
 
@@ -406,10 +400,10 @@ public class Ship extends MapElement implements JSONString
 	{
 		int x = center.getCoordX();
 		int y = center.getCoordY();
-		
+
 		int modifier = forward ? 1 : -1;
-		
-		switch(orientation)
+
+		switch (orientation)
 		{
 			case EAST:
 				x += modifier;
@@ -424,7 +418,7 @@ public class Ship extends MapElement implements JSONString
 				x -= modifier;
 				break;
 		}
-		
+
 		move(center.getMap().getBox(x, y), orientation);
 	}
 
@@ -437,7 +431,7 @@ public class Ship extends MapElement implements JSONString
 	{
 		return orientation;
 	}
-	
+
 	/**
 	 * Shoot on the ship
 	 */
@@ -489,9 +483,54 @@ public class Ship extends MapElement implements JSONString
 		target.setImage(img);
 	}
 
-	public boolean rotationPossible()
+	public boolean rotationPossible(boolean clockwise)
 	{
-		// TODO: Implement this method
+		// Get map
+		Map map = this.center.getMap();
+
+		// Compute size of boat rear for boxes alignment
+		int rearSize = this.wholeSize / 2;
+
+		// Get the new orientation
+		ShipOrientation newOrientation = ShipOrientation.next(this.orientation, clockwise);
+
+		// Return false if any box of the new position is already occupied
+		for (int i = 0; i < this.wholeSize; i++)
+		{
+			Box currentBox = null;
+			switch (newOrientation)
+			{
+				case EAST:
+					currentBox = map.getBox(this.center.getCoordX() - rearSize + i, this.center.getCoordY());
+					if (currentBox == null)
+						return false;
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+						return false;
+					break;
+				case WEST:
+					currentBox = map.getBox(this.center.getCoordX() + rearSize - i, this.center.getCoordY());
+					if (currentBox == null)
+						return false;
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+						return false;
+					break;
+				case NORTH:
+					currentBox = map.getBox(this.center.getCoordX(), this.center.getCoordY() + rearSize - i);
+					if (currentBox == null)
+						return false;
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+						return false;
+					break;
+				case SOUTH:
+					currentBox = map.getBox(this.center.getCoordX(), this.center.getCoordY() - rearSize + i);
+					if (currentBox == null)
+						return false;
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+						return false;
+					break;
+			}
+		}
+		
 		return true;
 	}
 }
