@@ -155,6 +155,8 @@ public class PanelPlay extends JPanel
 			{
 				// Create a ProgressBar
 				JProgressBar currentBar = new JProgressBar();
+				currentBar.setMaximum(100);
+				currentBar.setMinimum(0);
 				
 				// Save values
 				progressValueList.put(shipList[i], 0);

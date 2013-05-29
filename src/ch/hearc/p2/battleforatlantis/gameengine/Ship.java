@@ -444,9 +444,48 @@ public class Ship extends MapElement implements JSONString
 	@Override
 	public void shoot(Box target)
 	{
-		touchedSize ++;
+		touchedSize++;
 		
-		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, 1, true);
+		// Get whole size of the ship
+		int size = this.getWholeSize();
+		
+		// Get size before the center box of the ship
+		int beforeSize = Integer.valueOf(size / 2);
+		
+		// Get X coordinates of the target and the center of the ship
+		int targetX = target.getCoordX();
+		int centerX = center.getCoordX();
+		
+		// Calculate the coordinate of the first box of the ship
+		int baseX = centerX - beforeSize;
+		
+		// Get the difference between the target and the first box of the ship
+		int deltaTarget = targetX - baseX;
+		
+		// Calculate the part number of the ship destroyed image
+		int partNumber = 1 + deltaTarget;
+		
+		// Variable used to know how many rotation we have to made in function of the ship orientation
+		int iterations = 0;
+		
+		// Choose the good orientation of the ship destroyed image
+		if (orientation.equals(ShipOrientation.NORTH))
+			iterations = 1;
+		
+		else if (orientation.equals(ShipOrientation.WEST))
+			iterations = 2;
+		
+		else if (orientation.equals(ShipOrientation.SOUTH))
+			iterations = 3;
+		
+		// Get the ship destroyed image
+		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, partNumber, true);
+		
+		// Make the number of rotations indicated in iteration variable
+		for (int i = 1; i <= iterations; i++)
+			ImageShop.inplaceImageRotation(img);
+		
+		// Set image to the ship
 		target.setImage(img);
 	}
 
