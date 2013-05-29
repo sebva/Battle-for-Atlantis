@@ -7,6 +7,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.Box;
 import ch.hearc.p2.battleforatlantis.gameengine.Generator;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -40,7 +41,7 @@ public class AtlantisTransmissionAction extends Action
 	public void execute()
 	{
 		// Retrieve Atlantis Map
-		Map atlantisMap = Settings.FRAME_MAIN.getMapByType(MapType.ATLANTIS, true);
+		Map atlantisMap = Settings.FRAME_MAIN.getMapByType(MapType.ATLANTIS, Player.LOCAL);
 		
 		// Row number to load Atlantis parts images
 		int row = 0;

@@ -3,6 +3,7 @@ package ch.hearc.p2.battleforatlantis.action;
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -24,7 +25,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
-		Settings.PANEL_PLAY.setActiveMap(map, true);
+		Settings.PANEL_PLAY.setActiveMap(map, Player.DISTANT);
 	}
 
 	/**

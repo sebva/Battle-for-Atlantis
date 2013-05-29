@@ -25,6 +25,7 @@ import ch.hearc.p2.battleforatlantis.action.ShootAction;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
@@ -73,20 +74,20 @@ public class PanelPlay extends JPanel
 		 * @param playerName The player's name to be shown
 		 * @param isMe Whether to display local maps
 		 */
-		public PanelPlayerView(String playerName, boolean isMe)
+		public PanelPlayerView(String playerName, Player player)
 		{
 			Box box = Box.createVerticalBox();
 
 			box.add(new JLabel(playerName));
 
 			Box boxH = Box.createHorizontalBox();
-			boxH.add(new JLabel(isMe ? Messages.getString("PanelPlay.YourMap") : Messages.getString("PanelPlay.OtherMap")));
+			boxH.add(new JLabel(player == Player.LOCAL ? Messages.getString("PanelPlay.YourMap") : Messages.getString("PanelPlay.OtherMap")));
 			boxH.add(Box.createHorizontalGlue());
 			// TODO: Retrieve level number
 			boxH.add(new JLabel(Messages.getString("PanelPlay.Level") + " 1"));
 
 			box.add(boxH);
-			box.add(isMe ? levelsMe : levelsOther);
+			box.add(player == Player.LOCAL ? levelsMe : levelsOther);
 
 			box.add(new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus")));
 			box.add(new JProgressBar());
@@ -234,18 +235,18 @@ public class PanelPlay extends JPanel
 		for (Map map : rootFrame.getLocalMaps())
 			map.addShipControls();
 		
-		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, true);
+		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, Player.LOCAL);
 		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
 		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
 		
-		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, true);
-		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, false);
+		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
+		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
 
 		Box boxH = Box.createHorizontalBox();
 
-		boxH.add(new PanelPlayerView(rootFrame.getPlayerName(), true));
+		boxH.add(new PanelPlayerView(rootFrame.getPlayerName(), Player.LOCAL));
 		boxH.add(new JSeparator(SwingConstants.VERTICAL));
-		distantPlayerView = new PanelPlayerView(rootFrame.getDistantPlayerName(), false);
+		distantPlayerView = new PanelPlayerView(rootFrame.getDistantPlayerName(), Player.DISTANT);
 		boxH.add(distantPlayerView);
 
 		boxH.add(new JSeparator(SwingConstants.VERTICAL));
@@ -377,7 +378,7 @@ public class PanelPlay extends JPanel
 				throw new RuntimeException("nextLevel requested, but player is at latest level");
 		}
 		
-		setActiveMap(newMap, false);
+		setActiveMap(newMap, Player.DISTANT);
 		
 		new NextLevelAction(newMap).send();
 	}
@@ -404,13 +405,12 @@ public class PanelPlay extends JPanel
 	 * @param map The MapType to be shown on the Player's map
 	 * @param local True if this applies to the local player
 	 */
-	public void setActiveMap(MapType map, boolean local)
+	public void setActiveMap(MapType map, Player player)
 	{
-		if(local)
-
-			currentLocalMap = rootFrame.getMapByType(map, true);
+		if(player == Player.LOCAL)
+			currentLocalMap = rootFrame.getMapByType(map, Player.LOCAL);
 		else
-			currentDistantMap = rootFrame.getMapByType(map, false);
+			currentDistantMap = rootFrame.getMapByType(map, Player.DISTANT);
 		
 		if(MapType.ATLANTIS == currentDistantMap.getType() &&
 				MapType.ATLANTIS == currentLocalMap.getType())
@@ -419,10 +419,10 @@ public class PanelPlay extends JPanel
 			for(Component c : distantPlayerView.getComponents())
 				distantPlayerView.remove(c);
 			remove(distantPlayerView);
-			local = true;
+			player = Player.LOCAL;
 		}
 		
-		if(local)
+		if(player == Player.LOCAL)
 			levelsMe.showMap(map);
 		else
 			levelsOther.showMap(map);
@@ -430,9 +430,9 @@ public class PanelPlay extends JPanel
 		validate();	
 	}
 	
-	public Map getCurrentLevel(boolean local)
+	public Map getCurrentLevel(Player player)
 	{
-		return local ? currentLocalMap : currentDistantMap;
+		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;
 	}
 
 }

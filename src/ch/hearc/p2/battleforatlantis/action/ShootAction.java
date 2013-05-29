@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Box;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -47,7 +48,7 @@ public class ShootAction extends Action implements NetworkMessage
 		MapType level = MapType.valueOf(jo.getString("level"));
 		
 		// Get the box shot
-		Box target = Settings.FRAME_MAIN.getMapByType(level, true).getBox(jo.getJSONObject("target"));
+		Box target = Settings.FRAME_MAIN.getMapByType(level, Player.LOCAL).getBox(jo.getJSONObject("target"));
 		
 		return new ShootAction(target);
 	}

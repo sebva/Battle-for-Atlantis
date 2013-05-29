@@ -3,6 +3,7 @@ package ch.hearc.p2.battleforatlantis.action;
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Box;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
@@ -79,7 +80,7 @@ public class MoveAction extends Action implements NetworkMessage
 		assert finalShip != null : "The ship with ID " + shipId + " does not exist";
 		
 		// Get the center box of the ship
-		Box centerBox = Settings.PANEL_PLAY.getCurrentLevel(true).getBox(center);
+		Box centerBox = Settings.PANEL_PLAY.getCurrentLevel(Player.DISTANT).getBox(center);
 		
 		// Return the MoveAction corresponding to the request
 		return new MoveAction(finalShip, centerBox, orientation);

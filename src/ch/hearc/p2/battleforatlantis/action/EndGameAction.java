@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import ch.hearc.p2.battleforatlantis.gameengine.Box;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -99,7 +100,7 @@ public class EndGameAction extends Action implements NetworkMessage
 		if(jo.has("level") && jo.has("target"))
 		{
 			MapType level = MapType.valueOf(jo.getString("level"));
-			Map map = Settings.FRAME_MAIN.getMapByType(level, true);
+			Map map = Settings.FRAME_MAIN.getMapByType(level, Player.LOCAL);
 			return new EndGameAction(won, cause, map.getBox(jo.getJSONObject("target")));
 		}
 		// Otherwise

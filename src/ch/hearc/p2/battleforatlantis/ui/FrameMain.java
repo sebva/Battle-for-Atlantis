@@ -14,6 +14,7 @@ import ch.hearc.p2.battleforatlantis.Main;
 import ch.hearc.p2.battleforatlantis.action.Action;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameinit.Loader;
 import ch.hearc.p2.battleforatlantis.net.Host;
@@ -151,14 +152,14 @@ public class FrameMain extends JFrame
 		return localMaps;
 	}
 
-	public Map getMapByType(MapType type, boolean isLocalMap)
+	public Map getMapByType(MapType type, Player player)
 	{
 		// Special case for Atlantis Map
 		if (type == MapType.ATLANTIS)
 			return atlantis;
 
 		// Local or distant Map List
-		Map[] mapList = (isLocalMap) ? localMaps : distantMaps;
+		Map[] mapList = (player == Player.LOCAL) ? localMaps : distantMaps;
 
 		// List each map
 		for (Map map : mapList)
