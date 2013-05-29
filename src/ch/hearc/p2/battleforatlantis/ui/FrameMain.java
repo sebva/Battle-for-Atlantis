@@ -89,6 +89,8 @@ public class FrameMain extends JFrame
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 
 		//cards.showCard(PanelPrepare.class.getSimpleName());
+		
+		
 
 		setVisible(true);
 	}
@@ -188,7 +190,7 @@ public class FrameMain extends JFrame
 	{
 		return ships;
 	}
-	
+
 	public Set<Ship> getDistantShips()
 	{
 		return distantShips;

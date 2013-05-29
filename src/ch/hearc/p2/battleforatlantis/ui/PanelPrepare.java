@@ -219,6 +219,7 @@ public class PanelPrepare extends JPanel
 	public void start()
 	{
 		// Check that every ship has been placed
+		//*
 		for (Ship ship : rootFrame.getShips())
 			if (ship.getCenter() == null)
 			{
@@ -226,6 +227,7 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			//*/
 
 
 		StartGameAction sga = new StartGameAction();
