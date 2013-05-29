@@ -290,7 +290,7 @@ public class Map extends JPanel implements JSONString
 			}
 
 			@Override
-			public void mouseClicked(MouseEvent e)
+			public void mousePressed(MouseEvent e)
 			{
 
 			}

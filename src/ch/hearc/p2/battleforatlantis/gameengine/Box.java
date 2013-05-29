@@ -122,7 +122,7 @@ public class Box extends JPanel implements JSONString
 		addMouseListener(new MouseAdapter()
 		{
 			@Override
-			public void mouseClicked(MouseEvent e)
+			public void mousePressed(MouseEvent e)
 			{
 				PanelPlay panelPlay = Settings.PANEL_PLAY;
 				if(panelPlay == null)
