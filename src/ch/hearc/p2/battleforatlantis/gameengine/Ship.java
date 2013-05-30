@@ -52,8 +52,10 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Default constructor for ship instantiation
 	 * 
-	 * @param size Length of ship, in boxes number
-	 * @param type Type of ship (ship, submarine)
+	 * @param size
+	 *            Length of ship, in boxes number
+	 * @param type
+	 *            Type of ship (ship, submarine)
 	 */
 	public Ship(int size, ShipType type, int id)
 	{
@@ -101,7 +103,8 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * External call for ship rotation
 	 * 
-	 * @param clockwise Indicates if it's a clockwise rotation
+	 * @param clockwise
+	 *            Indicates if it's a clockwise rotation
 	 */
 	public void rotate(boolean clockwise)
 	{
@@ -157,8 +160,10 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Call for ship rotation
 	 * 
-	 * @param oldOrientation Old orientation of the ship
-	 * @param newOrientation New orientation of the ship
+	 * @param oldOrientation
+	 *            Old orientation of the ship
+	 * @param newOrientation
+	 *            New orientation of the ship
 	 */
 	private void rotateImage(ShipOrientation oldOrientation, ShipOrientation newOrientation)
 	{
@@ -206,8 +211,10 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * External call for ship movement
 	 * 
-	 * @param box New box considered as boat center
-	 * @param orientation New orientation of boat
+	 * @param box
+	 *            New box considered as boat center
+	 * @param orientation
+	 *            New orientation of boat
 	 */
 	public void move(Box box, ShipOrientation orientation)
 	{
@@ -334,7 +341,8 @@ public class Ship extends MapElement implements JSONString
 	/**
 	 * Make the ship from a request received by the player
 	 * 
-	 * @param jo JSON Object received by the player
+	 * @param jo
+	 *            JSON Object received by the player
 	 * @return The ship corresponding to the request
 	 */
 	public static Ship createFromJSONObject(JSONObject jo, Box center)
@@ -431,72 +439,46 @@ public class Ship extends MapElement implements JSONString
 	public void shoot(Box target)
 	{
 		touchedSize++;
-
+		
 		// Get whole size of the ship
 		int size = this.getWholeSize();
-
+		
 		// Get size before the center box of the ship
 		int beforeSize = Integer.valueOf(size / 2);
-
-		// Get position of targetted part of boat
-		int targetIndex = -1;
-		int centerIndex = -1;
-		if (this.orientation == ShipOrientation.NORTH || this.orientation == ShipOrientation.SOUTH)
-		{
-			targetIndex = target.getCoordY();
-			centerIndex = center.getCoordY();
-		}
-		else
-		{
-			targetIndex = target.getCoordX();
-			centerIndex = center.getCoordX();
-		}
-
-		int deltaTarget = -1;
-		int baseIndex = -1;
-		switch (this.orientation)
-		{
-			case NORTH:
-				baseIndex = centerIndex + beforeSize;
-				deltaTarget = baseIndex - targetIndex;
-				break;
-			case SOUTH:
-				baseIndex = centerIndex - beforeSize;
-				deltaTarget = targetIndex - baseIndex;
-				break;
-			case EAST:
-				baseIndex = centerIndex - beforeSize;
-				deltaTarget = targetIndex - baseIndex;
-				break;
-			case WEST:
-				baseIndex = centerIndex + beforeSize;
-				deltaTarget = baseIndex - targetIndex;
-				break;
-		}
-
+		
+		// Get X coordinates of the target and the center of the ship
+		int targetX = target.getCoordX();
+		int centerX = center.getCoordX();
+		
+		// Calculate the coordinate of the first box of the ship
+		int baseX = centerX - beforeSize;
+		
+		// Get the difference between the target and the first box of the ship
+		int deltaTarget = targetX - baseX;
+		
 		// Calculate the part number of the ship destroyed image
 		int partNumber = 1 + deltaTarget;
-
+		
 		// Variable used to know how many rotation we have to made in function of the ship orientation
 		int iterations = 0;
-
+		
 		// Choose the good orientation of the ship destroyed image
 		if (orientation.equals(ShipOrientation.NORTH))
-			iterations = 3;
-
+			iterations = 1;
+		
 		else if (orientation.equals(ShipOrientation.WEST))
 			iterations = 2;
-
+		
 		else if (orientation.equals(ShipOrientation.SOUTH))
-			iterations = 1;
-
+			iterations = 3;
+		
 		// Get the ship destroyed image
 		BufferedImage img = ImageShop.loadShipImage(type, initialImages.length, partNumber, true);
-
+		
 		// Make the number of rotations indicated in iteration variable
 		for (int i = 1; i <= iterations; i++)
 			ImageShop.inplaceImageRotation(img);
-
+		
 		// Set image to the ship
 		target.setImage(img);
 	}
@@ -548,7 +530,7 @@ public class Ship extends MapElement implements JSONString
 					break;
 			}
 		}
-
+		
 		return true;
 	}
 }

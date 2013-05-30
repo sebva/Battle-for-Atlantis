@@ -44,30 +44,35 @@ public class PanelPlay extends JPanel
 	private PanelMaps levelsMe;
 	/** The PanelMaps displaying distant maps */
 	private PanelMaps levelsOther;
-
+	
 	/** Stats of the shots made **/
 	private PanelStats panelStats;
-
+	
 	/** Total shots **/
 	private int totalShots;
 	/** Shots in ships **/
 	private int effectiveShots;
-	/** Shots in water **/
+	/** Shots in water **/ 
 	private int waterShots;
-
+	
 	/** Progression of the player **/
 	private final PanelProgress panelProgress;
-
+	
 	private Map currentLocalMap;
 	private Map currentDistantMap;
 	private final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private PanelPlayerView distantPlayerView;
-
+	
+	private Player playerPlaying;
+	private PanelPlayerView localPlayerView;
+	
 	/**
 	 * The Panel that shows the maps as well as some stats relative to this map.
 	 */
 	private class PanelPlayerView extends JPanel
 	{
+		JLabel labelTurn = new JLabel();
+		
 		/**
 		 * 
 		 * @param playerName The player's name to be shown
@@ -80,6 +85,7 @@ public class PanelPlay extends JPanel
 			box.add(new JLabel(playerName));
 
 			Box boxH = Box.createHorizontalBox();
+			boxH.add(labelTurn);
 			boxH.add(new JLabel(player == Player.LOCAL ? Messages.getString("PanelPlay.YourMap") : Messages.getString("PanelPlay.OtherMap")));
 			boxH.add(Box.createHorizontalGlue());
 			// TODO: Retrieve level number
@@ -93,12 +99,17 @@ public class PanelPlay extends JPanel
 
 			add(box, BorderLayout.CENTER);
 		}
+		
+		public void setTurn(boolean b)
+		{
+			labelTurn.setText(b ? "Tour" : "");
+		}
 	}
 
 	/**
 	 * CardLayout to display one map at time
 	 */
-	public class PanelMaps extends JPanel
+	private class PanelMaps extends JPanel
 	{
 		private CardLayout cards;
 		private Map atlantis;
@@ -114,7 +125,7 @@ public class PanelPlay extends JPanel
 			setLayout(cards);
 			for (Map map : maps)
 				add(map, map.getType().name());
-
+			
 			this.atlantis = atlantis;
 
 			showMap(MapType.SURFACE);
@@ -122,14 +133,13 @@ public class PanelPlay extends JPanel
 
 		/**
 		 * Display the map relative to a particular type
-		 * 
 		 * @param type The MapType of the map to be displayed
 		 */
 		public void showMap(MapType type)
 		{
-			if (type == MapType.ATLANTIS && getComponentCount() <= 2)
+			if(type == MapType.ATLANTIS && getComponentCount() <= 2)
 				add(atlantis, atlantis.getType().name());
-
+			
 			cards.show(this, type.toString());
 		}
 	}
@@ -141,16 +151,15 @@ public class PanelPlay extends JPanel
 	{
 		private java.util.Map<Ship, Integer> progressValueList = new HashMap<Ship, Integer>();
 		private java.util.Map<Ship, JProgressBar> progressBarList = new HashMap<Ship, JProgressBar>();
-
-		// TODO
+		//TODO
 		public PanelProgress()
 		{
 			// Get ship list
 			Ship[] shipList = Settings.FRAME_MAIN.getShips();
-
+			
 			// Grid for progress
 			setLayout(new GridLayout(shipList.length, 2));
-
+			
 			// For each MapElement to destroy by the player
 			for (int i = 0; i < shipList.length; i++)
 			{
@@ -158,14 +167,14 @@ public class PanelPlay extends JPanel
 				JProgressBar currentBar = new JProgressBar();
 				currentBar.setMaximum(100);
 				currentBar.setMinimum(0);
-
+				
 				// Save values
 				progressValueList.put(shipList[i], 0);
 				progressBarList.put(shipList[i], currentBar);
-
+				
 				// Add the ProgressBar to the current line
 				add(currentBar);
-
+				
 				if (shipList[i].getType() == ShipType.SHIP)
 				{
 					add(new JLabel(Messages.getString("Ship.Size" + shipList[i].getWholeSize())));
@@ -176,7 +185,7 @@ public class PanelPlay extends JPanel
 				}
 			}
 		}
-
+		
 		/**
 		 * Indicates a progression (shot effective)
 		 * 
@@ -185,13 +194,13 @@ public class PanelPlay extends JPanel
 		public void addProgress(Ship occupier)
 		{
 			int value;
-			if (progressValueList.containsKey(occupier))
+			if(progressValueList.containsKey(occupier))
 				value = progressValueList.get(occupier);
 			else
 				value = 0;
-
+			
 			progressValueList.put(occupier, value + 1);
-			progressBarList.get(occupier).setValue((occupier.getWholeSize() / (value + 1)) * 100);
+			progressBarList.get(occupier).setValue((occupier.getWholeSize() / (value+1)) * 100);
 		}
 	}
 
@@ -207,7 +216,7 @@ public class PanelPlay extends JPanel
 		public PanelStats()
 		{
 			Box box = Box.createVerticalBox();
-
+			
 			labelTotalShots = new JLabel("");
 			box.add(labelTotalShots);
 			labelEffectiveShots = new JLabel("");
@@ -217,7 +226,7 @@ public class PanelPlay extends JPanel
 
 			add(box, BorderLayout.CENTER);
 		}
-
+		
 		public void refresh()
 		{
 			labelTotalShots.setText(totalShots + " " + Messages.getString("PanelPlay.TotalShots"));
@@ -227,27 +236,29 @@ public class PanelPlay extends JPanel
 	}
 
 	/**
-	 * Instantiate a new PanelPlay. All the maps have to be set in FrameMain before calling this constructor !
-	 * 
+	 * Instantiate a new PanelPlay.
+	 * All the maps have to be set in FrameMain before calling this constructor !
 	 * @param rootFrame The application's FrameMain object
 	 */
 	public PanelPlay(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
-
+		this.playerPlaying = rootFrame.getFirstPlayerToPlay();
+		
 		for (Map map : rootFrame.getLocalMaps())
 			map.addShipControls();
-
+		
 		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, Player.LOCAL);
 		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
 		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
-
+		
 		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
 		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
 
 		Box boxH = Box.createHorizontalBox();
 
-		boxH.add(new PanelPlayerView(rootFrame.getPlayerName(), Player.LOCAL));
+		localPlayerView = new PanelPlayerView(rootFrame.getPlayerName(), Player.LOCAL);
+		boxH.add(localPlayerView);
 		boxH.add(new JSeparator(SwingConstants.VERTICAL));
 		distantPlayerView = new PanelPlayerView(rootFrame.getDistantPlayerName(), Player.DISTANT);
 		boxH.add(distantPlayerView);
@@ -266,7 +277,7 @@ public class PanelPlay extends JPanel
 			}
 		});
 		boxHUD.add(btnCapitulate);
-
+		
 		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
 		btnNextLevel.addActionListener(new ActionListener()
 		{
@@ -281,95 +292,116 @@ public class PanelPlay extends JPanel
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.ConquestProgress")));
 		boxHUD.add(new JSeparator(SwingConstants.HORIZONTAL));
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.Stats")));
-
+		
 		panelProgress = new PanelProgress();
 		boxHUD.add(panelProgress);
-
+		
 		panelStats = new PanelStats();
 		boxHUD.add(panelStats);
-
+		
 		boxHUD.add(Box.createVerticalGlue());
 
 		boxH.add(boxHUD);
 
 		add(boxH, BorderLayout.CENTER);
+		
+		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
+		localPlayerView.setTurn(isLocalPlaying);
+		distantPlayerView.setTurn(!isLocalPlaying);	
 	}
 
 	/**
 	 * Called when the remote player shoots on a particular box
-	 * 
 	 * @param location The reference to the Box that is targeted
 	 */
 	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
+		if(playerPlaying != Player.LOCAL)
+			return;
+		
 		// Get occupier of the box shot
 		MapElement occupier = location.getOccupier();
-
+		
 		// If we shot a ship
 		if (occupier != null)
 		{
 			effectiveShots++;
-
+			
 			if (occupier instanceof Ship)
 			{
 				// FIXME: NullPointerException in the following method call !
-				// this.panelProgress.addProgress((Ship) occupier);
+				//this.panelProgress.addProgress((Ship) occupier);
 			}
 		}
 		// Or shot nothing
 		else
 			waterShots++;
-
+		
 		// Count total shots
 		totalShots++;
-
+		
 		// Refresh the stats pannel
 		panelStats.refresh();
-
+		
 		// Made the shot at the box location
 		location.shoot();
-
+		
+		endCurrentTurn();
+		
 		// Send the shot to the opponent
 		new ShootAction(location).send();
 	}
 
 	/**
 	 * Rotate a particular Ship
-	 * 
 	 * @param ship The ship to be rotated
 	 * @param clockwise Whether the boat is to be rotated in a clockwise angle
 	 */
 	public void rotate(Ship ship, boolean clockwise)
 	{
-		if (!ship.rotationPossible(clockwise))
+		if(playerPlaying != Player.LOCAL)
+			return;
+		
+		if(!ship.rotationPossible(clockwise))
 			return;
 		ship.rotate(clockwise);
 		ship.getCenter().getMap().addShipControls();
+		
+		endCurrentTurn();
+		
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
 	/**
 	 * Move a particular ship forwards/backwards
-	 * 
 	 * @param forward True = forwards, false = backwards
 	 */
 	public void place(Ship ship, boolean forward)
 	{
+		if(playerPlaying != Player.LOCAL)
+			return;
+		
 		ship.moveOut();
 		ship.place(forward);
 		ship.getCenter().getMap().addShipControls();
+		
+		endCurrentTurn();
+		
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
 	/**
-	 * Called when a player asks to go to the next level
+	 * Called when a player asks to go to the next level 
 	 */
 	public void nextLevel()
 	{
+		if(playerPlaying != Player.LOCAL)
+			return;
+		
 		log.info("Next level");
-
+		
 		MapType oldMap = currentDistantMap.getType();
-
+		
 		MapType newMap = null;
 		switch (oldMap)
 		{
@@ -383,21 +415,30 @@ public class PanelPlay extends JPanel
 				// Should not happen
 				throw new RuntimeException("nextLevel requested, but player is at latest level");
 		}
-
+		
 		setActiveMap(newMap, Player.DISTANT);
-
+		
+		endCurrentTurn();
+		
 		new NextLevelAction(newMap).send();
+	}
+	
+	public void endCurrentTurn()
+	{
+		playerPlaying = playerPlaying == Player.LOCAL ? Player.DISTANT : Player.LOCAL;
+		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
+		localPlayerView.setTurn(isLocalPlaying);
+		distantPlayerView.setTurn(!isLocalPlaying);	
 	}
 
 	/**
 	 * The game is finished
-	 * 
 	 * @param isWinner True when the local player is the winner
 	 * @param fromNetwork True if this call comes from the network
 	 */
 	public void endGame(boolean isWinner, boolean fromNetwork)
 	{
-		if (!fromNetwork)
+		if(!fromNetwork)
 		{
 			EndGameCause cause = isWinner ? EndGameCause.ATLANTIS_DESTROYED : EndGameCause.SURRENDERED;
 			new EndGameAction(!isWinner, cause).send();
@@ -407,35 +448,36 @@ public class PanelPlay extends JPanel
 	}
 
 	/**
-	 * Like nextLevel(), but more generic because the Player to which the level change applies can be set as well as the destination MapType
-	 * 
+	 * Like nextLevel(), but more generic because the Player to which
+	 * the level change applies can be set as well as the destination MapType
 	 * @param map The MapType to be shown on the Player's map
 	 * @param local True if this applies to the local player
 	 */
 	public void setActiveMap(MapType map, Player player)
 	{
-		if (player == Player.LOCAL)
+		if(player == Player.LOCAL)
 			currentLocalMap = rootFrame.getMapByType(map, Player.LOCAL);
 		else
 			currentDistantMap = rootFrame.getMapByType(map, Player.DISTANT);
-
-		if (MapType.ATLANTIS == currentDistantMap.getType() && MapType.ATLANTIS == currentLocalMap.getType())
+		
+		if(MapType.ATLANTIS == currentDistantMap.getType() &&
+				MapType.ATLANTIS == currentLocalMap.getType())
 		{
 			// We play on one panel
-			for (Component c : distantPlayerView.getComponents())
+			for(Component c : distantPlayerView.getComponents())
 				distantPlayerView.remove(c);
 			remove(distantPlayerView);
 			player = Player.LOCAL;
 		}
-
-		if (player == Player.LOCAL)
+		
+		if(player == Player.LOCAL)
 			levelsMe.showMap(map);
 		else
 			levelsOther.showMap(map);
-
-		validate();
+		
+		validate();	
 	}
-
+	
 	public Map getCurrentLevel(Player player)
 	{
 		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;

@@ -41,6 +41,7 @@ public class FrameMain extends JFrame
 	private String hashConfig;
 	private String playerName;
 	private String distantPlayerName;
+	private Player firstPlayerToPlay;
 
 	private class PanelCards extends JPanel
 	{
@@ -89,8 +90,6 @@ public class FrameMain extends JFrame
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 
 		//cards.showCard(PanelPrepare.class.getSimpleName());
-		
-		
 
 		setVisible(true);
 	}
@@ -190,7 +189,7 @@ public class FrameMain extends JFrame
 	{
 		return ships;
 	}
-
+	
 	public Set<Ship> getDistantShips()
 	{
 		return distantShips;
@@ -233,5 +232,15 @@ public class FrameMain extends JFrame
 	public String getDistantPlayerName()
 	{
 		return distantPlayerName;
+	}
+
+	public Player getFirstPlayerToPlay()
+	{
+		return firstPlayerToPlay;
+	}
+
+	public void setFirstPlayerToPlay(Player firstPlayerToPlay)
+	{
+		this.firstPlayerToPlay = firstPlayerToPlay;
 	}
 }

@@ -26,6 +26,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 	public void execute()
 	{
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
+		Settings.PANEL_PLAY.endCurrentTurn();
 	}
 
 	/**

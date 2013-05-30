@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkAutodiscover.NetworkAutodiscoverListener;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -378,10 +379,12 @@ public class NetworkManager
 		// We are slave
 			case -1:
 				tcpConnect();
+				Settings.FRAME_MAIN.setFirstPlayerToPlay(Player.DISTANT);
 				break;
 			// We are master
 			case 1:
 				listenToTcpConnection();
+				Settings.FRAME_MAIN.setFirstPlayerToPlay(Player.LOCAL);
 				break;
 			// UUIDs are equal !
 			case 0:

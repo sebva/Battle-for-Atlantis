@@ -32,6 +32,7 @@ public class ShootAction extends Action implements NetworkMessage
 	public void execute()
 	{
 		target.shoot();
+		Settings.PANEL_PLAY.endCurrentTurn();
 	}
 
 	/**

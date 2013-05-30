@@ -49,6 +49,7 @@ public class MoveAction extends Action implements NetworkMessage
 	{
 		ship.moveOut();
 		ship.move(center, orientation);
+		Settings.PANEL_PLAY.endCurrentTurn();
 	}
 	
 	/**
