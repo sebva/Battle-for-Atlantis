@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -66,6 +67,8 @@ public class PanelPlay extends JPanel
 	private Player playerPlaying;
 	private PanelPlayerView localPlayerView;
 	
+	private Ship selectedShip = null;
+	
 	/**
 	 * The Panel that shows the maps as well as some stats relative to this map.
 	 */
@@ -85,7 +88,7 @@ public class PanelPlay extends JPanel
 			box.add(new JLabel(playerName));
 
 			Box boxH = Box.createHorizontalBox();
-			boxH.add(labelTurn);
+			
 			boxH.add(new JLabel(player == Player.LOCAL ? Messages.getString("PanelPlay.YourMap") : Messages.getString("PanelPlay.OtherMap")));
 			boxH.add(Box.createHorizontalGlue());
 			// TODO: Retrieve level number
@@ -96,6 +99,8 @@ public class PanelPlay extends JPanel
 
 			box.add(new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus")));
 			box.add(new JProgressBar());
+			
+			box.add(labelTurn);
 
 			add(box, BorderLayout.CENTER);
 		}
@@ -245,9 +250,6 @@ public class PanelPlay extends JPanel
 		this.rootFrame = rootFrame;
 		this.playerPlaying = rootFrame.getFirstPlayerToPlay();
 		
-		for (Map map : rootFrame.getLocalMaps())
-			map.addShipControls();
-		
 		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, Player.LOCAL);
 		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
 		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
@@ -364,8 +366,9 @@ public class PanelPlay extends JPanel
 		
 		if(!ship.rotationPossible(clockwise))
 			return;
-		ship.rotate(clockwise);
-		ship.getCenter().getMap().addShipControls();
+		
+		ship.getCenter().getMap().removeShipControls(ship);
+		ship.rotate(clockwise);		
 		
 		endCurrentTurn();
 		
@@ -381,13 +384,31 @@ public class PanelPlay extends JPanel
 		if(playerPlaying != Player.LOCAL)
 			return;
 		
+		ship.getCenter().getMap().removeShipControls(ship);
 		ship.moveOut();
 		ship.place(forward);
-		ship.getCenter().getMap().addShipControls();
 		
 		endCurrentTurn();
 		
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
+	}
+	
+	public void select(Ship ship, int mouseButton)
+	{
+		if(playerPlaying != Player.LOCAL)
+			return;
+		
+		if(selectedShip != null)
+		{
+			ship.getCenter().getMap().removeShipControls(ship);
+			if(selectedShip == ship && (mouseButton == MouseEvent.BUTTON1 || mouseButton == MouseEvent.BUTTON3) && !ship.isTouched())
+			{
+				rotate(ship, mouseButton == MouseEvent.BUTTON1);
+				return;
+			}
+		}
+		selectedShip = ship;
+		ship.getCenter().getMap().addShipControls(ship);
 	}
 
 	/**
@@ -395,7 +416,7 @@ public class PanelPlay extends JPanel
 	 */
 	public void nextLevel()
 	{
-		if(playerPlaying != Player.LOCAL)
+		if(playerPlaying != Player.LOCAL || !currentDistantMap.isFinished())
 			return;
 		
 		log.info("Next level");
@@ -411,9 +432,9 @@ public class PanelPlay extends JPanel
 			case SURFACE:
 				newMap = MapType.SUBMARINE;
 				break;
-			default:
-				// Should not happen
-				throw new RuntimeException("nextLevel requested, but player is at latest level");
+			case ATLANTIS:
+				endGame(true, false);
+				return;
 		}
 		
 		setActiveMap(newMap, Player.DISTANT);
@@ -425,6 +446,7 @@ public class PanelPlay extends JPanel
 	
 	public void endCurrentTurn()
 	{
+		selectedShip = null;
 		playerPlaying = playerPlaying == Player.LOCAL ? Player.DISTANT : Player.LOCAL;
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
 		localPlayerView.setTurn(isLocalPlaying);

@@ -155,12 +155,7 @@ public class Box extends JPanel implements JSONString
 					else
 					{
 						if(occupier instanceof Ship)
-						{
-							if(e.getButton() == MouseEvent.BUTTON1)
-								panelPlay.rotate((Ship) occupier, true);
-							else if(e.getButton() == MouseEvent.BUTTON3)
-								panelPlay.rotate((Ship) occupier, false);
-						}
+							Settings.PANEL_PLAY.select((Ship) occupier, e.getButton());
 						else if(occupier instanceof ShipControl)
 							((ShipControl) occupier).execute();
 					}

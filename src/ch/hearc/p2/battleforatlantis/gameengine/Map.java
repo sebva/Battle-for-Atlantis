@@ -312,62 +312,63 @@ public class Map extends JPanel implements JSONString
 		return isLocal;
 	}
 	
-	public void addShipControls()
+	private Box[] getControlBoxes(Ship ship)
 	{
-		Set<Ship> ships = new HashSet<>();
+		Box[] occupied = ship.getOccupied();
 		
-		for (Box[] line : boxes)
-		{
-			for (Box box : line)
-			{
-				MapElement mapElement = box.getOccupier();
-				if(mapElement instanceof Ship)
-					ships.add((Ship) mapElement);
-				else if(mapElement instanceof ShipControl)
-				{
-					box.setOccupier(null, null);
-					mapElement = null;
-				}
-			}
-		}
+		Box first = occupied[0];
+		Box last = occupied[occupied.length -1];
 		
-		for (Ship ship : ships)
+		switch(ship.getOrientation())
 		{
-			if(ship.isTouched())
-				continue;
-			
-			Box[] occupied = ship.getOccupied();
-			
-			Box first = occupied[0];
-			Box last = occupied[occupied.length -1];
-			
-			Box forwardControl = null, backwardControl = null;
-			
-			switch(ship.getOrientation())
-			{
-				case EAST:
-					forwardControl = getBox(last.getCoordX() +1, last.getCoordY());
-					backwardControl = getBox(first.getCoordX() -1, first.getCoordY());
-					break;
-				case NORTH:
-					forwardControl = getBox(last.getCoordX(), last.getCoordY() -1);
-					backwardControl = getBox(first.getCoordX(), first.getCoordY() +1);
-					break;
-				case SOUTH:
-					forwardControl = getBox(last.getCoordX(), last.getCoordY() +1);
-					backwardControl = getBox(first.getCoordX(), first.getCoordY() -1);
-					break;
-				case WEST:
-					forwardControl = getBox(last.getCoordX() -1, last.getCoordY());
-					backwardControl = getBox(first.getCoordX() +1, first.getCoordY());
-					break;
-			}
-			
-			if(forwardControl != null && forwardControl.getOccupier() == null)
-				new ShipControl(ship, forwardControl, ShipControlType.PLACE_FORWARD);
-			if(backwardControl != null && backwardControl.getOccupier() == null)
-				new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
+			case EAST:
+				return new Box[] {
+					getBox(last.getCoordX() +1, last.getCoordY()),
+					getBox(first.getCoordX() -1, first.getCoordY())
+				};
+			case NORTH:
+				return new Box[] {
+					getBox(last.getCoordX(), last.getCoordY() -1),
+					getBox(first.getCoordX(), first.getCoordY() +1)
+				};
+			case SOUTH:
+				return new Box[] {
+					getBox(last.getCoordX(), last.getCoordY() +1),
+					getBox(first.getCoordX(), first.getCoordY() -1)
+				};
+			case WEST:
+				return new Box[] {
+					getBox(last.getCoordX() -1, last.getCoordY()),
+					getBox(first.getCoordX() +1, first.getCoordY())
+				};
+			default:
+				return null;
 		}
+	}
+	
+	public void addShipControls(Ship ship)
+	{
+		if(ship.isTouched())
+			return;
+		
+		Box[] controlBoxes = getControlBoxes(ship);
+		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
+		
+		if(forwardControl != null && forwardControl.getOccupier() == null)
+			new ShipControl(ship, forwardControl, ShipControlType.PLACE_FORWARD);
+		if(backwardControl != null && backwardControl.getOccupier() == null)
+			new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
+	}
+	
+	public void removeShipControls(Ship ship)
+	{
+		Box[] controlBoxes = getControlBoxes(ship);
+		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
+		
+		if(forwardControl.getOccupier() instanceof ShipControl)
+			forwardControl.setOccupier(null, null);
+		if(backwardControl.getOccupier() instanceof ShipControl)
+			backwardControl.setOccupier(null, null);
 	}
 
 	@Override
@@ -416,5 +417,11 @@ public class Map extends JPanel implements JSONString
 		}
 		
 		return map;
+	}
+
+	public boolean isFinished()
+	{
+		// TODO This should return true when nextLevel() on this map is allowed
+		return true;
 	}
 }
