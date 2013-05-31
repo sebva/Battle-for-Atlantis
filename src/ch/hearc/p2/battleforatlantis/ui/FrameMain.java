@@ -2,6 +2,9 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Frame;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -86,6 +89,18 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_HOME, PanelHome.class.getSimpleName());
 		cards.add(Settings.PANEL_CONNECTIONS, PanelConnection.class.getSimpleName());
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
+
+		this.addWindowStateListener(new WindowStateListener()
+		{
+			@Override
+			public void windowStateChanged(WindowEvent e)
+			{
+				if ((e.getNewState() == Frame.MAXIMIZED_BOTH))
+				{
+					FrameMain.this.setExtendedState(Frame.NORMAL);
+				}
+			}
+		});
 
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 

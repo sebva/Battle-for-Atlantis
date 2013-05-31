@@ -2,13 +2,13 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -218,14 +218,10 @@ public class PanelPrepare extends JPanel
 	{
 		// Check that every ship has been placed
 		/*
-		for (Ship ship : rootFrame.getShips())
-			if (ship.getCenter() == null)
-			{
-				JOptionPane.showMessageDialog(this, Messages.getString("PanelPrepare.ValidateErrorMessage"),
-						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		// */
+		 * for (Ship ship : rootFrame.getShips()) if (ship.getCenter() == null) { JOptionPane.showMessageDialog(this,
+		 * Messages.getString("PanelPrepare.ValidateErrorMessage"), Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE); return; }
+		 * //
+		 */
 
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
