@@ -499,6 +499,9 @@ public class Ship extends MapElement implements JSONString
 
 		// Set image to the ship
 		target.setImage(img);
+
+		// Refresh map drawing
+		target.getMap().resizeComponent();
 	}
 
 	public boolean rotationPossible(boolean clockwise)

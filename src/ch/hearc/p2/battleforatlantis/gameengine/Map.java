@@ -74,7 +74,7 @@ public class Map extends JPanel implements JSONString
 	 * Internal panel
 	 */
 	private InternalPanel internalPanel;
-	
+
 	/**
 	 * Indicated if this map is a local map. For Atlantis, it should set to true
 	 */
@@ -94,12 +94,9 @@ public class Map extends JPanel implements JSONString
 	/**
 	 * Create a map of specified dimensions
 	 * 
-	 * @param width
-	 *            Number of rows
-	 * @param height
-	 *            Number of columns
-	 * @param type
-	 *            Type of map (surface, submarine, atlantis)
+	 * @param width Number of rows
+	 * @param height Number of columns
+	 * @param type Type of map (surface, submarine, atlantis)
 	 */
 	public Map(int width, int height, MapType type, boolean isLocal)
 	{
@@ -144,32 +141,7 @@ public class Map extends JPanel implements JSONString
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
-				int numberY = Map.this.height;
-				int numberX = Map.this.width;
-
-				int sizeBoxX = Map.this.getWidth() / numberX;
-				int sizeBoxY = Map.this.getHeight() / numberY;
-
-				if (sizeBoxX <= Map.this.sizeBox || sizeBoxY <= Map.this.sizeBox)
-				{
-					Map.this.sizeBox = (sizeBoxX < sizeBoxY ? sizeBoxX : sizeBoxY);
-				}
-				else
-				{
-					Map.this.sizeBox = (sizeBoxX > sizeBoxY ? sizeBoxX : sizeBoxY);
-				}
-
-				for (int i = 0; i < numberY; i++)
-				{
-					for (int j = 0; j < numberX; j++)
-					{
-						boxes[i][j].setSizeFromMap(Map.this.sizeBox);
-					}
-				}
-
-				Dimension newDimension = new Dimension(Map.this.sizeBox * numberX, Map.this.sizeBox * numberY);
-				Map.this.internalPanel.setPreferredSize(newDimension);
-				Map.this.internalPanel.setMaximumSize(newDimension);
+				resizeComponent();
 			}
 		});
 
@@ -208,10 +180,8 @@ public class Map extends JPanel implements JSONString
 	/**
 	 * Get the box at specified coordinates (top-left is 0;0)
 	 * 
-	 * @param x
-	 *            Horizontal coordinate, starting at 0 on left side
-	 * @param y
-	 *            Vertical coordinate, starting at 0 on upper side
+	 * @param x Horizontal coordinate, starting at 0 on left side
+	 * @param y Vertical coordinate, starting at 0 on upper side
 	 * 
 	 * @return Box at location, or null if incorrect location
 	 */
@@ -226,9 +196,10 @@ public class Map extends JPanel implements JSONString
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the box associated by the x and y attributes of the JSONObject
+	 * 
 	 * @param jo A JSONObject containing x and y
 	 * @return Box at location, or null
 	 */
@@ -306,68 +277,56 @@ public class Map extends JPanel implements JSONString
 	{
 		return this.width;
 	}
-	
+
 	public boolean isLocal()
 	{
 		return isLocal;
 	}
-	
+
 	private Box[] getControlBoxes(Ship ship)
 	{
 		Box[] occupied = ship.getOccupied();
-		
+
 		Box first = occupied[0];
-		Box last = occupied[occupied.length -1];
-		
-		switch(ship.getOrientation())
+		Box last = occupied[occupied.length - 1];
+
+		switch (ship.getOrientation())
 		{
 			case EAST:
-				return new Box[] {
-					getBox(last.getCoordX() +1, last.getCoordY()),
-					getBox(first.getCoordX() -1, first.getCoordY())
-				};
+				return new Box[] { getBox(last.getCoordX() + 1, last.getCoordY()), getBox(first.getCoordX() - 1, first.getCoordY()) };
 			case NORTH:
-				return new Box[] {
-					getBox(last.getCoordX(), last.getCoordY() -1),
-					getBox(first.getCoordX(), first.getCoordY() +1)
-				};
+				return new Box[] { getBox(last.getCoordX(), last.getCoordY() - 1), getBox(first.getCoordX(), first.getCoordY() + 1) };
 			case SOUTH:
-				return new Box[] {
-					getBox(last.getCoordX(), last.getCoordY() +1),
-					getBox(first.getCoordX(), first.getCoordY() -1)
-				};
+				return new Box[] { getBox(last.getCoordX(), last.getCoordY() + 1), getBox(first.getCoordX(), first.getCoordY() - 1) };
 			case WEST:
-				return new Box[] {
-					getBox(last.getCoordX() -1, last.getCoordY()),
-					getBox(first.getCoordX() +1, first.getCoordY())
-				};
+				return new Box[] { getBox(last.getCoordX() - 1, last.getCoordY()), getBox(first.getCoordX() + 1, first.getCoordY()) };
 			default:
 				return null;
 		}
 	}
-	
+
 	public void addShipControls(Ship ship)
 	{
-		if(ship.isTouched())
+		if (ship.isTouched())
 			return;
-		
+
 		Box[] controlBoxes = getControlBoxes(ship);
 		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
-		
-		if(forwardControl != null && forwardControl.getOccupier() == null)
+
+		if (forwardControl != null && forwardControl.getOccupier() == null)
 			new ShipControl(ship, forwardControl, ShipControlType.PLACE_FORWARD);
-		if(backwardControl != null && backwardControl.getOccupier() == null)
+		if (backwardControl != null && backwardControl.getOccupier() == null)
 			new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
 	}
-	
+
 	public void removeShipControls(Ship ship)
 	{
 		Box[] controlBoxes = getControlBoxes(ship);
 		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
-		
-		if(forwardControl != null && forwardControl.getOccupier() instanceof ShipControl)
+
+		if (forwardControl != null && forwardControl.getOccupier() instanceof ShipControl)
 			forwardControl.setOccupier(null, null);
-		if(backwardControl != null && backwardControl.getOccupier() instanceof ShipControl)
+		if (backwardControl != null && backwardControl.getOccupier() instanceof ShipControl)
 			backwardControl.setOccupier(null, null);
 	}
 
@@ -394,28 +353,28 @@ public class Map extends JPanel implements JSONString
 	public static Map createFromJsonObject(JSONObject jo)
 	{
 		MapType type = MapType.valueOf(jo.getString("levelName"));
-		
+
 		Map map = null;
-		
+
 		// Determine map size by using local map size
 		Map[] localMaps = Settings.FRAME_MAIN.getLocalMaps();
 		for (Map localmap : localMaps)
 		{
-			if(localmap.type.equals(type))
+			if (localmap.type.equals(type))
 				map = new Map(localmap.width, localmap.height, type, false);
 		}
-		
+
 		JSONArray ships = jo.getJSONArray("ships");
-		for(int i = 0; i < ships.length(); i++)
+		for (int i = 0; i < ships.length(); i++)
 		{
 			JSONObject jsonShip = ships.getJSONObject(i);
 			JSONObject jsonCenter = jsonShip.getJSONObject("center");
 			int x = jsonCenter.getInt("x");
 			int y = jsonCenter.getInt("y");
-			
+
 			Settings.FRAME_MAIN.getDistantShips().add(Ship.createFromJSONObject(jsonShip, map.boxes[y][x]));
 		}
-		
+
 		return map;
 	}
 
@@ -423,5 +382,40 @@ public class Map extends JPanel implements JSONString
 	{
 		// TODO This should return true when nextLevel() on this map is allowed
 		return true;
+	}
+
+	/**
+	 * 
+	 */
+	public void resizeComponent()
+	{
+		int numberY = Map.this.height;
+		int numberX = Map.this.width;
+
+		int sizeBoxX = Map.this.getWidth() / numberX;
+		int sizeBoxY = Map.this.getHeight() / numberY;
+
+		if (sizeBoxX <= Map.this.sizeBox || sizeBoxY < Map.this.sizeBox)
+		{
+			Map.this.sizeBox = (sizeBoxX < sizeBoxY ? sizeBoxX : sizeBoxY);
+		}
+		else
+		{
+			Map.this.sizeBox = (sizeBoxX > sizeBoxY ? sizeBoxX : sizeBoxY);
+		}
+
+		for (int i = 0; i < numberY; i++)
+		{
+			for (int j = 0; j < numberX; j++)
+			{
+				boxes[i][j].setSizeFromMap(Map.this.sizeBox);
+			}
+		}
+
+		Dimension newDimension = new Dimension(Map.this.sizeBox * numberX, Map.this.sizeBox * numberY);
+		Map.this.internalPanel.setPreferredSize(newDimension);
+		Map.this.internalPanel.setMaximumSize(newDimension);
+
+		validate();
 	}
 }

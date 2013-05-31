@@ -26,8 +26,8 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class FrameMain extends JFrame
 {
-	private static final int kDefaultWidth = 1600;
-	private static final int kDefaultHeight = 900;
+	private static final int kDefaultWidth = 1585;
+	private static final int kDefaultHeight = 885;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	private static final String kKeyPlayerName = "playerName";
 
@@ -89,7 +89,7 @@ public class FrameMain extends JFrame
 
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 
-		//cards.showCard(PanelPrepare.class.getSimpleName());
+		// cards.showCard(PanelPrepare.class.getSimpleName());
 
 		setVisible(true);
 	}
@@ -130,6 +130,7 @@ public class FrameMain extends JFrame
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void showGame()
 	{
 		Settings.PANEL_PLAY = new PanelPlay(this);
@@ -189,7 +190,7 @@ public class FrameMain extends JFrame
 	{
 		return ships;
 	}
-	
+
 	public Set<Ship> getDistantShips()
 	{
 		return distantShips;
