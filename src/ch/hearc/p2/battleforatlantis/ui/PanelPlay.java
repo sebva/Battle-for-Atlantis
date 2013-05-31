@@ -495,6 +495,9 @@ public class PanelPlay extends JPanel
 	
 	public void endCurrentTurn()
 	{
+		if(selectedShip != null)
+			selectedShip.getCenter().getMap().removeShipControls(selectedShip);
+		
 		selectedShip = null;
 		playerPlaying = playerPlaying == Player.LOCAL ? Player.DISTANT : Player.LOCAL;
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;

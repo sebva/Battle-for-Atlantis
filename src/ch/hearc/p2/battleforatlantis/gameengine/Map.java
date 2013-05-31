@@ -365,9 +365,9 @@ public class Map extends JPanel implements JSONString
 		Box[] controlBoxes = getControlBoxes(ship);
 		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
 		
-		if(forwardControl.getOccupier() instanceof ShipControl)
+		if(forwardControl != null && forwardControl.getOccupier() instanceof ShipControl)
 			forwardControl.setOccupier(null, null);
-		if(backwardControl.getOccupier() instanceof ShipControl)
+		if(backwardControl != null && backwardControl.getOccupier() instanceof ShipControl)
 			backwardControl.setOccupier(null, null);
 	}
 
