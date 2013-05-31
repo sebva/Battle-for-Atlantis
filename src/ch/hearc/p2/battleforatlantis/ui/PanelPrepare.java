@@ -219,7 +219,7 @@ public class PanelPrepare extends JPanel
 	public void start()
 	{
 		// Check that every ship has been placed
-		/*
+		//*
 		for (Ship ship : rootFrame.getShips())
 			if (ship.getCenter() == null)
 			{
