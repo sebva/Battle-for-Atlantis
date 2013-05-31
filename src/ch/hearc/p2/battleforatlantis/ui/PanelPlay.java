@@ -298,6 +298,11 @@ public class PanelPlay extends JPanel
 		canvasProgressDistant.add(progressDistant);
 		canvasProgressDistant.add(Box.createHorizontalStrut(15));
 
+		// Canvas for buttons
+		Box canvasButtons = Box.createVerticalBox();
+		canvasButtons.add(btnCapitulate);
+		canvasButtons.add(btnNextLevel);
+
 		// Canvas for progress bars
 		Box canvasLevels = Box.createHorizontalBox();
 		canvasLevels.add(Box.createHorizontalGlue());
@@ -305,6 +310,7 @@ public class PanelPlay extends JPanel
 		canvasLevels.add(Box.createHorizontalGlue());
 		canvasLevels.add(canvasProgressDistant);
 		canvasLevels.add(Box.createHorizontalGlue());
+		canvasLevels.add(canvasButtons);
 
 		// Main canvas
 		add(canvasMaps, BorderLayout.CENTER);
@@ -513,7 +519,7 @@ public class PanelPlay extends JPanel
 	{
 		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;
 	}
-	
+
 	public void initSizes()
 	{
 		currentLocalMap.resizeComponent();
