@@ -52,18 +52,12 @@ public class PanelPlay extends JPanel
 	/** The PanelMaps displaying distant maps */
 	private PanelMaps levelsOther;
 
-	/** Stats of the shots made **/
-	private PanelStats panelStats;
-
 	/** Total shots **/
 	private int totalShots;
 	/** Shots in ships **/
 	private int effectiveShots;
 	/** Shots in water **/
 	private int waterShots;
-
-	/** Progression of the player **/
-	private final PanelProgress panelProgress;
 
 	private Map currentLocalMap;
 	private Map currentDistantMap;
@@ -135,11 +129,6 @@ public class PanelPlay extends JPanel
 				g2d.drawImage(ImageShop.UI_PLAYERNAME_NO, 0, 0, null);
 			}
 		}
-
-		public void setTurn(boolean b)
-		{
-			// TODO use colors
-		}
 	}
 
 	/**
@@ -192,119 +181,31 @@ public class PanelPlay extends JPanel
 	}
 
 	/**
-	 * A subpanel that shows his progression to the player
-	 */
-	private class PanelProgress extends JPanel
-	{
-		private java.util.Map<Ship, Integer> progressValueList = new HashMap<Ship, Integer>();
-		private java.util.Map<Ship, JProgressBar> progressBarList = new HashMap<Ship, JProgressBar>();
-
-		// TODO
-		public PanelProgress()
-		{
-			// Get ship list
-			Ship[] shipList = Settings.FRAME_MAIN.getShips();
-
-			// Grid for progress
-			setLayout(new GridLayout(shipList.length, 2));
-
-			// For each MapElement to destroy by the player
-			for (int i = 0; i < shipList.length; i++)
-			{
-				// Create a ProgressBar
-				JProgressBar currentBar = new JProgressBar();
-				currentBar.setMaximum(100);
-				currentBar.setMinimum(0);
-
-				// Save values
-				progressValueList.put(shipList[i], 0);
-				progressBarList.put(shipList[i], currentBar);
-
-				// Add the ProgressBar to the current line
-				add(currentBar);
-
-				if (shipList[i].getType() == ShipType.SHIP)
-				{
-					add(new JLabel(Messages.getString("Ship.Size" + shipList[i].getWholeSize())));
-				}
-				else
-				{
-					add(new JLabel(Messages.getString("Submarine.Size" + shipList[i].getWholeSize())));
-				}
-			}
-		}
-
-		/**
-		 * Indicates a progression (shot effective)
-		 * 
-		 * @param occupier Element shot
-		 */
-		public void addProgress(Ship occupier)
-		{
-			int value;
-			if (progressValueList.containsKey(occupier))
-				value = progressValueList.get(occupier);
-			else
-				value = 0;
-
-			progressValueList.put(occupier, value + 1);
-			progressBarList.get(occupier).setValue((occupier.getWholeSize() / (value + 1)) * 100);
-		}
-	}
-
-	/**
-	 * A subpanel containing some statistics
-	 */
-	private class PanelStats extends JPanel
-	{
-		private JLabel labelTotalShots;
-		private JLabel labelEffectiveShots;
-		private JLabel labelWaterShots;
-
-		public PanelStats()
-		{
-			Box box = Box.createVerticalBox();
-
-			labelTotalShots = new JLabel("");
-			box.add(labelTotalShots);
-			labelEffectiveShots = new JLabel("");
-			box.add(labelEffectiveShots);
-			labelWaterShots = new JLabel("");
-			box.add(labelWaterShots);
-
-			add(box, BorderLayout.CENTER);
-		}
-
-		public void refresh()
-		{
-			labelTotalShots.setText(totalShots + " " + Messages.getString("PanelPlay.TotalShots"));
-			labelEffectiveShots.setText(effectiveShots + " " + Messages.getString("PanelPlay.EffectiveShots"));
-			labelWaterShots.setText(waterShots + " " + Messages.getString("PanelPlay.WaterShots"));
-		}
-	}
-
-	/**
 	 * Instantiate a new PanelPlay. All the maps have to be set in FrameMain before calling this constructor !
 	 * 
 	 * @param rootFrame The application's FrameMain object
 	 */
 	public PanelPlay(FrameMain rootFrame)
 	{
+		// Assign input parameters
 		this.rootFrame = rootFrame;
 		this.playerPlaying = rootFrame.getFirstPlayerToPlay();
 
+		// Gather all maps for settings application
 		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, Player.LOCAL);
 		Map mySurface = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
 		Map mySubmarine = rootFrame.getMapByType(MapType.SUBMARINE, Player.LOCAL);
 		Map yourSurface = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
 		Map yourSubmarine = rootFrame.getMapByType(MapType.SUBMARINE, Player.DISTANT);
 
+		// Set alignment of maps for correct displaying
 		atlantis.setAlignmentX(LEFT_ALIGNMENT);
 		mySurface.setAlignmentX(LEFT_ALIGNMENT);
 		mySubmarine.setAlignmentX(LEFT_ALIGNMENT);
 		yourSurface.setAlignmentX(LEFT_ALIGNMENT);
 		yourSubmarine.setAlignmentX(LEFT_ALIGNMENT);
 
+		// Assign first current maps (surfaces) at start of game
 		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
 		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
 
@@ -342,9 +243,7 @@ public class PanelPlay extends JPanel
 		canvasMaps.add(Box.createHorizontalStrut(20));
 		canvasMaps.add(Box.createHorizontalGlue());
 
-		// Create HUD
-		// *
-		Box boxHUD = Box.createVerticalBox();
+		// Button for capitulation
 		JButton btnCapitulate = new CustomButton(Messages.getString("PanelPlay.Capitulate"));
 		btnCapitulate.addActionListener(new ActionListener()
 		{
@@ -354,7 +253,8 @@ public class PanelPlay extends JPanel
 				endGame(false, false);
 			}
 		});
-		boxHUD.add(btnCapitulate);
+		
+		// Button for next level transition
 		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
 		btnNextLevel.addActionListener(new ActionListener()
 		{
@@ -364,24 +264,15 @@ public class PanelPlay extends JPanel
 				nextLevel();
 			}
 		});
-		boxHUD.add(btnNextLevel);
-		boxHUD.add(new JLabel(Messages.getString("PanelPlay.ConquestProgress")));
-		boxHUD.add(new JSeparator(SwingConstants.HORIZONTAL));
-		boxHUD.add(new JLabel(Messages.getString("PanelPlay.Stats")));
-		panelProgress = new PanelProgress();
-		boxHUD.add(panelProgress);
-		panelStats = new PanelStats();
-		boxHUD.add(panelStats);
-		boxHUD.add(Box.createVerticalGlue());
-		// */
 
+		// Main canvas
 		add(canvasMaps, BorderLayout.CENTER);
-		// add(boxHUD, BorderLayout.EAST);
 
-		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
+		// Assign currently playing player
 		// TODO better
-		infosLocal.setTurn(isLocalPlaying);
-		infosDistant.setTurn(!isLocalPlaying);
+		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
+		infosLocal.setPlaying(isLocalPlaying);
+		infosDistant.setPlaying(!isLocalPlaying);
 	}
 
 	/**
@@ -414,9 +305,6 @@ public class PanelPlay extends JPanel
 
 		// Count total shots
 		totalShots++;
-
-		// Refresh the stats pannel
-		panelStats.refresh();
 
 		// Made the shot at the box location
 		location.shoot();
@@ -527,8 +415,8 @@ public class PanelPlay extends JPanel
 		selectedShip = null;
 		playerPlaying = playerPlaying == Player.LOCAL ? Player.DISTANT : Player.LOCAL;
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
-		infosLocal.setTurn(isLocalPlaying);
-		infosDistant.setTurn(!isLocalPlaying);
+		infosLocal.setPlaying(isLocalPlaying);
+		infosDistant.setPlaying(!isLocalPlaying);
 	}
 
 	/**
