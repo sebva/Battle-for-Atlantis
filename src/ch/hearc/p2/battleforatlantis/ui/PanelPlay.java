@@ -172,7 +172,6 @@ public class PanelPlay extends JPanel
 				add(atlantis, atlantis.getType().name());
 
 			cards.show(this, type.toString());
-
 		}
 	}
 
@@ -290,7 +289,7 @@ public class PanelPlay extends JPanel
 		canvasProgressLocal.add(Box.createVerticalStrut(15));
 		canvasProgressLocal.add(progressLocal);
 		canvasProgressLocal.add(Box.createVerticalStrut(15));
-		
+
 		// Canvas distant progress bar
 		Box canvasProgressDistant = Box.createVerticalBox();
 		canvasProgressDistant.add(Box.createHorizontalStrut(15));
@@ -298,7 +297,7 @@ public class PanelPlay extends JPanel
 		canvasProgressDistant.add(Box.createHorizontalStrut(15));
 		canvasProgressDistant.add(progressDistant);
 		canvasProgressDistant.add(Box.createHorizontalStrut(15));
-		
+
 		// Canvas for progress bars
 		Box canvasLevels = Box.createHorizontalBox();
 		canvasLevels.add(Box.createHorizontalGlue());
@@ -505,11 +504,20 @@ public class PanelPlay extends JPanel
 			levelsMe.showMap(map);
 		else
 			levelsOther.showMap(map);
+
+		currentLocalMap.resizeComponent();
+		currentDistantMap.resizeComponent();
 	}
 
 	public Map getCurrentLevel(Player player)
 	{
 		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;
+	}
+	
+	public void initSizes()
+	{
+		currentLocalMap.resizeComponent();
+		currentDistantMap.resizeComponent();
 	}
 
 }

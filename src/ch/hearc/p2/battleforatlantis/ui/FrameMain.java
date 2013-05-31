@@ -26,8 +26,8 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class FrameMain extends JFrame
 {
-	private static final int kDefaultWidth = 1600;
-	private static final int kDefaultHeight = 900;
+	private static final int kDefaultWidth = 1024;
+	private static final int kDefaultHeight = 768;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	private static final String kKeyPlayerName = "playerName";
 
@@ -118,6 +118,7 @@ public class FrameMain extends JFrame
 		this.distantPlayerName = h.getName();
 		cards.showCard(PanelPrepare.class.getSimpleName());
 		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
+		forceResize();
 		SoundManager.getInstance().setStream(SoundManager.Stream.PLACEMENT);
 	}
 
@@ -137,6 +138,39 @@ public class FrameMain extends JFrame
 		cards.add(Settings.PANEL_PLAY, PanelPlay.class.getSimpleName());
 
 		cards.showCard(PanelPlay.class.getSimpleName());
+		forceResize();
+	}
+
+	private void forceResize()
+	{
+		new Thread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					int originalWidth = FrameMain.this.getWidth();
+					int minimalWidth = originalWidth - 5;
+					Thread.sleep(80);
+					while (FrameMain.this.getWidth() > minimalWidth)
+					{
+						FrameMain.this.setSize(FrameMain.this.getWidth() - 1, FrameMain.this.getHeight());
+						Thread.sleep(2);
+					}
+					while (FrameMain.this.getWidth() < originalWidth)
+					{
+						FrameMain.this.setSize(FrameMain.this.getWidth() + 1, FrameMain.this.getHeight());
+						Thread.sleep(2);
+					}
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	public void endGame()
