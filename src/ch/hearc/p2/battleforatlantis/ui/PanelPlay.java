@@ -2,6 +2,9 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -69,10 +73,11 @@ public class PanelPlay extends JPanel
 
 	private Ship selectedShip = null;
 
-	// private PanelPlayerView distantPlayerView;
-
 	private PanelPlayerInfos infosLocal;
 	private PanelPlayerInfos infosDistant;
+
+	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
+	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
 
 	/**
 	 * Panel containing player informations (upper part of map)
@@ -84,8 +89,15 @@ public class PanelPlay extends JPanel
 
 		public PanelPlayerInfos(String playerName, boolean playing)
 		{
+			this.setMaximumSize(new Dimension(600, 39));
+			this.setMinimumSize(new Dimension(300, 39));
+
 			this.labelLevel = new JLabel();
+			this.labelLevel.setFont(PanelPlay.fontLevel);
 			JLabel labelName = new JLabel(playerName);
+			labelName.setForeground(Color.BLACK);
+			labelName.setFont(PanelPlay.fontName);
+			labelName.setBorder(BorderFactory.createEmptyBorder(0, 7, 0, 0));
 
 			this.setLevelNumber(1);
 
@@ -145,10 +157,13 @@ public class PanelPlay extends JPanel
 		 */
 		public PanelMaps(Map[] maps, Map atlantis)
 		{
+			this.setBorder(BorderFactory.createLineBorder(new Color(97, 173, 233), 1));
+
 			cards = new CardLayout();
 			setLayout(cards);
 			for (Map map : maps)
 			{
+				map.setBackground(new Color(12, 21, 28));
 				add(map, map.getType().name());
 				if (map.getType() == MapType.SURFACE)
 				{
@@ -300,30 +315,35 @@ public class PanelPlay extends JPanel
 
 		// Prepare local map box
 		this.infosLocal = new PanelPlayerInfos(rootFrame.getPlayerName(), true);
+		this.infosLocal.setAlignmentX(LEFT_ALIGNMENT);
 		this.levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
+		this.levelsMe.setAlignmentX(LEFT_ALIGNMENT);
 		Box boxLocal = Box.createVerticalBox();
-		boxLocal.add(Box.createVerticalGlue());
 		boxLocal.add(this.infosLocal);
 		boxLocal.add(this.levelsMe);
-		boxLocal.add(Box.createVerticalGlue());
 
 		// Prepare distant map box
 		this.infosDistant = new PanelPlayerInfos(rootFrame.getDistantPlayerName(), false);
+		this.infosDistant.setAlignmentX(LEFT_ALIGNMENT);
 		this.levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
+		this.levelsOther.setAlignmentX(LEFT_ALIGNMENT);
 		Box boxDistant = Box.createVerticalBox();
-		boxDistant.add(Box.createVerticalGlue());
 		boxDistant.add(this.infosDistant);
 		boxDistant.add(this.levelsOther);
-		boxDistant.add(Box.createVerticalGlue());
 
 		// Add maps to canvas
+		canvasMaps.add(Box.createHorizontalGlue());
 		canvasMaps.add(Box.createHorizontalStrut(20));
 		canvasMaps.add(boxLocal);
-		canvasMaps.add(Box.createHorizontalStrut(20));
+		canvasMaps.add(Box.createHorizontalStrut(10));
+		canvasMaps.add(Box.createHorizontalGlue());
+		canvasMaps.add(Box.createHorizontalStrut(10));
 		canvasMaps.add(boxDistant);
 		canvasMaps.add(Box.createHorizontalStrut(20));
+		canvasMaps.add(Box.createHorizontalGlue());
 
 		// Create HUD
+		// *
 		Box boxHUD = Box.createVerticalBox();
 		JButton btnCapitulate = new CustomButton(Messages.getString("PanelPlay.Capitulate"));
 		btnCapitulate.addActionListener(new ActionListener()
@@ -353,9 +373,10 @@ public class PanelPlay extends JPanel
 		panelStats = new PanelStats();
 		boxHUD.add(panelStats);
 		boxHUD.add(Box.createVerticalGlue());
+		// */
 
 		add(canvasMaps, BorderLayout.CENTER);
-		add(boxHUD, BorderLayout.EAST);
+		// add(boxHUD, BorderLayout.EAST);
 
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
 		// TODO better
@@ -553,21 +574,11 @@ public class PanelPlay extends JPanel
 			levelsMe.showMap(map);
 		else
 			levelsOther.showMap(map);
-
-		initSizes();
 	}
 
 	public Map getCurrentLevel(Player player)
 	{
 		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;
-	}
-
-	public void initSizes()
-	{
-		currentLocalMap.resizeComponent();
-		currentDistantMap.resizeComponent();
-
-		validate();
 	}
 
 }
