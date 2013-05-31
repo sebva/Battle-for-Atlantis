@@ -7,11 +7,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -19,9 +17,6 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.action.EndGameAction;
 import ch.hearc.p2.battleforatlantis.action.EndGameAction.EndGameCause;
@@ -33,10 +28,8 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
-import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
-import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
  * The Panel where the game takes place.
@@ -69,6 +62,9 @@ public class PanelPlay extends JPanel
 
 	private PanelPlayerInfos infosLocal;
 	private PanelPlayerInfos infosDistant;
+
+	private CustomProgress progressLocal;
+	private CustomProgress progressDistant;
 
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
@@ -253,7 +249,7 @@ public class PanelPlay extends JPanel
 				endGame(false, false);
 			}
 		});
-		
+
 		// Button for next level transition
 		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
 		btnNextLevel.addActionListener(new ActionListener()
@@ -265,8 +261,45 @@ public class PanelPlay extends JPanel
 			}
 		});
 
+		// Progress bars
+		// TODO gather total number of occupied boxes on current for maximum value (instead of 100)
+		this.progressLocal = new CustomProgress(0, 100);
+		this.progressDistant = new CustomProgress(0, 100);
+
+		this.progressLocal.setValue(30);
+		this.progressDistant.setValue(55);
+
+		// Labels for progress bars
+		JLabel labelProgressLocal = new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus"));
+		labelProgressLocal.setFont(PanelPlay.fontLevel);
+		labelProgressLocal.setForeground(Color.WHITE);
+		JLabel labelProgressDistant = new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus"));
+		labelProgressDistant.setFont(PanelPlay.fontLevel);
+		labelProgressDistant.setForeground(Color.WHITE);
+
+		// Set alignment
+		this.progressLocal.setAlignmentX(CENTER_ALIGNMENT);
+		this.progressDistant.setAlignmentX(CENTER_ALIGNMENT);
+		labelProgressLocal.setAlignmentX(CENTER_ALIGNMENT);
+		labelProgressDistant.setAlignmentX(CENTER_ALIGNMENT);
+
+		// Canvas for progress bars
+		Box canvasProgressLocal = Box.createVerticalBox();
+		canvasProgressLocal.add(labelProgressLocal);
+		canvasProgressLocal.add(progressLocal);
+		Box canvasProgressDistant = Box.createVerticalBox();
+		canvasProgressDistant.add(labelProgressDistant);
+		canvasProgressDistant.add(progressDistant);
+		Box canvasLevels = Box.createHorizontalBox();
+		canvasLevels.add(Box.createHorizontalGlue());
+		canvasLevels.add(canvasProgressLocal);
+		canvasLevels.add(Box.createHorizontalGlue());
+		canvasLevels.add(canvasProgressDistant);
+		canvasLevels.add(Box.createHorizontalGlue());
+
 		// Main canvas
 		add(canvasMaps, BorderLayout.CENTER);
+		add(canvasLevels, BorderLayout.NORTH);
 
 		// Assign currently playing player
 		// TODO better

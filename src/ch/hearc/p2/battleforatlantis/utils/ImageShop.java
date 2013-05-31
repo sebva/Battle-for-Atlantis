@@ -45,11 +45,8 @@ public final class ImageShop
 
 	public static final Image UI_PLAYERNAME_YES = loadImage(UI_FOLDER + "playername_yes.png");
 	public static final Image UI_PLAYERNAME_NO = loadImage(UI_FOLDER + "playername_no.png");
-	public static final Image UI_DECORATION = loadImage(UI_FOLDER + "play_deco.png");
-	public static final Image UI_PROGRESS_LEFT_NO = loadImage(UI_FOLDER + "progress_left_no.png");
-	public static final Image UI_PROGRESS_LEFT_YES = loadImage(UI_FOLDER + "progress_left_yes.png");
-	public static final Image UI_PROGRESS_RIGHT_NO = loadImage(UI_FOLDER + "progress_right_no.png");
-	public static final Image UI_PROGRESS_RIGHT_YES = loadImage(UI_FOLDER + "progress_right_yes.png");
+	public static final Image UI_PROGRESS_YES = loadImage(UI_FOLDER + "progress_yes.png");
+	public static final Image UI_PROGRESS_NO = loadImage(UI_FOLDER + "progress_no.png");
 
 	public static BufferedImage loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
 	{
