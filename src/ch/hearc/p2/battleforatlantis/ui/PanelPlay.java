@@ -2,7 +2,8 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +30,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
+import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -62,52 +64,70 @@ public class PanelPlay extends JPanel
 	private Map currentLocalMap;
 	private Map currentDistantMap;
 	private final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	private PanelPlayerView distantPlayerView;
 	
 	private Player playerPlaying;
-	private PanelPlayerView localPlayerView;
 	
 	private Ship selectedShip = null;
 	
+	// private PanelPlayerView distantPlayerView;
+
+	private PanelPlayerInfos infosLocal;
+	private PanelPlayerInfos infosDistant;
+
 	/**
-	 * The Panel that shows the maps as well as some stats relative to this map.
+	 * Panel containing player informations (upper part of map)
 	 */
-	private class PanelPlayerView extends JPanel
+	private class PanelPlayerInfos extends JPanel
 	{
-		JLabel labelTurn = new JLabel();
-		
-		/**
-		 * 
-		 * @param playerName The player's name to be shown
-		 * @param isMe Whether to display local maps
-		 */
-		public PanelPlayerView(String playerName, Player player)
+		private JLabel labelLevel;
+		private boolean playing;
+
+		public PanelPlayerInfos(String playerName, boolean playing)
 		{
-			Box box = Box.createVerticalBox();
+			this.labelLevel = new JLabel();
+			JLabel labelName = new JLabel(playerName);
 
-			box.add(new JLabel(playerName));
+			this.setLevelNumber(1);
 
-			Box boxH = Box.createHorizontalBox();
+			setLayout(new BorderLayout(0, 0));
+			add(labelName, BorderLayout.WEST);
+			add(labelLevel, BorderLayout.EAST);
+
+			this.setPlaying(playing);
+		}
+
+		public void setLevelNumber(Integer level)
+		{
+			this.labelLevel.setText(Messages.getString("PanelPlay.Level") + " " + level.toString());
+		}
 			
-			boxH.add(new JLabel(player == Player.LOCAL ? Messages.getString("PanelPlay.YourMap") : Messages.getString("PanelPlay.OtherMap")));
-			boxH.add(Box.createHorizontalGlue());
-			// TODO: Retrieve level number
-			boxH.add(new JLabel(Messages.getString("PanelPlay.Level") + " 1"));
 
-			box.add(boxH);
-			box.add(player == Player.LOCAL ? levelsMe : levelsOther);
+		public void setPlaying(boolean playing)
+		{
+			this.playing = playing;
+			repaint();
+		}
 
-			box.add(new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus")));
-			box.add(new JProgressBar());
-			
-			box.add(labelTurn);
+		@Override
+		protected void paintComponent(Graphics g)
+		{
+			super.paintComponent(g);
 
-			add(box, BorderLayout.CENTER);
+			Graphics2D g2d = (Graphics2D) g;
+
+			if (this.playing)
+			{
+				g2d.drawImage(ImageShop.UI_PLAYERNAME_YES, 0, 0, null);
+			}
+			else
+			{
+				g2d.drawImage(ImageShop.UI_PLAYERNAME_NO, 0, 0, null);
+			}
 		}
 		
 		public void setTurn(boolean b)
 		{
-			labelTurn.setText(b ? "Tour" : "");
+			// TODO use colors
 		}
 	}
 
@@ -129,8 +149,14 @@ public class PanelPlay extends JPanel
 			cards = new CardLayout();
 			setLayout(cards);
 			for (Map map : maps)
+			{
 				add(map, map.getType().name());
-			
+				if (map.getType() == MapType.SURFACE)
+				{
+					setMaximumSize(map.getMaximumSize());
+				}
+			}
+
 			this.atlantis = atlantis;
 
 			showMap(MapType.SURFACE);
@@ -251,24 +277,52 @@ public class PanelPlay extends JPanel
 		this.playerPlaying = rootFrame.getFirstPlayerToPlay();
 		
 		Map atlantis = rootFrame.getMapByType(MapType.ATLANTIS, Player.LOCAL);
-		levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
-		levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
+		Map mySurface = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
+		Map mySubmarine = rootFrame.getMapByType(MapType.SUBMARINE, Player.LOCAL);
+		Map yourSurface = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
+		Map yourSubmarine = rootFrame.getMapByType(MapType.SUBMARINE, Player.DISTANT);
 		
+		atlantis.setAlignmentX(LEFT_ALIGNMENT);
+		mySurface.setAlignmentX(LEFT_ALIGNMENT);
+		mySubmarine.setAlignmentX(LEFT_ALIGNMENT);
+		yourSurface.setAlignmentX(LEFT_ALIGNMENT);
+		yourSubmarine.setAlignmentX(LEFT_ALIGNMENT);
+
 		currentLocalMap = rootFrame.getMapByType(MapType.SURFACE, Player.LOCAL);
 		currentDistantMap = rootFrame.getMapByType(MapType.SURFACE, Player.DISTANT);
 
-		Box boxH = Box.createHorizontalBox();
+		// Create canvas
+		setLayout(new BorderLayout(0, 0));
+		Box canvasMaps = Box.createHorizontalBox();
+		Box menuMaps = Box.createVerticalBox();
 
-		localPlayerView = new PanelPlayerView(rootFrame.getPlayerName(), Player.LOCAL);
-		boxH.add(localPlayerView);
-		boxH.add(new JSeparator(SwingConstants.VERTICAL));
-		distantPlayerView = new PanelPlayerView(rootFrame.getDistantPlayerName(), Player.DISTANT);
-		boxH.add(distantPlayerView);
+		// Prepare local map box
+		this.infosLocal = new PanelPlayerInfos(rootFrame.getPlayerName(), true);
+		this.levelsMe = new PanelMaps(rootFrame.getLocalMaps(), atlantis);
+		Box boxLocal = Box.createVerticalBox();
+		boxLocal.add(Box.createVerticalGlue());
+		boxLocal.add(this.infosLocal);
+		boxLocal.add(this.levelsMe);
+		boxLocal.add(Box.createVerticalGlue());
 
-		boxH.add(new JSeparator(SwingConstants.VERTICAL));
+		// Prepare distant map box
+		this.infosDistant = new PanelPlayerInfos(rootFrame.getDistantPlayerName(), false);
+		this.levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
+		Box boxDistant = Box.createVerticalBox();
+		boxDistant.add(Box.createVerticalGlue());
+		boxDistant.add(this.infosDistant);
+		boxDistant.add(this.levelsOther);
+		boxDistant.add(Box.createVerticalGlue());
 
+		// Add maps to canvas
+		canvasMaps.add(Box.createHorizontalStrut(20));
+		canvasMaps.add(boxLocal);
+		canvasMaps.add(Box.createHorizontalStrut(20));
+		canvasMaps.add(boxDistant);
+		canvasMaps.add(Box.createHorizontalStrut(20));
+
+		// Create HUD
 		Box boxHUD = Box.createVerticalBox();
-
 		JButton btnCapitulate = new CustomButton(Messages.getString("PanelPlay.Capitulate"));
 		btnCapitulate.addActionListener(new ActionListener()
 		{
@@ -279,7 +333,6 @@ public class PanelPlay extends JPanel
 			}
 		});
 		boxHUD.add(btnCapitulate);
-		
 		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
 		btnNextLevel.addActionListener(new ActionListener()
 		{
@@ -290,26 +343,22 @@ public class PanelPlay extends JPanel
 			}
 		});
 		boxHUD.add(btnNextLevel);
-
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.ConquestProgress")));
 		boxHUD.add(new JSeparator(SwingConstants.HORIZONTAL));
 		boxHUD.add(new JLabel(Messages.getString("PanelPlay.Stats")));
-		
 		panelProgress = new PanelProgress();
 		boxHUD.add(panelProgress);
-		
 		panelStats = new PanelStats();
 		boxHUD.add(panelStats);
-		
 		boxHUD.add(Box.createVerticalGlue());
 
-		boxH.add(boxHUD);
-
-		add(boxH, BorderLayout.CENTER);
+		add(canvasMaps, BorderLayout.CENTER);
+		add(boxHUD, BorderLayout.EAST);
 		
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
-		localPlayerView.setTurn(isLocalPlaying);
-		distantPlayerView.setTurn(!isLocalPlaying);	
+		// TODO better
+		infosLocal.setTurn(isLocalPlaying);
+		infosDistant.setTurn(!isLocalPlaying);	
 	}
 
 	/**
@@ -449,8 +498,8 @@ public class PanelPlay extends JPanel
 		selectedShip = null;
 		playerPlaying = playerPlaying == Player.LOCAL ? Player.DISTANT : Player.LOCAL;
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
-		localPlayerView.setTurn(isLocalPlaying);
-		distantPlayerView.setTurn(!isLocalPlaying);	
+		infosLocal.setTurn(isLocalPlaying);
+		infosDistant.setTurn(!isLocalPlaying);	
 	}
 
 	/**
@@ -486,9 +535,9 @@ public class PanelPlay extends JPanel
 				MapType.ATLANTIS == currentLocalMap.getType())
 		{
 			// We play on one panel
-			for(Component c : distantPlayerView.getComponents())
-				distantPlayerView.remove(c);
-			remove(distantPlayerView);
+			// for (Component c : distantPlayerView.getComponents())
+			// distantPlayerView.remove(c);
+			// remove(distantPlayerView);
 			player = Player.LOCAL;
 		}
 		

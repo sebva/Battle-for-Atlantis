@@ -2,7 +2,6 @@ package ch.hearc.p2.battleforatlantis.utils;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -40,9 +39,17 @@ public final class ImageShop
 	public static final Image UI_BUTTON = loadImage(UI_FOLDER + "bouton.png");
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
 	public static final Image UI_LOGO = loadImage(UI_FOLDER + "logo.png");
-	
+
 	public static final Image UI_ARROW_DARK = loadImage(UI_FOLDER + "connect_arrow_dark.png");
 	public static final Image UI_ARROW_LIGHT = loadImage(UI_FOLDER + "connect_arrow_light.png");
+
+	public static final Image UI_PLAYERNAME_YES = loadImage(UI_FOLDER + "playername_yes.png");
+	public static final Image UI_PLAYERNAME_NO = loadImage(UI_FOLDER + "playername_no.png");
+	public static final Image UI_DECORATION = loadImage(UI_FOLDER + "play_deco.png");
+	public static final Image UI_PROGRESS_LEFT_NO = loadImage(UI_FOLDER + "progress_left_no.png");
+	public static final Image UI_PROGRESS_LEFT_YES = loadImage(UI_FOLDER + "progress_left_yes.png");
+	public static final Image UI_PROGRESS_RIGHT_NO = loadImage(UI_FOLDER + "progress_right_no.png");
+	public static final Image UI_PROGRESS_RIGHT_YES = loadImage(UI_FOLDER + "progress_right_yes.png");
 
 	public static BufferedImage loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
 	{
@@ -123,8 +130,7 @@ public final class ImageShop
 	/**
 	 * Rotates a squared BufferedImage clockwise. The algorithm rotates the image in-place.
 	 * 
-	 * @param image
-	 *            The image that will be rotated
+	 * @param image The image that will be rotated
 	 */
 	public static void inplaceImageRotation(BufferedImage image)
 	{
@@ -161,7 +167,7 @@ public final class ImageShop
 		filename.append(ARROWS_FOLDER);
 		filename.append(imageOrientation.toString().toLowerCase());
 		filename.append(EXTENSION);
-		
+
 		String string = filename.toString();
 		return loadImage(string);
 	}
