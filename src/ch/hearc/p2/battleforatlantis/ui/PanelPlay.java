@@ -283,13 +283,23 @@ public class PanelPlay extends JPanel
 		labelProgressLocal.setAlignmentX(CENTER_ALIGNMENT);
 		labelProgressDistant.setAlignmentX(CENTER_ALIGNMENT);
 
-		// Canvas for progress bars
+		// Canvas local progress bar
 		Box canvasProgressLocal = Box.createVerticalBox();
+		canvasProgressLocal.add(Box.createVerticalStrut(15));
 		canvasProgressLocal.add(labelProgressLocal);
+		canvasProgressLocal.add(Box.createVerticalStrut(15));
 		canvasProgressLocal.add(progressLocal);
+		canvasProgressLocal.add(Box.createVerticalStrut(15));
+		
+		// Canvas distant progress bar
 		Box canvasProgressDistant = Box.createVerticalBox();
+		canvasProgressDistant.add(Box.createHorizontalStrut(15));
 		canvasProgressDistant.add(labelProgressDistant);
+		canvasProgressDistant.add(Box.createHorizontalStrut(15));
 		canvasProgressDistant.add(progressDistant);
+		canvasProgressDistant.add(Box.createHorizontalStrut(15));
+		
+		// Canvas for progress bars
 		Box canvasLevels = Box.createHorizontalBox();
 		canvasLevels.add(Box.createHorizontalGlue());
 		canvasLevels.add(canvasProgressLocal);

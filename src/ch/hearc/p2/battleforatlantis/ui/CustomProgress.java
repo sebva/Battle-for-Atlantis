@@ -57,22 +57,16 @@ public class CustomProgress extends JComponent
 		double percent = filled / (double) this.interval;
 		int position = (int) (width * percent);
 
-		System.out.println("Width : " + width + " / Height : " + getHeight() + " / Filled : " + filled + " / Percent : " + percent + " / Position : "
-				+ position);
-
 		for (int i = 0; i < width - 27; i++)
 		{
 			if (i < position)
 			{
-				System.out.print("I");
 				g2d.drawImage(ImageShop.UI_PROGRESS_YES, i, 0, null);
 			}
 			else
 			{
-				System.out.print(".");
 				g2d.drawImage(ImageShop.UI_PROGRESS_NO, i, 0, null);
 			}
 		}
-		System.out.println();
 	}
 }
