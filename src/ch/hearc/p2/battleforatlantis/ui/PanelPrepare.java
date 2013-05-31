@@ -2,6 +2,7 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
@@ -53,8 +54,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * Default constructor
 	 * 
-	 * @param rootFrame
-	 *            Parent frame
+	 * @param rootFrame Parent frame
 	 */
 	public PanelPrepare(FrameMain rootFrame)
 	{
@@ -154,8 +154,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * A ship has been clicked, either by its button on the right or on the map.
 	 * 
-	 * @param ship
-	 *            Clicked ship
+	 * @param ship Clicked ship
 	 */
 	public void shipClick(Ship ship)
 	{
@@ -182,8 +181,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * External call for place ship on map
 	 * 
-	 * @param box
-	 *            Center of ship
+	 * @param box Center of ship
 	 */
 	public void place(ch.hearc.p2.battleforatlantis.gameengine.Box box)
 	{
@@ -219,7 +217,7 @@ public class PanelPrepare extends JPanel
 	public void start()
 	{
 		// Check that every ship has been placed
-		//*
+		// *
 		for (Ship ship : rootFrame.getShips())
 			if (ship.getCenter() == null)
 			{
@@ -227,8 +225,7 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		//*/
-
+		// */
 
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);
@@ -269,5 +266,14 @@ public class PanelPrepare extends JPanel
 	{
 		if (dialogWait != null)
 			dialogWait.dispose();
+	}
+
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+
+		mapSurface.validate();
+		mapSubmarine.validate();
 	}
 }

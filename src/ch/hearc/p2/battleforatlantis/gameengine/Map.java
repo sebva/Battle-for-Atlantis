@@ -2,9 +2,9 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -89,6 +89,13 @@ public class Map extends JPanel implements JSONString
 		{
 			setLayout(new GridLayout(height, width, 0, 0));
 		}
+
+		@Override
+		protected void paintComponent(Graphics g)
+		{
+			super.paintComponent(g);
+			Map.this.resizeComponent();
+		}
 	}
 
 	/**
@@ -136,14 +143,12 @@ public class Map extends JPanel implements JSONString
 		// Instanciate listeners
 		instanciatePreparationListener();
 		instanciateGameListener();
-		addComponentListener(new ComponentAdapter()
-		{
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				resizeComponent();
-			}
-		});
+
+		/*
+		 * addComponentListener(new ComponentAdapter() {
+		 * 
+		 * @Override public void componentResized(ComponentEvent e) { resizeComponent(); } });
+		 */
 
 	}
 
@@ -415,7 +420,5 @@ public class Map extends JPanel implements JSONString
 		Dimension newDimension = new Dimension(Map.this.sizeBox * numberX, Map.this.sizeBox * numberY);
 		Map.this.internalPanel.setPreferredSize(newDimension);
 		Map.this.internalPanel.setMaximumSize(newDimension);
-
-		validate();
 	}
 }
