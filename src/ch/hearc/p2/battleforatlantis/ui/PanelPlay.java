@@ -66,6 +66,8 @@ public class PanelPlay extends JPanel
 	private CustomProgress progressLocal;
 	private CustomProgress progressDistant;
 
+	private PanelStats panelStats;
+
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
 
@@ -172,6 +174,138 @@ public class PanelPlay extends JPanel
 				add(atlantis, atlantis.getType().name());
 
 			cards.show(this, type.toString());
+		}
+	}
+
+	/**
+	 * Panel for displaying rotative label with statistics
+	 */
+	private class PanelStats extends JPanel
+	{
+		private String text;
+		private int missed;
+		private int touched;
+		private int sank;
+		private int position;
+		private boolean threadRunning;
+
+		private final Font font = new Font("Arial", Font.BOLD, 12);
+
+		public PanelStats()
+		{
+			this.missed = 0;
+			this.touched = 0;
+			this.sank = 0;
+
+			this.setLayout(null);
+
+			this.setBackground(Color.BLACK);
+
+			this.setMinimumSize(new Dimension(100, 100));
+			this.setPreferredSize(new Dimension(2000, 100));
+
+			this.refreshLabel();
+			this.launchRotation();
+			
+			this.position = this.getWidth();
+		}
+
+		/**
+		 * Adds a missed shot to counter
+		 */
+		public void addMissedShot()
+		{
+			this.missed++;
+			this.refreshLabel();
+		}
+
+		/**
+		 * Adds a touched shot to counter
+		 */
+		public void addTouchedShot()
+		{
+			this.touched++;
+			this.refreshLabel();
+		}
+
+		/**
+		 * Adds a boat sank to counter, including, the final touching shot
+		 */
+		public void addSankShot()
+		{
+			this.touched++;
+			this.sank++;
+			this.refreshLabel();
+		}
+
+		/**
+		 * Starts the main loop of label rotation
+		 */
+		public void launchRotation()
+		{
+			this.threadRunning = true;
+			Thread thread = new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						while(PanelStats.this.threadRunning)
+						{
+							PanelStats.this.position -= 2;
+							if (PanelStats.this.position < -500)
+							{
+								PanelStats.this.position = PanelStats.this.getWidth();
+							}
+							PanelStats.this.repaint();
+							Thread.sleep(20);
+						}
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			});
+			thread.start();
+		}
+		
+		/**
+		 * Stops the main loop of label rotation
+		 */
+		public void stopRotation()
+		{
+			this.threadRunning = false;
+		}
+
+		@Override
+		protected void paintComponent(Graphics g)
+		{
+			super.paintComponent(g);
+
+			Graphics2D g2d = (Graphics2D) g;
+
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(this.font);
+			g2d.drawString(this.text, this.position, 35);
+		}
+
+		private void refreshLabel()
+		{
+			StringBuilder builder = new StringBuilder();
+			builder.append("* * * ");
+			builder.append(this.missed);
+			builder.append(" tirs manqués - ");
+			builder.append(this.touched);
+			builder.append(" tirs touchés - ");
+			builder.append(this.missed + this.touched);
+			builder.append(" tirs au total - ");
+			builder.append(this.sank);
+			builder.append(" bateaux coulés * * *");
+			this.text = builder.toString();
+			
+			this.repaint();
 		}
 	}
 
@@ -312,9 +446,13 @@ public class PanelPlay extends JPanel
 		canvasLevels.add(Box.createHorizontalGlue());
 		canvasLevels.add(canvasButtons);
 
+		// Panel for statistics
+		this.panelStats = new PanelStats();
+
 		// Main canvas
 		add(canvasMaps, BorderLayout.CENTER);
 		add(canvasLevels, BorderLayout.NORTH);
+		add(this.panelStats, BorderLayout.SOUTH);
 
 		// Assign currently playing player
 		// TODO better
