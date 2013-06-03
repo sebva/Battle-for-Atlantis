@@ -48,6 +48,9 @@ public final class ImageShop
 	public static final Image UI_PROGRESS_YES = loadImage(UI_FOLDER + "progress_yes.png");
 	public static final Image UI_PROGRESS_NO = loadImage(UI_FOLDER + "progress_no.png");
 
+	public static final Image UI_DEFIL_BACKGROUND = loadImage(UI_FOLDER + "defil_background.png");
+	public static final Image UI_DEFIL_LIGHT = loadImage(UI_FOLDER + "defil_light.png");
+
 	public static BufferedImage loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
 	{
 		StringBuilder filename = new StringBuilder();

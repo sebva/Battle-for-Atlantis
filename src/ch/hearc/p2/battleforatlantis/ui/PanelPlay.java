@@ -186,7 +186,8 @@ public class PanelPlay extends JPanel
 		private int missed;
 		private int touched;
 		private int sank;
-		private int position;
+		private int textPosition;
+		private int lightPosition;
 		private boolean threadRunning;
 
 		private final Font font = new Font("Arial", Font.BOLD, 12);
@@ -206,8 +207,9 @@ public class PanelPlay extends JPanel
 
 			this.refreshLabel();
 			this.launchRotation();
-			
-			this.position = this.getWidth();
+
+			this.textPosition = this.getWidth();
+			this.lightPosition = this.getWidth();
 		}
 
 		/**
@@ -251,15 +253,20 @@ public class PanelPlay extends JPanel
 				{
 					try
 					{
-						while(PanelStats.this.threadRunning)
+						while (PanelStats.this.threadRunning)
 						{
-							PanelStats.this.position -= 2;
-							if (PanelStats.this.position < -500)
+							PanelStats.this.lightPosition += 5;
+							if (PanelStats.this.lightPosition > 2500)
 							{
-								PanelStats.this.position = PanelStats.this.getWidth();
+								PanelStats.this.lightPosition = -300;
+							}
+							PanelStats.this.textPosition -= 1;
+							if (PanelStats.this.textPosition < -500)
+							{
+								PanelStats.this.textPosition = PanelStats.this.getWidth();
 							}
 							PanelStats.this.repaint();
-							Thread.sleep(20);
+							Thread.sleep(10);
 						}
 					}
 					catch (InterruptedException e)
@@ -270,7 +277,7 @@ public class PanelPlay extends JPanel
 			});
 			thread.start();
 		}
-		
+
 		/**
 		 * Stops the main loop of label rotation
 		 */
@@ -286,9 +293,16 @@ public class PanelPlay extends JPanel
 
 			Graphics2D g2d = (Graphics2D) g;
 
+			for (int i = 0; i <= this.getWidth(); i++)
+			{
+				g2d.drawImage(ImageShop.UI_DEFIL_BACKGROUND, i, 35, null);
+			}
+			g2d.drawImage(ImageShop.UI_DEFIL_LIGHT, this.lightPosition, 35, null);
+			g2d.drawImage(ImageShop.UI_DEFIL_LIGHT, this.lightPosition, 68, null);
+
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(this.font);
-			g2d.drawString(this.text, this.position, 35);
+			g2d.drawString(this.text, this.textPosition, 57);
 		}
 
 		private void refreshLabel()
@@ -304,7 +318,7 @@ public class PanelPlay extends JPanel
 			builder.append(this.sank);
 			builder.append(" bateaux coulés * * *");
 			this.text = builder.toString();
-			
+
 			this.repaint();
 		}
 	}
