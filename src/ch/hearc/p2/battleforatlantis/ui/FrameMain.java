@@ -66,14 +66,7 @@ public class FrameMain extends JFrame
 	public FrameMain() throws Exception
 	{
 		Settings.FRAME_MAIN = this;
-		distantShips = new HashSet<>();
-
-		Loader loader = new Loader();
-		loader.load();
-		localMaps = loader.getMapsWithoutAtlantis();
-		atlantis = loader.getAtlantis();
-		ships = loader.getShips();
-		hashConfig = loader.getHash();
+		initGame();
 
 		windowConfig();
 
@@ -82,13 +75,11 @@ public class FrameMain extends JFrame
 
 		Settings.PANEL_HOME = new PanelHome(this);
 		Settings.PANEL_CONNECTIONS = new PanelConnection(this);
-		Settings.PANEL_PREPARE = new PanelPrepare(this);
 
 		cards = new PanelCards();
 		add(cards, BorderLayout.CENTER);
 		cards.add(Settings.PANEL_HOME, PanelHome.class.getSimpleName());
 		cards.add(Settings.PANEL_CONNECTIONS, PanelConnection.class.getSimpleName());
-		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 
 		this.addWindowStateListener(new WindowStateListener()
 		{
@@ -107,6 +98,19 @@ public class FrameMain extends JFrame
 		// cards.showCard(PanelPrepare.class.getSimpleName());
 
 		setVisible(true);
+	}
+
+	private void initGame() throws Exception
+	{
+		distantShips = new HashSet<>();
+
+		Loader loader = new Loader();
+		loader.load();
+		localMaps = loader.getMapsWithoutAtlantis();
+		distantMaps = null;
+		atlantis = loader.getAtlantis();
+		ships = loader.getShips();
+		hashConfig = loader.getHash();
 	}
 
 	private void windowConfig()
@@ -131,7 +135,11 @@ public class FrameMain extends JFrame
 	public void placeShips(Host h)
 	{
 		this.distantPlayerName = h.getName();
+		
+		Settings.PANEL_PREPARE = new PanelPrepare(this);
+		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.showCard(PanelPrepare.class.getSimpleName());
+		
 		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 		forceResize();
 		SoundManager.getInstance().setStream(SoundManager.Stream.PLACEMENT);
@@ -146,7 +154,6 @@ public class FrameMain extends JFrame
 
 	}
 
-	@SuppressWarnings("deprecation")
 	private void showGame()
 	{
 		Settings.PANEL_PLAY = new PanelPlay(this);
@@ -190,12 +197,19 @@ public class FrameMain extends JFrame
 
 	public void endGame()
 	{
+		NetworkManager.getInstance().closeTcpConnection();
+		try
+		{
+			initGame();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 		cards.showCard(PanelHome.class.getSimpleName());
-	}
-
-	public static PanelPrepare getPanelPrepare()
-	{
-		return Settings.PANEL_PREPARE;
+		cards.remove(Settings.PANEL_PLAY);
+		Settings.PANEL_PLAY = null;
 	}
 
 	public Map[] getLocalMaps()

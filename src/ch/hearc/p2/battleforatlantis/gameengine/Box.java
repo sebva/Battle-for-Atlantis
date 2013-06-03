@@ -127,7 +127,7 @@ public class Box extends JPanel implements JSONString
 				PanelPlay panelPlay = Settings.PANEL_PLAY;
 				if(panelPlay == null)
 				{
-					PanelPrepare panelPrepare = FrameMain.getPanelPrepare();
+					PanelPrepare panelPrepare = Settings.PANEL_PREPARE;
 					switch (e.getButton())
 					{
 					// left button pressed

@@ -62,6 +62,7 @@ public class NetworkManager
 	private List<InetAddress> bcastAddresses;
 	/** Flag to stop UDP and TCP receiving threads */
 	private boolean receiving = false;
+	private boolean tcpReceiving = false;
 
 	private NetworkManager()
 	{
@@ -184,11 +185,10 @@ public class NetworkManager
 	 */
 	private void startTcpReception()
 	{
-		/*
-		 * if (receiving) return;
-		 * 
-		 * receiving = true;
-		 */
+		if (tcpReceiving)
+			return;
+
+		tcpReceiving = true;
 
 		new Thread(new Runnable()
 		{
@@ -197,7 +197,7 @@ public class NetworkManager
 			@Override
 			public void run()
 			{
-				while (receiving)
+				while (tcpReceiving)
 				{
 					try
 					{
@@ -214,14 +214,40 @@ public class NetworkManager
 						log.warning("Non-JSON packet received\n" + e.toString());
 					}
 					catch (IOException e)
-					{
+					{	
 						log.severe("Connexion perdue !");
-						fatalError(e.getLocalizedMessage());
+						if(tcpReceiving)
+							fatalError(e.getLocalizedMessage());
 						break;
 					}
 				}
 			}
 		}, "TCP Reception Thread").start();
+	}
+	
+	public void closeTcpConnection()
+	{
+		if(tcpSocket != null)
+		{
+			tcpReceiving = false;
+			
+			try
+			{
+				tcpInStream.close();
+				tcpOutStream.close();
+				tcpSocket.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				tcpInStream = null;
+				tcpOutStream = null;
+				tcpSocket = null;
+			}
+		}
 	}
 
 	/**

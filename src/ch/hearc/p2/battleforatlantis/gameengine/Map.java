@@ -233,14 +233,14 @@ public class Map extends JPanel implements JSONString
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				PanelPrepare panel = FrameMain.getPanelPrepare();
+				PanelPrepare panel = Settings.PANEL_PREPARE;
 				panel.place(null);
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				PanelPrepare panel = FrameMain.getPanelPrepare();
+				PanelPrepare panel = Settings.PANEL_PREPARE;
 				panel.place((Box) e.getComponent());
 			}
 		};
