@@ -4,7 +4,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
 public final class SoundShop
 {
-	private static final String SOUND = "res/sound/";
+	private static final String SOUND = "/sound/";
 	private static final String FX = SOUND + "fx/";
 
 	// Streams

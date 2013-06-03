@@ -1,7 +1,7 @@
 package ch.hearc.p2.battleforatlantis.sound;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.Semaphore;
 
 import javax.sound.sampled.AudioFormat;
@@ -33,7 +33,7 @@ public class SoundEngine
 	/**
 	 * Source file to read
 	 */
-	private File source;
+	private URL source;
 	
 	/**
 	 * Stream generated from source file for read operations
@@ -114,8 +114,9 @@ public class SoundEngine
 				public void run()
 				{
 					// Open file
-					SoundEngine.this.source = new File(SoundEngine.this.filename);
-					if (!SoundEngine.this.source.exists())
+					SoundEngine.this.source = getClass().getResource(SoundEngine.this.filename);
+					
+					if (SoundEngine.this.source == null)
 					{
 						System.err.println("Wave file not found : " + SoundEngine.this.filename);
 						return;
