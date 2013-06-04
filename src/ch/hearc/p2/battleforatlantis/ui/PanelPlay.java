@@ -23,11 +23,14 @@ import ch.hearc.p2.battleforatlantis.action.EndGameAction.EndGameCause;
 import ch.hearc.p2.battleforatlantis.action.MoveAction;
 import ch.hearc.p2.battleforatlantis.action.NextLevelAction;
 import ch.hearc.p2.battleforatlantis.action.ShootAction;
+import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
+import ch.hearc.p2.battleforatlantis.gameengine.Generator;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
+import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
@@ -44,13 +47,6 @@ public class PanelPlay extends JPanel
 	private PanelMaps levelsMe;
 	/** The PanelMaps displaying distant maps */
 	private PanelMaps levelsOther;
-
-	/** Total shots **/
-	private int totalShots;
-	/** Shots in ships **/
-	private int effectiveShots;
-	/** Shots in water **/
-	private int waterShots;
 
 	private Map currentLocalMap;
 	private Map currentDistantMap;
@@ -473,6 +469,10 @@ public class PanelPlay extends JPanel
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
 		infosLocal.setPlaying(isLocalPlaying);
 		infosDistant.setPlaying(!isLocalPlaying);
+		
+		SoundManager.getInstance().playNextLevel(MapType.SURFACE);
+		SoundManager.getInstance().setStream(SoundManager.Stream.SURFACE);
+		SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
 	}
 
 	/**
@@ -491,20 +491,56 @@ public class PanelPlay extends JPanel
 		// If we shot a ship
 		if (occupier != null)
 		{
-			effectiveShots++;
+			if (occupier.getRemainingSize() > 1)
+			{
+				this.panelStats.addTouchedShot();
+			}
+			else
+			{
+				this.panelStats.addSankShot();
+			}
 
 			if (occupier instanceof Ship)
 			{
-				// FIXME: NullPointerException in the following method call !
-				// this.panelProgress.addProgress((Ship) occupier);
+				if (occupier.getRemainingSize() > 1)
+				{
+					SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.TOUCH);
+				}
+				else
+				{
+					SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.SINK);
+				}
+			}
+			else if (occupier instanceof Generator)
+			{
+				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
+				SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+			}
+			else if (occupier instanceof Atlantis)
+			{
+				if (((Atlantis)occupier).isDestroyable())
+				{
+					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
+				}
+				else
+				{
+					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
+				}
 			}
 		}
 		// Or shot nothing
 		else
-			waterShots++;
-
-		// Count total shots
-		totalShots++;
+		{
+			this.panelStats.addMissedShot();
+			if (location.getMapType() == MapType.ATLANTIS)
+			{
+				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
+			}
+			else
+			{
+				SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
+			}
+		}
 
 		// Made the shot at the box location
 		location.shoot();
@@ -591,9 +627,13 @@ public class PanelPlay extends JPanel
 		{
 			case SUBMARINE:
 				newMap = MapType.ATLANTIS;
+				SoundManager.getInstance().playNextLevel(MapType.ATLANTIS);
+				SoundManager.getInstance().setStream(SoundManager.Stream.ATLANTIS);
 				break;
 			case SURFACE:
 				newMap = MapType.SUBMARINE;
+				SoundManager.getInstance().playNextLevel(MapType.SUBMARINE);
+				SoundManager.getInstance().setStream(SoundManager.Stream.SUBMARINE);
 				break;
 			case ATLANTIS:
 				endGame(true, false);

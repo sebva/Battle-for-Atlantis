@@ -2,10 +2,15 @@ package ch.hearc.p2.battleforatlantis.action;
 
 import org.json.JSONObject;
 
+import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameengine.Box;
+import ch.hearc.p2.battleforatlantis.gameengine.Generator;
+import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
+import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
+import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class ShootAction extends Action implements NetworkMessage
@@ -31,6 +36,55 @@ public class ShootAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
+		// Get occupier of the box shot
+		MapElement occupier = this.target.getOccupier();
+
+		// If we shot a ship
+		if (occupier != null)
+		{
+			if (occupier instanceof Ship)
+			{
+				if (occupier.getRemainingSize() > 1)
+				{
+					SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.TOUCH);
+					SoundManager.getInstance().setMusic(SoundManager.Music.TOUCHED);
+				}
+				else
+				{
+					SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.SINK);
+					SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
+				}
+			}
+			else if (occupier instanceof Generator)
+			{
+				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
+				SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+			}
+			else if (occupier instanceof Atlantis)
+			{
+				if (((Atlantis)occupier).isDestroyable())
+				{
+					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
+				}
+				else
+				{
+					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
+				}
+			}
+		}
+		// Or shot nothing
+		else
+		{
+			if (this.target.getMapType() == MapType.ATLANTIS)
+			{
+				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
+			}
+			else
+			{
+				SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.MISS);
+			}
+		}
+		
 		target.shoot();
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}

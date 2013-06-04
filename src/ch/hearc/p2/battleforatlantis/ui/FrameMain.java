@@ -94,6 +94,7 @@ public class FrameMain extends JFrame
 		});
 
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
+		SoundManager.getInstance().setMusic(SoundManager.Music.MENU);
 
 		// cards.showCard(PanelPrepare.class.getSimpleName());
 
@@ -143,6 +144,7 @@ public class FrameMain extends JFrame
 		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 		forceResize();
 		SoundManager.getInstance().setStream(SoundManager.Stream.PLACEMENT);
+		SoundManager.getInstance().setMusic(SoundManager.Music.NONE);
 	}
 
 	public void startGame()
@@ -161,6 +163,8 @@ public class FrameMain extends JFrame
 
 		cards.showCard(PanelPlay.class.getSimpleName());
 		forceResize();
+		SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
+		SoundManager.getInstance().setStream(SoundManager.Stream.SURFACE);
 	}
 
 	private void forceResize()
@@ -210,6 +214,9 @@ public class FrameMain extends JFrame
 		cards.showCard(PanelHome.class.getSimpleName());
 		cards.remove(Settings.PANEL_PLAY);
 		Settings.PANEL_PLAY = null;
+		
+		SoundManager.getInstance().setMusic(SoundManager.Music.MENU);
+		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 	}
 
 	public Map[] getLocalMaps()

@@ -101,6 +101,11 @@ public abstract class MapElement extends JLabel
 		return touchedSize > 0;
 	}
 	
+	public int getRemainingSize()
+	{
+		return this.wholeSize - this.touchedSize;
+	}
+	
 	public Box[] getOccupied()
 	{
 		return occupied;

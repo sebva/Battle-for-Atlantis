@@ -56,6 +56,14 @@ public class SoundManager
 	{
 		MISS, SHIELD, GENERATOR, CITY
 	};
+	
+	/**
+	 * Enum of available musics
+	 */
+	public enum Music
+	{
+		NONE, MENU, CALM, TOUCHED, FINAL
+	};
 
 	/**
 	 * Set the stream song looping in background
@@ -79,6 +87,35 @@ public class SoundManager
 				break;
 			case ATLANTIS:
 				SoundShop.STREAM_SUBMARINE.play();
+				break;
+			default:
+				break;
+		}
+	}
+	
+	/**
+	 * Set the music song looping in background
+	 * @param music : music to play loop
+	 */
+	public void setMusic(Music music)
+	{
+		SoundShop.MUSIC_MENU.pause();
+		SoundShop.MUSIC_CALM.pause();
+		SoundShop.MUSIC_TOUCHED.pause();
+		SoundShop.MUSIC_FINAL.pause();
+		switch (music)
+		{
+			case MENU:
+				SoundShop.MUSIC_MENU.play();
+				break;
+			case CALM:
+				SoundShop.MUSIC_CALM.play();
+				break;
+			case TOUCHED:
+				SoundShop.MUSIC_TOUCHED.play();
+				break;
+			case FINAL:
+				SoundShop.MUSIC_FINAL.play();
 				break;
 			default:
 				break;

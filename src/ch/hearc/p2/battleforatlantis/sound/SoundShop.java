@@ -6,6 +6,7 @@ public final class SoundShop
 {
 	private static final String SOUND = "/sound/";
 	private static final String FX = SOUND + "fx/";
+	private static final String MUSIC = SOUND + "music/";
 
 	// Streams
 	public static final SoundPlayer STREAM_PLACE = new SoundPlayer(FX + "surface_place_stream.wav", SoundPlayer.LoopMode.LOOP);
@@ -54,5 +55,11 @@ public final class SoundShop
 	public static final SoundPlayer ATLANTIS_SEND_SHIELD = new SoundPlayer(FX + "atlantis_send_shield.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer ATLANTIS_SEND_GENERATOR = new SoundPlayer(FX + "atlantis_send_generator.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer ATLANTIS_SEND_CITY = new SoundPlayer(FX + "atlantis_send_city.wav", SoundPlayer.LoopMode.ONCE);
+	
+	// Musics
+	public static final SoundPlayer MUSIC_MENU = new SoundPlayer(MUSIC + "menu16.wav", SoundPlayer.LoopMode.LOOP);
+	public static final SoundPlayer MUSIC_CALM = new SoundPlayer(MUSIC + "game_calm_loop.wav", SoundPlayer.LoopMode.LOOP);
+	public static final SoundPlayer MUSIC_TOUCHED = new SoundPlayer(MUSIC + "game_touched_loop.wav", SoundPlayer.LoopMode.LOOP);
+	public static final SoundPlayer MUSIC_FINAL = new SoundPlayer(MUSIC + "game_final_loop.wav", SoundPlayer.LoopMode.LOOP);
 
 }
