@@ -156,15 +156,17 @@ public class Loader extends DefaultHandler
 				MapType type = MapType.valueOf(attributes.getValue("type").toUpperCase());
 				currentLevel = type;
 				
-				Map map = new Map(width, height, type, true);
-				
+				Map map = null;
 				try
 				{
 					if (this.currentLevel == MapType.ATLANTIS)
 					{
+						map = new Map(width, height, type, false);
 						AtlantisCreator.setMap(map);
 						this.atlantis = map;
 					}
+					else
+						map = new Map(width, height, type, true);
 				}
 				catch (Exception e)
 				{

@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import org.json.JSONObject;
 import org.json.JSONString;
 
-import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPlay;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
@@ -285,6 +284,11 @@ public class Box extends JPanel implements JSONString
 		jo.put("x", x);
 		jo.put("y", y);
 		return jo.toString();
+	}
+
+	public boolean isDiscovered()
+	{
+		return discovered;
 	}
 
 }

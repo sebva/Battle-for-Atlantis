@@ -3,8 +3,8 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
-import javax.swing.Icon;
+import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -18,7 +18,11 @@ public class Atlantis extends MapElement
 	private boolean destroyable;
 	
 	// Initial images
-	private Icon[] initialImages;
+	private BufferedImage[][] images;
+	
+	private Box[][] occupied;
+	
+	private Map map;
 	
 	// Generator of the shield
 	private Generator shieldGenerator = null;
@@ -31,16 +35,17 @@ public class Atlantis extends MapElement
 	private int mapWidth;
 	private int mapHeight;
 
+	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 	/**
 	 * Generate a new Atlantis game element
 	 * 
 	 * @param width Width of the Atlantis
 	 * @param height Height of the Atlantis
-	 * @param mapWidth Map width
-	 * @param mapHeight Map height
+	 * @param map Atlantis map
 	 * @throws Exception Invalid Size Map
 	 */
-	public Atlantis(int width, int height, int mapWidth, int mapHeight) throws Exception
+	public Atlantis(int width, int height, Map map) throws Exception
 	{
 		super(width * height);
 		
@@ -48,9 +53,11 @@ public class Atlantis extends MapElement
 		this.width = width;
 		this.height = height;
 		
+		this.map = map;
+		
 		// Size of map
-		this.mapWidth = mapWidth;
-		this.mapHeight = mapHeight;
+		this.mapWidth = map.getMapWidth();
+		this.mapHeight = map.getMapHeight();
 		
 		// Some verification for Generator
 		if (width < mapWidth - 2 && height < mapHeight - 2)
@@ -63,13 +70,16 @@ public class Atlantis extends MapElement
 		this.setMinimumSize(this.preferredSize);
 		this.setMaximumSize(this.preferredSize);
 		this.setBackground(Color.WHITE);
+		
+		this.images = new BufferedImage[height][width];
+		this.occupied = new Box[height][width];
 
 		// Load images corresponding to boat parts
-		for (int row = 0; row < width; row++)
+		for (int row = 0; row < height; row++)
 		{
-			for (int col = 0; col < height; col++)
+			for (int col = 0; col < width; col++)
 			{
-				this.images[(row * width) + col] = ImageShop.loadAtlantisImage(row, col, true);
+				this.images[row][col] = ImageShop.loadAtlantisImage(row, col, true);
 				
 				// FIXME: There is a bug in one of the two following lines
 				// this.initialImages[(row * width) + col] = new ImageIcon(this.images[(row * width) + col]);
@@ -82,22 +92,6 @@ public class Atlantis extends MapElement
 	}
 	
 	/**
-	 * Generate a new Atlantis game element
-	 * 
-	 * @param width Width of the Atlantis
-	 * @param height Height of the Atlantis
-	 * @param mapWidth Map width
-	 * @param mapHeight Map height
-	 * @param generator The Atlantis' generator (received over the network)
-	 * @throws Exception Invalid Size Map
-	 */
-	public Atlantis(int width, int height, int mapWidth, int mapHeight, Generator generator) throws Exception
-	{
-		this(width, height, mapWidth, mapHeight);
-		this.shieldGenerator = generator;
-	}
-	
-	/**
 	 * Generate random position for the Atlantis
 	 */
 	public void generatePosition()
@@ -105,6 +99,23 @@ public class Atlantis extends MapElement
 		// Position of Atlantis
 		positionX = (int)(Math.random() * (mapWidth - this.width));
 		positionY = (int)(Math.random() * (mapHeight - this.height));
+		
+		occupy();
+	}
+
+	private void occupy()
+	{
+		int row = 0;
+		for(int y = positionY; y < positionY + height; y++, row++)
+		{
+			int col = 0;
+			for(int x = positionX; x < positionX + width; x++, col++)
+			{
+				this.occupied[row][col] = map.getBox(x, y);
+				if(images[row][col] != null)
+					this.occupied[row][col].setOccupier(this, this.images[row][col]);
+			}
+		}
 	}
 	
 	/**
@@ -171,10 +182,15 @@ public class Atlantis extends MapElement
 				}
 			}
 			
-			this.shieldGenerator = new Generator(generatorPositionX, generatorPositionY);
+			this.shieldGenerator = new Generator(map.getBox(generatorPositionX, generatorPositionY), this);
 		}
 		
 		return this.shieldGenerator;
+	}
+	
+	public void setGenerator(Generator gen)
+	{
+		this.shieldGenerator = gen;
 	}
 
 	/**
@@ -183,6 +199,16 @@ public class Atlantis extends MapElement
 	public void generatorDestroyed()
 	{
 		this.destroyable = true;
+		
+		for(int row = 0; row < height; row++)
+		{
+			for(int col = 0; col < width; col++)
+			{
+				this.images[row][col] = ImageShop.loadAtlantisImage(row, col, false);
+				if(images[row][col] != null && occupied[row][col] != null)
+					this.occupied[row][col].setOccupier(this, this.images[row][col]);
+			}
+		}
 	}
 
 	/**
@@ -226,6 +252,8 @@ public class Atlantis extends MapElement
 	{
 		this.positionX = positionX;
 		this.positionY = positionY;
+		
+		occupy();
 	}
 
 	@Override
@@ -238,10 +266,11 @@ public class Atlantis extends MapElement
 	@Override
 	public void shoot(Box target)
 	{
+		log.info("Shoot on atlantis");
 		if(destroyable)
 			Settings.PANEL_PLAY.endGame(true, false);
 		else
-			; // TODO: Uncover without destroying
+			target.setImage(ImageShop.loadAtlantisImage(target.getCoordY() - positionY, target.getCoordX() - positionX, false));
 	}
 
 }

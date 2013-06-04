@@ -18,7 +18,6 @@ public class AtlantisCreator
 
 	/**
 	 * TODO
-	 * @return
 	 */
 	public static Map generateMap()
 	{
@@ -59,7 +58,7 @@ public class AtlantisCreator
 		
 		if (AtlantisCreator.atlantis == null)
 		{
-			AtlantisCreator.atlantis = new Atlantis(width, height, map.getMapWidth(), map.getMapHeight());
+			AtlantisCreator.atlantis = new Atlantis(width, height, map);
 			AtlantisCreator.atlantis.generatePosition();
 		}
 		

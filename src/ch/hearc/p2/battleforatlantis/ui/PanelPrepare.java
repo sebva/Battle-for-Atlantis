@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -219,6 +218,7 @@ public class PanelPrepare extends JPanel
 	 */
 	public void start()
 	{
+		/*
 		// Check that every ship has been placed
 		for (Ship ship : rootFrame.getShips())
 			if (ship.getCenter() == null)
@@ -227,6 +227,7 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+		//*/
 
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);

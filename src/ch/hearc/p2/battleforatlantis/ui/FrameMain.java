@@ -29,8 +29,8 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class FrameMain extends JFrame
 {
-	private static final int kDefaultWidth = 1024;
-	private static final int kDefaultHeight = 768;
+	private static final int kDefaultWidth = 1400;
+	private static final int kDefaultHeight = 1000;
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
 	private static final String kKeyPlayerName = "playerName";
 

@@ -482,7 +482,11 @@ public class PanelPlay extends JPanel
 	 */
 	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
+		if(location.isDiscovered())
+			return;
 		if (playerPlaying != Player.LOCAL)
+			return;
+		if(location.getMapType() == MapType.ATLANTIS && currentDistantMap.getType() != MapType.ATLANTIS)
 			return;
 
 		// Get occupier of the box shot
@@ -545,7 +549,8 @@ public class PanelPlay extends JPanel
 		// Made the shot at the box location
 		location.shoot();
 
-		endCurrentTurn();
+		if(!(occupier instanceof Generator))
+			endCurrentTurn();
 
 		// Send the shot to the opponent
 		new ShootAction(location).send();

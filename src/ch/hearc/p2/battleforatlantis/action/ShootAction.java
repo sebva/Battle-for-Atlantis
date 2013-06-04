@@ -86,7 +86,8 @@ public class ShootAction extends Action implements NetworkMessage
 		}
 		
 		target.shoot();
-		Settings.PANEL_PLAY.endCurrentTurn();
+		if(!(target.getOccupier() instanceof Generator))
+			Settings.PANEL_PLAY.endCurrentTurn();
 	}
 
 	/**

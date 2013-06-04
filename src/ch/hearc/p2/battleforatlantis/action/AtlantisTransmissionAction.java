@@ -47,13 +47,13 @@ public class AtlantisTransmissionAction extends Action
 		int row = 0;
 		
 		// Run through the atlantis width
-		for (int x = this.atlantis.getPositionX(); x < this.atlantis.getPositionX() + Settings.ATLANTIS_WIDTH; x++)
+		for (int y = this.atlantis.getPositionY(); y < this.atlantis.getPositionY() + Settings.ATLANTIS_HEIGHT; y++)
 		{
 			// Column number to load Atlantis parts images
 			int col = 0;
 			
 			// Run through the atlantis height
-			for (int y = this.atlantis.getPositionY(); y < this.atlantis.getPositionY() + Settings.ATLANTIS_HEIGHT; y++)
+			for (int x = this.atlantis.getPositionX(); x < this.atlantis.getPositionX() + Settings.ATLANTIS_WIDTH; x++)
 			{
 				// Get box and set atlantis as occupier
 				Box actualBox = atlantisMap.getBox(x, y);
@@ -86,24 +86,21 @@ public class AtlantisTransmissionAction extends Action
 		int positionX = atlantisInformation.getJSONObject("northWest").getInt("x");
 		int positionY = atlantisInformation.getJSONObject("northWest").getInt("y");
 		
-		int generatorPositionX = atlantisInformation.getJSONObject("generator").getInt("x");
-		int generatorPositionY = atlantisInformation.getJSONObject("generator").getInt("y");
-
-		Generator generator = new Generator(generatorPositionX, generatorPositionY);
-		
 		try
 		{
 			// Create Atlantis with user game configuration
 			Atlantis atlantis = new Atlantis(
 					Settings.ATLANTIS_WIDTH, 
 					Settings.ATLANTIS_HEIGHT, 
-					AtlantisCreator.getMap().getWidth(), 
-					AtlantisCreator.getMap().getHeight(),
-					generator
+					AtlantisCreator.getMap()
 			);
 			
 			// Set position with retrieved JSON information
 			atlantis.setPosition(positionX, positionY);
+			
+			Generator generator = new Generator(AtlantisCreator.getMap().getBox(atlantisInformation.getJSONObject("generator")), atlantis);
+			atlantis.setGenerator(generator);
+			
 			
 			// Return this Action class with Atlantis configured
 			return new AtlantisTransmissionAction(atlantis);

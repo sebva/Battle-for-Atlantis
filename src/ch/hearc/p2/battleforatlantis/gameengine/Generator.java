@@ -1,5 +1,7 @@
 package ch.hearc.p2.battleforatlantis.gameengine;
 
+import java.util.logging.Logger;
+
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
 public class Generator extends MapElement
@@ -7,10 +9,14 @@ public class Generator extends MapElement
 	// Position of Generator
 	private int positionX;
 	private int positionY;
+	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	// Size of Generator
 	private static int sizeX = 1;
 	private static int sizeY = 1;
+	
+	private Box box;
+	private Atlantis atlantis;
 	
 	// Distance between Atlantis and Generator
 	private static int distanceX = 2;
@@ -19,19 +25,21 @@ public class Generator extends MapElement
 	/**
 	 * Construct a new Generator
 	 * 
-	 * @param positionX Position X of the generator (start at 0)
-	 * @param positionY Position Y of the generator (start at 0)
 	 */
-	public Generator(int positionX, int positionY)
+	public Generator(Box box, Atlantis atlantis)
 	{
 		super(sizeX * sizeY);
 		
+		this.box = box;
+		this.atlantis = atlantis;
+		
 		// Set Position
-		this.positionX = positionX;
-		this.positionY = positionY;
+		this.positionX = box.getCoordX();
+		this.positionY = box.getCoordY();
 		
 		// Set Image
 		this.images[0] = ImageShop.loadGeneratorImage(false);
+		box.setOccupier(this, images[0]);
 	}
 
 	/**
@@ -104,6 +112,8 @@ public class Generator extends MapElement
 	@Override
 	public void shoot(Box target)
 	{
-		// TODO: Deactivate generator
+		log.info("Shoot on generator");
+		box.setOccupier(this, ImageShop.loadGeneratorImage(true));
+		atlantis.generatorDestroyed();
 	}
 }
