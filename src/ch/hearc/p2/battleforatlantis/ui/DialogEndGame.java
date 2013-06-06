@@ -2,13 +2,12 @@ package ch.hearc.p2.battleforatlantis.ui;
 
 import java.awt.Component;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
-public class DialogEndGame extends JDialog
+public class DialogEndGame
 {
 	/**
 	 * Announce the game result to the user

@@ -45,7 +45,6 @@ public class FrameMain extends JFrame
 	private String playerName;
 	private String distantPlayerName;
 	private Player firstPlayerToPlay;
-	private boolean gameEnded = true;
 
 	private class PanelCards extends JPanel
 	{
@@ -150,7 +149,6 @@ public class FrameMain extends JFrame
 
 	public void startGame()
 	{
-		gameEnded = false;
 		if (distantMaps != null)
 			showGame();
 		else
@@ -203,11 +201,6 @@ public class FrameMain extends JFrame
 
 	public void endGame()
 	{
-		// Do not display the EndDialog more than one time
-		if(gameEnded)
-			return;
-		
-		gameEnded = true;
 		NetworkManager.getInstance().closeTcpConnection();
 		try
 		{

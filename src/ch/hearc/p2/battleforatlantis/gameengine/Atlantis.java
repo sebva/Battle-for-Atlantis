@@ -269,7 +269,7 @@ public class Atlantis extends MapElement
 	public void shoot(Box target)
 	{
 		log.info("Shoot on atlantis");
-		if(destroyable)
+		if(destroyable && Settings.PANEL_PLAY.isLocalPlayerPlaying())
 			Settings.PANEL_PLAY.endGame(true, false);
 		else
 		{
@@ -284,7 +284,7 @@ public class Atlantis extends MapElement
 					}
 			}
 			
-			if(fatal)
+			if(fatal && Settings.PANEL_PLAY.isLocalPlayerPlaying())
 				Settings.PANEL_PLAY.endGame(false, false);
 		}
 	}

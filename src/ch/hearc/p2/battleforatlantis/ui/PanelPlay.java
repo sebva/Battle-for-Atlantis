@@ -759,4 +759,9 @@ public class PanelPlay extends JPanel
 		currentDistantMap.resizeComponent();
 	}
 
+	public boolean isLocalPlayerPlaying()
+	{
+		return playerPlaying == Player.LOCAL;
+	}
+
 }
