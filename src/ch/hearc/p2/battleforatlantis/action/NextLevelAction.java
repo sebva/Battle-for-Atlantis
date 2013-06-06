@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
+import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class NextLevelAction extends Action implements NetworkMessage
@@ -25,6 +26,17 @@ public class NextLevelAction extends Action implements NetworkMessage
 	@Override
 	public void execute()
 	{
+		switch (this.map)
+		{
+			case SUBMARINE:
+				SoundManager.getInstance().playVoice(SoundManager.Voice.SUBMARINE);
+				break;
+			case ATLANTIS:
+				SoundManager.getInstance().playVoice(SoundManager.Voice.ATLANTIS);
+				break;
+			default:
+				break;
+		}
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}

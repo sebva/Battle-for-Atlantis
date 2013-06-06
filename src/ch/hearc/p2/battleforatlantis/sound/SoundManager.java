@@ -64,6 +64,14 @@ public class SoundManager
 	{
 		NONE, MENU, CALM, TOUCHED, FINAL
 	};
+	
+	/**
+	 * Enum of available voices
+	 */
+	public enum Voice
+	{
+		VICTORY, DEFEAT, SUBMARINE, ATLANTIS
+	};
 
 	/**
 	 * Set the stream song looping in background
@@ -156,9 +164,11 @@ public class SoundManager
 	 * @param level : type of level
 	 * @param direction : direction of shoot (listener is sending or receiving the shoot)
 	 * @param target : type of target shot
+	 * @return delay in ms for audio action to be heard (effective explosion)
 	 */
-	public void playShoot(MapType level, Direction direction, Target target)
+	public int playShoot(MapType level, Direction direction, Target target)
 	{
+		int soundDelay = 0;
 		switch (level)
 		{
 			case SURFACE:
@@ -169,12 +179,15 @@ public class SoundManager
 						{
 							case MISS:
 								SoundShop.SURFACE_SEND_MISS.play();
+								soundDelay = SoundShop.TIME_SURFACE_SEND_MISS;
 								break;
 							case TOUCH:
 								SoundShop.SURFACE_SEND_TOUCH.play();
+								soundDelay = SoundShop.TIME_SURFACE_SEND_TOUCH;
 								break;
 							case SINK:
 								SoundShop.SURFACE_SEND_SINK.play();
+								soundDelay = SoundShop.TIME_SURFACE_SEND_SINK;
 								break;
 						}
 						break;
@@ -183,12 +196,15 @@ public class SoundManager
 						{
 							case MISS:
 								SoundShop.SURFACE_GET_MISS.play();
+								soundDelay = SoundShop.TIME_SURFACE_GET_MISS;
 								break;
 							case TOUCH:
 								SoundShop.SURFACE_GET_TOUCH.play();
+								soundDelay = SoundShop.TIME_SURFACE_GET_TOUCH;
 								break;
 							case SINK:
 								SoundShop.SURFACE_GET_SINK.play();
+								soundDelay = SoundShop.TIME_SURFACE_GET_SINK;
 								break;
 						}
 						break;
@@ -202,12 +218,15 @@ public class SoundManager
 						{
 							case MISS:
 								SoundShop.SUBMARINE_SEND_MISS.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_SEND_MISS;
 								break;
 							case TOUCH:
 								SoundShop.SUBMARINE_SEND_TOUCH.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_SEND_TOUCH;
 								break;
 							case SINK:
 								SoundShop.SUBMARINE_SEND_SINK.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_SEND_SINK;
 								break;
 						}
 						break;
@@ -216,12 +235,15 @@ public class SoundManager
 						{
 							case MISS:
 								SoundShop.SUBMARINE_GET_MISS.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_GET_MISS;
 								break;
 							case TOUCH:
 								SoundShop.SUBMARINE_GET_TOUCH.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_GET_TOUCH;
 								break;
 							case SINK:
 								SoundShop.SUBMARINE_GET_SINK.play();
+								soundDelay = SoundShop.TIME_SUBMARINE_GET_SINK;
 								break;
 						}
 						break;
@@ -230,27 +252,60 @@ public class SoundManager
 			default:
 				break;
 		}
+		return soundDelay;
 	}
 
 	/**
 	 * Play a song corresponding to a shoot on a box in atlantis map
 	 * @param target : type of target shot
+	 * @return delay in ms for audio action to be heard (effective explosion)
 	 */
-	public void playShootAtlantis(Atlantis target)
+	public int playShootAtlantis(Atlantis target)
 	{
+		int soundDelay = 0;
 		switch (target)
 		{
 			case MISS:
 				SoundShop.ATLANTIS_SEND_MISS.play();
+				soundDelay = SoundShop.TIME_ATLANTIS_SEND_MISS;
 				break;
 			case SHIELD:
 				SoundShop.ATLANTIS_SEND_SHIELD.play();
+				soundDelay = SoundShop.TIME_ATLANTIS_SEND_SHIELD;
 				break;
 			case GENERATOR:
 				SoundShop.ATLANTIS_SEND_GENERATOR.play();
+				soundDelay = SoundShop.TIME_ATLANTIS_SEND_GENERATOR;
 				break;
 			case CITY:
 				SoundShop.ATLANTIS_SEND_CITY.play();
+				soundDelay = SoundShop.TIME_ATLANTIS_SEND_CITY;
+				break;
+			default:
+				break;
+		}
+		return soundDelay;
+	}
+	
+	/**
+	 * Play a voice corresponding to given event
+	 * @param voice : event
+	 */
+	public void playVoice(Voice voice)
+	{
+		switch (voice)
+		{
+			case VICTORY:
+				SoundShop.VOICE_VICTORY.play();
+				break;
+			case DEFEAT:
+				SoundShop.VOICE_DEFEAT.play();
+				break;
+			case SUBMARINE:
+				SoundShop.VOICE_SUBMARINE.play();
+				break;
+			case ATLANTIS:
+				SoundShop.VOICE_ATLANTIS.play();
 				break;
 			default:
 				break;

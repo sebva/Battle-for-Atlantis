@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class DialogEndGame extends JDialog
@@ -21,11 +22,13 @@ public class DialogEndGame extends JDialog
 		{
 			title = Messages.getString("DialogEndGame.VictoryTitle");
 			message = Messages.getString("DialogEndGame.VictoryMessage");
+			SoundManager.getInstance().playVoice(SoundManager.Voice.VICTORY);
 		}
 		else
 		{
 			title = Messages.getString("DialogEndGame.DefeatTitle");
 			message = Messages.getString("DialogEndGame.DefeatMessage");
+			SoundManager.getInstance().playVoice(SoundManager.Voice.DEFEAT);
 		}
 
 		JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);

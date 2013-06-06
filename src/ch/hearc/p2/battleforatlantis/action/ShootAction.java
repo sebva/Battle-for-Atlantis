@@ -38,6 +38,8 @@ public class ShootAction extends Action implements NetworkMessage
 	{
 		// Get occupier of the box shot
 		MapElement occupier = this.target.getOccupier();
+		
+		int soundDelay = 0;
 
 		// If we shot a ship
 		if (occupier != null)
@@ -46,29 +48,77 @@ public class ShootAction extends Action implements NetworkMessage
 			{
 				if (occupier.getRemainingSize() > 1)
 				{
-					SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.TOUCH);
-					SoundManager.getInstance().setMusic(SoundManager.Music.TOUCHED);
+					soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.TOUCH);
+					final int temporarySoundDelay = soundDelay;
+					new Thread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							try
+							{
+								Thread.sleep(temporarySoundDelay);
+							}
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
+							SoundManager.getInstance().setMusic(SoundManager.Music.TOUCHED);
+						}
+					}).start();
 				}
 				else
 				{
-					SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.SINK);
-					SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
+					soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.SINK);
+					final int temporarySoundDelay = soundDelay;
+					new Thread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							try
+							{
+								Thread.sleep(temporarySoundDelay);
+							}
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
+							SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
+						}
+					}).start();
 				}
 			}
 			else if (occupier instanceof Generator)
 			{
-				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
-				SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
+				final int temporarySoundDelay = soundDelay;
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							Thread.sleep(temporarySoundDelay);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+						SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+					}
+				}).start();
 			}
 			else if (occupier instanceof Atlantis)
 			{
 				if (((Atlantis)occupier).isDestroyable())
 				{
-					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
+					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
 				else
 				{
-					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
+					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
 				}
 			}
 		}
@@ -77,17 +127,36 @@ public class ShootAction extends Action implements NetworkMessage
 		{
 			if (this.target.getMapType() == MapType.ATLANTIS)
 			{
-				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
+				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
 			}
 			else
 			{
-				SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.MISS);
+				soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.MISS);
 			}
 		}
 		
-		target.shoot();
-		if(!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
-			Settings.PANEL_PLAY.endCurrentTurn();
+		// Finalize the sound delay
+		final int finalSoundDelay = soundDelay;
+		
+		new Thread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(finalSoundDelay);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				target.shoot();
+				if(!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
+					Settings.PANEL_PLAY.endCurrentTurn();
+			}
+		}).start();
 	}
 
 	/**

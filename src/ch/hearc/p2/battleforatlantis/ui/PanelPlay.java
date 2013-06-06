@@ -480,7 +480,7 @@ public class PanelPlay extends JPanel
 	 * 
 	 * @param location The reference to the Box that is targeted
 	 */
-	public void shoot(ch.hearc.p2.battleforatlantis.gameengine.Box location)
+	public void shoot(final ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
 		if(location.isDiscovered())
 			return;
@@ -488,9 +488,11 @@ public class PanelPlay extends JPanel
 			return;
 		if(location.getMapType() == MapType.ATLANTIS && currentDistantMap.getType() != MapType.ATLANTIS)
 			return;
+		
+		int soundDelay = 0;
 
 		// Get occupier of the box shot
-		MapElement occupier = location.getOccupier();
+		final MapElement occupier = location.getOccupier();
 
 		// If we shot a ship
 		if (occupier != null)
@@ -508,27 +510,44 @@ public class PanelPlay extends JPanel
 			{
 				if (occupier.getRemainingSize() > 1)
 				{
-					SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.TOUCH);
+					soundDelay = SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.TOUCH);
 				}
 				else
 				{
-					SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.SINK);
+					soundDelay = SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.SINK);
 				}
 			}
 			else if (occupier instanceof Generator)
 			{
-				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
-				SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
+				final int temporarySoundDelay = soundDelay;
+				new Thread(new Runnable()
+				{
+					
+					@Override
+					public void run()
+					{
+						try
+						{
+							Thread.sleep(temporarySoundDelay);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+						SoundManager.getInstance().setMusic(SoundManager.Music.FINAL);
+					}
+				}).start();
 			}
 			else if (occupier instanceof Atlantis)
 			{
 				if (((Atlantis)occupier).isDestroyable())
 				{
-					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
+					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
 				else
 				{
-					SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
+					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
 				}
 			}
 		}
@@ -538,22 +557,39 @@ public class PanelPlay extends JPanel
 			this.panelStats.addMissedShot();
 			if (location.getMapType() == MapType.ATLANTIS)
 			{
-				SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
+				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
 			}
 			else
 			{
-				SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
+				soundDelay = SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
 			}
 		}
 		
+		// Finalize the sound delay
+		final int finalSoundDelay = soundDelay;
+
+		// Made the shot at the box location with sound delay
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(finalSoundDelay);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				location.shoot();
+				if(!(occupier instanceof Generator))
+					endCurrentTurn();
+			}
+		}).start();
+
 		// Send the shot to the opponent
 		new ShootAction(location).send();
-
-		// Made the shot at the box location
-		location.shoot();
-
-		if(!(occupier instanceof Generator))
-			endCurrentTurn();
 	}
 
 	/**
