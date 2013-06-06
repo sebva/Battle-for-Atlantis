@@ -111,9 +111,11 @@ public class Atlantis extends MapElement
 			int col = 0;
 			for(int x = positionX; x < positionX + width; x++, col++)
 			{
-				this.occupied[row][col] = map.getBox(x, y);
 				if(images[row][col] != null)
+				{
+					this.occupied[row][col] = map.getBox(x, y);
 					this.occupied[row][col].setOccupier(this, this.images[row][col]);
+				}
 			}
 		}
 	}
@@ -270,7 +272,22 @@ public class Atlantis extends MapElement
 		if(destroyable)
 			Settings.PANEL_PLAY.endGame(true, false);
 		else
+		{
+			boolean fatal = true;
+			outer: for (Box[] row : occupied)
+			{
+				for(Box box : row)
+					if(box != null && !target.equals(box) && !box.isDiscovered())
+					{
+						fatal = false;
+						break outer;
+					}
+			}
+			
 			target.setImage(ImageShop.loadAtlantisImage(target.getCoordY() - positionY, target.getCoordX() - positionX, false));
+			if(fatal)
+				Settings.PANEL_PLAY.endGame(false, false);
+		}
 	}
 
 }

@@ -545,15 +545,15 @@ public class PanelPlay extends JPanel
 				SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
 			}
 		}
+		
+		// Send the shot to the opponent
+		new ShootAction(location).send();
 
 		// Made the shot at the box location
 		location.shoot();
 
 		if(!(occupier instanceof Generator))
 			endCurrentTurn();
-
-		// Send the shot to the opponent
-		new ShootAction(location).send();
 	}
 
 	/**
