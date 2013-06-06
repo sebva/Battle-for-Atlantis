@@ -1,5 +1,7 @@
 package ch.hearc.p2.battleforatlantis.action;
 
+import java.awt.image.BufferedImage;
+
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
@@ -57,7 +59,9 @@ public class AtlantisTransmissionAction extends Action
 			{
 				// Get box and set atlantis as occupier
 				Box actualBox = atlantisMap.getBox(x, y);
-				actualBox.setOccupier(atlantis, ImageShop.loadAtlantisImage(row, col, true));
+				BufferedImage atlantisImage = ImageShop.loadAtlantisImage(row, col, true);
+				if(atlantisImage != null)
+					actualBox.setOccupier(atlantis, atlantisImage);
 				
 				// Next column
 				col++;

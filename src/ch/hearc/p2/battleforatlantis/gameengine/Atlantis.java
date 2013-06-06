@@ -284,7 +284,6 @@ public class Atlantis extends MapElement
 					}
 			}
 			
-			target.setImage(ImageShop.loadAtlantisImage(target.getCoordY() - positionY, target.getCoordX() - positionX, false));
 			if(fatal)
 				Settings.PANEL_PLAY.endGame(false, false);
 		}

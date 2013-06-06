@@ -35,6 +35,8 @@ public class Box extends JPanel implements JSONString
 	 * Image for displaying correct part of boat in box
 	 */
 	private Image imageOccupier = null;
+	
+	private Image imageOverlay = null;
 
 	/**
 	 * Map to which this box belong
@@ -109,6 +111,9 @@ public class Box extends JPanel implements JSONString
 				this.imageBox = ImageShop.BACKGROUND_ATLANTIS;
 				break;
 		}
+		
+		if(!map.isLocal() || map.getType() == MapType.ATLANTIS)
+			imageOverlay = ImageShop.STATE_NOT_DISCOVERED;
 
 		// Set size of box to display on screen
 		this.sizePreferred = new Dimension(60, 60);
@@ -189,8 +194,16 @@ public class Box extends JPanel implements JSONString
 		if(discovered)
 			return;
 		discovered = true;
+		
 		if(occupier != null)
+		{
+			imageOverlay = ImageShop.STATE_SHOT;
 			occupier.shoot(this);
+		}
+		else
+			imageOverlay = null;
+		
+		repaint();
 	}
 
 	/**
@@ -271,9 +284,20 @@ public class Box extends JPanel implements JSONString
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(this.imageBox, 0, 0, this.size+1, this.size+1, null);
-		if (this.imageOccupier != null)
-		{
+		
+		if(map.isLocal() && map.getType() != MapType.ATLANTIS)
 			g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
+		else
+		{
+			if(discovered && this.imageOccupier != null)
+			{
+				if(occupier instanceof Ship && occupier.getRemainingSize() > 0)
+					g2d.drawImage(this.imageOverlay, 0, 0, this.size+1, this.size+1, null);
+				else
+					g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
+			}
+			else
+				g2d.drawImage(this.imageOverlay, 0, 0, this.size+1, this.size+1, null);
 		}
 	}
 

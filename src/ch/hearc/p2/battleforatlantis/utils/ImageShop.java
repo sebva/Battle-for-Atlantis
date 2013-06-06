@@ -19,6 +19,7 @@ public final class ImageShop
 	private static final String SUBMARINES_FOLDER = GAMEITEMS_FOLDER + "submarines/";
 	private static final String ATLANTIS_FOLDER = GAMEITEMS_FOLDER + "atlantis/";
 	private static final String ARROWS_FOLDER = GAMEITEMS_FOLDER + "arrows/";
+	private static final String BOXSTATE_FOLDER = GAMEITEMS_FOLDER + "boxstate/";
 
 	private static final String KEYWORD_ATLANTIS = "atlantis";
 	private static final String KEYWORD_SHIELD = "bouclier";
@@ -35,6 +36,9 @@ public final class ImageShop
 	public static final Image BACKGROUND_ATLANTIS = loadImage(BACKGOUNDS_FOLDER + "case_fond_atlantide.png");
 	public static final Image BACKGROUND_SUBMARINE = loadImage(BACKGOUNDS_FOLDER + "case_fond_sousmarin.png");
 	public static final Image BACKGROUND_SURFACE = loadImage(BACKGOUNDS_FOLDER + "case_fond_surface.png");
+	
+	public static final Image STATE_SHOT = loadImage(BOXSTATE_FOLDER + "fire.png");
+	public static final Image STATE_NOT_DISCOVERED = loadImage(BOXSTATE_FOLDER + "fog.png");
 
 	public static final Image UI_BUTTON = loadImage(UI_FOLDER + "bouton.png");
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
