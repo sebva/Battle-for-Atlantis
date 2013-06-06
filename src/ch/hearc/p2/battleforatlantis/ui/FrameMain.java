@@ -212,8 +212,11 @@ public class FrameMain extends JFrame
 		}
 		
 		cards.showCard(PanelHome.class.getSimpleName());
-		cards.remove(Settings.PANEL_PLAY);
-		Settings.PANEL_PLAY = null;
+		if(Settings.PANEL_PLAY != null)
+		{
+			cards.remove(Settings.PANEL_PLAY);
+			Settings.PANEL_PLAY = null;
+		}
 		
 		SoundManager.getInstance().setMusic(SoundManager.Music.MENU);
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
