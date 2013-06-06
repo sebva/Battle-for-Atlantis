@@ -66,6 +66,7 @@ public class PanelPlay extends JPanel
 
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
+	private JButton btnNextLevel;
 
 	/**
 	 * Panel containing player informations (upper part of map)
@@ -382,7 +383,6 @@ public class PanelPlay extends JPanel
 		canvasMaps.add(Box.createHorizontalStrut(20));
 		canvasMaps.add(Box.createHorizontalGlue());
 
-		// Button for capitulation
 		JButton btnCapitulate = new CustomButton(Messages.getString("PanelPlay.Capitulate"));
 		btnCapitulate.addActionListener(new ActionListener()
 		{
@@ -394,7 +394,7 @@ public class PanelPlay extends JPanel
 		});
 
 		// Button for next level transition
-		JButton btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
+		btnNextLevel = new CustomButton(Messages.getString("PanelPlay.NextLevel"));
 		btnNextLevel.addActionListener(new ActionListener()
 		{
 			@Override
@@ -403,6 +403,7 @@ public class PanelPlay extends JPanel
 				nextLevel();
 			}
 		});
+		btnNextLevel.setVisible(false);
 
 		// Progress bars
 		// TODO gather total number of occupied boxes on current for maximum value (instead of 100)
@@ -583,6 +584,8 @@ public class PanelPlay extends JPanel
 					e.printStackTrace();
 				}
 				location.shoot();
+				btnNextLevel.setVisible(currentDistantMap.isFinished());
+				validate();
 				if(!(occupier instanceof Generator))
 					endCurrentTurn();
 			}
@@ -660,6 +663,9 @@ public class PanelPlay extends JPanel
 			return;
 
 		log.info("Next level");
+		
+		btnNextLevel.setVisible(false);
+		validate();
 
 		MapType oldMap = currentDistantMap.getType();
 

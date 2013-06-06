@@ -385,8 +385,20 @@ public class Map extends JPanel implements JSONString
 
 	public boolean isFinished()
 	{
-		// TODO This should return true when nextLevel() on this map is allowed
-		return true;
+		// TODO: Use PlayerProgress to implement this method
+		int total = 0;
+		
+		for(int row = 0; row < height ; row ++)
+		{
+			for(int col = 0; col < width; col ++)
+			{
+				MapElement occupier = getBox(col, row).getOccupier();
+				if(occupier != null)
+					total += occupier.getRemainingSize();
+			}
+		}
+		
+		return total == 0;
 	}
 
 	/**
