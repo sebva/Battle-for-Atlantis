@@ -10,7 +10,6 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -310,17 +309,11 @@ public class PanelPlay extends JPanel
 
 		private void refreshLabel()
 		{
-			StringBuilder builder = new StringBuilder();
-			builder.append("* * * ");
-			builder.append(this.missed);
-			builder.append(" tirs manqués - ");
-			builder.append(this.touched);
-			builder.append(" tirs touchés - ");
-			builder.append(this.missed + this.touched);
-			builder.append(" tirs au total - ");
-			builder.append(this.sank);
-			builder.append(" bateaux coulés * * *");
-			this.text = builder.toString();
+			this.text = String.format(Messages.getString("PanelPlay.PanelStatsText"),
+					missed,
+					touched,
+					missed + touched,
+					sank);
 
 			this.repaint();
 		}
