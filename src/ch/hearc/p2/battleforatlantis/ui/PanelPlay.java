@@ -680,7 +680,7 @@ public class PanelPlay extends JPanel
 
 		if (selectedShip != null)
 		{
-			ship.getCenter().getMap().removeShipControls(ship);
+			selectedShip.getCenter().getMap().removeShipControls(selectedShip);
 			if (selectedShip == ship && (mouseButton == MouseEvent.BUTTON1 || mouseButton == MouseEvent.BUTTON3) && !ship.isTouched())
 			{
 				rotate(ship, mouseButton == MouseEvent.BUTTON1);
