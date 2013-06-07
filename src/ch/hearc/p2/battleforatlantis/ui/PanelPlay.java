@@ -67,6 +67,8 @@ public class PanelPlay extends JPanel
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
 	private JButton btnNextLevel;
+	
+	private boolean canThreadPlay;
 
 	/**
 	 * Panel containing player informations (upper part of map)
@@ -470,6 +472,7 @@ public class PanelPlay extends JPanel
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
 		infosLocal.setPlaying(isLocalPlaying);
 		infosDistant.setPlaying(!isLocalPlaying);
+		canThreadPlay = true;
 		
 		SoundManager.getInstance().playNextLevel(MapType.SURFACE);
 		SoundManager.getInstance().setStream(SoundManager.Stream.SURFACE);
@@ -489,6 +492,10 @@ public class PanelPlay extends JPanel
 			return;
 		if(location.getMapType() == MapType.ATLANTIS && currentDistantMap.getType() != MapType.ATLANTIS)
 			return;
+		if(!canThreadPlay)
+			return;
+		
+		canThreadPlay = false;
 		
 		int soundDelay = 0;
 
@@ -498,15 +505,6 @@ public class PanelPlay extends JPanel
 		// If we shot a ship
 		if (occupier != null)
 		{
-			if (occupier.getRemainingSize() > 1)
-			{
-				this.panelStats.addTouchedShot();
-			}
-			else
-			{
-				this.panelStats.addSankShot();
-			}
-
 			if (occupier instanceof Ship)
 			{
 				if (occupier.getRemainingSize() > 1)
@@ -551,11 +549,30 @@ public class PanelPlay extends JPanel
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
 				}
 			}
+			
+			final int statisticSoundDelay = soundDelay;
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(statisticSoundDelay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if (occupier.getRemainingSize() > 1)
+					{
+						panelStats.addTouchedShot();
+					}
+					else
+					{
+						panelStats.addSankShot();
+					}
+				}
+			}).start();
 		}
 		// Or shot nothing
 		else
 		{
-			this.panelStats.addMissedShot();
 			if (location.getMapType() == MapType.ATLANTIS)
 			{
 				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.MISS);
@@ -564,6 +581,19 @@ public class PanelPlay extends JPanel
 			{
 				soundDelay = SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
 			}
+			
+			final int statisticSoundDelay = soundDelay;
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(statisticSoundDelay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					panelStats.addMissedShot();
+				}
+			}).start();
 		}
 		
 		// Finalize the sound delay
@@ -588,6 +618,7 @@ public class PanelPlay extends JPanel
 				validate();
 				if(!(occupier instanceof Generator))
 					endCurrentTurn();
+				canThreadPlay = true;
 			}
 		}).start();
 
@@ -608,6 +639,9 @@ public class PanelPlay extends JPanel
 
 		if (!ship.rotationPossible(clockwise))
 			return;
+		
+		if (!canThreadPlay)
+			return;
 
 		ship.getCenter().getMap().removeShipControls(ship);
 		ship.rotate(clockwise);
@@ -625,6 +659,9 @@ public class PanelPlay extends JPanel
 	public void place(Ship ship, boolean forward)
 	{
 		if (playerPlaying != Player.LOCAL)
+			return;
+		
+		if (!canThreadPlay)
 			return;
 
 		ship.getCenter().getMap().removeShipControls(ship);
@@ -660,6 +697,9 @@ public class PanelPlay extends JPanel
 	public void nextLevel()
 	{
 		if (playerPlaying != Player.LOCAL || !currentDistantMap.isFinished())
+			return;
+		
+		if (!canThreadPlay)
 			return;
 
 		log.info("Next level");
