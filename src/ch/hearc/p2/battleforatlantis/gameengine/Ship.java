@@ -528,28 +528,28 @@ public class Ship extends MapElement implements JSONString
 					currentBox = map.getBox(this.center.getCoordX() - rearSize + i, this.center.getCoordY());
 					if (currentBox == null)
 						return false;
-					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this || currentBox.isDiscovered())
 						return false;
 					break;
 				case WEST:
 					currentBox = map.getBox(this.center.getCoordX() + rearSize - i, this.center.getCoordY());
 					if (currentBox == null)
 						return false;
-					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this || currentBox.isDiscovered())
 						return false;
 					break;
 				case NORTH:
 					currentBox = map.getBox(this.center.getCoordX(), this.center.getCoordY() + rearSize - i);
 					if (currentBox == null)
 						return false;
-					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this || currentBox.isDiscovered())
 						return false;
 					break;
 				case SOUTH:
 					currentBox = map.getBox(this.center.getCoordX(), this.center.getCoordY() - rearSize + i);
 					if (currentBox == null)
 						return false;
-					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this)
+					if (currentBox.getOccupier() != null && currentBox.getOccupier() != this || currentBox.isDiscovered())
 						return false;
 					break;
 			}

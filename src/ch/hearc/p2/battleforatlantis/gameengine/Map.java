@@ -3,7 +3,6 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,6 @@ import org.json.JSONObject;
 import org.json.JSONString;
 
 import ch.hearc.p2.battleforatlantis.gameengine.ShipControl.ShipControlType;
-import ch.hearc.p2.battleforatlantis.ui.FrameMain;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
@@ -318,9 +316,9 @@ public class Map extends JPanel implements JSONString
 		Box[] controlBoxes = getControlBoxes(ship);
 		Box forwardControl = controlBoxes[0], backwardControl = controlBoxes[1];
 
-		if (forwardControl != null && forwardControl.getOccupier() == null)
+		if (forwardControl != null && forwardControl.getOccupier() == null && !forwardControl.isDiscovered())
 			new ShipControl(ship, forwardControl, ShipControlType.PLACE_FORWARD);
-		if (backwardControl != null && backwardControl.getOccupier() == null)
+		if (backwardControl != null && backwardControl.getOccupier() == null && !backwardControl.isDiscovered())
 			new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
 	}
 
