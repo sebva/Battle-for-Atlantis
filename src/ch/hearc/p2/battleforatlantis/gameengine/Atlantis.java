@@ -134,22 +134,20 @@ public class Atlantis extends MapElement
 			int generatorPositionX = 0;
 			int generatorPositionY = 0; 
 			
-			/* FIXME: The switch doesn't cover all the possibilities, and so
-			 * an infinite loop may occur, thus blocking the TCP reception thread.
-			 * When fixed, remember to set isPlaced to false again ! 
-			 */
-			boolean isPlaced = true;
+			boolean isPlaced = false;
+			
+			int direction = (int)(Math.random() * 4.0);
 			
 			while (isPlaced == false)
 			{
 				// Choose position
-				switch ((int)(Math.random() * 4.0)) // *4.0 because (int) floors the result
+				switch (direction)
 				{
 					case 0:
 						// If we've some place for the top
 						if (this.positionY >= 2)
 						{
-							generatorPositionX = this.positionX + (int)(Math.random() * (this.width - 2 - 1));
+							generatorPositionX = this.positionX + 1 + (int)(Math.random() * (this.width - 2));
 							generatorPositionY = this.positionY - 2;
 							isPlaced = true;
 						}
@@ -159,28 +157,33 @@ public class Atlantis extends MapElement
 						if (positionX >= 2)
 						{
 							generatorPositionX = this.positionX - 2;
-							generatorPositionY = this.positionY + (int)(Math.random() * (this.height - 2 - 1));
+							generatorPositionY = this.positionY + 1 + (int)(Math.random() * (this.height - 2));
 							isPlaced = true;
 						}
 						break;
 					case 2:
 						// If we've some place for the right
-						if ((this.positionX + this.width) <= this.mapWidth - 2)
+						if ((this.positionX + this.width + 1) < this.mapWidth)
 						{
-							generatorPositionX = this.positionX + this.width + 2;
-							generatorPositionY = this.positionY + (int)(Math.random() * (this.height - 2 - 1));
+							generatorPositionX = this.positionX + this.width + 1;
+							generatorPositionY = this.positionY + 1 + (int)(Math.random() * (this.height - 2));
 							isPlaced = true;
 						}
 						break;
 					case 3:
 						// If we've some place for the bottom
-						if ((this.positionY + this.height) <= this.mapHeight - 2)
+						if ((this.positionY + this.height + 1) < this.mapHeight)
 						{
-							generatorPositionX = this.positionX + (int)(Math.random() * (this.width - 2 - 1));
-							generatorPositionY = this.positionY + this.height + 2;
+							generatorPositionX = this.positionX + 1 + (int)(Math.random() * (this.width - 2));
+							generatorPositionY = this.positionY + this.height + 1;
 							isPlaced = true;
 						}
 						break;
+				}
+				direction++;
+				if (direction > 3)
+				{
+					direction = 0;
 				}
 			}
 			
