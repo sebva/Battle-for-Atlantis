@@ -93,8 +93,8 @@ public class Atlantis extends MapElement
 	public void generatePosition()
 	{
 		// Position of Atlantis
-		positionX = (int)(Math.random() * (mapWidth - this.width));
-		positionY = (int)(Math.random() * (mapHeight - this.height));
+		positionX = ((int)(Math.random() * 1000)) % (mapWidth - width);
+		positionY = ((int)(Math.random() * 1000)) % (mapHeight - height);
 		
 		occupy();
 	}
