@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
+import ch.hearc.p2.battleforatlantis.gameengine.PlayerProgress;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
@@ -37,6 +38,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 			default:
 				break;
 		}
+		PlayerProgress.getInstance(Player.DISTANT).nextLevel(Settings.FRAME_MAIN.getShips());
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}

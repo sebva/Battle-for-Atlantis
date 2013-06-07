@@ -203,16 +203,6 @@ public class Loader extends DefaultHandler
 				Settings.ATLANTIS_WIDTH = width;
 				Settings.ATLANTIS_HEIGHT = height;
 				
-				/*
-				 * A générer au début de la partie, puisqu'une seule atlantis est générée et transmise à l'adversaire
-				 * 
-				try {
-					atlantis = AtlantisCreator.generateAtlantis(width, height);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				*/
-				
 				break;
 			}
 		}

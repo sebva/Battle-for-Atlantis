@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -29,10 +31,12 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
+import ch.hearc.p2.battleforatlantis.gameengine.PlayerProgress;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
+import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
  * The Panel where the game takes place.
@@ -59,8 +63,8 @@ public class PanelPlay extends JPanel
 	private PanelPlayerInfos infosLocal;
 	private PanelPlayerInfos infosDistant;
 
-	private CustomProgress progressLocal;
-	private CustomProgress progressDistant;
+	public CustomProgress progressLocal;
+	public CustomProgress progressDistant;
 
 	private PanelStats panelStats;
 
@@ -411,9 +415,15 @@ public class PanelPlay extends JPanel
 		// TODO gather total number of occupied boxes on current for maximum value (instead of 100)
 		this.progressLocal = new CustomProgress(0, 100);
 		this.progressDistant = new CustomProgress(0, 100);
-
-		this.progressLocal.setValue(30);
-		this.progressDistant.setValue(55);
+		
+		Set<Ship> distantShipSet = Settings.FRAME_MAIN.getDistantShips();
+		MapElement[] distantShipList = new MapElement[distantShipSet.size()];
+		distantShipSet.toArray(distantShipList);
+		
+		PlayerProgress.getInstance(Player.LOCAL).calculateTotalProgression(MapType.SURFACE, Settings.FRAME_MAIN.getShips());
+		PlayerProgress.getInstance(Player.DISTANT).calculateTotalProgression(MapType.SURFACE, distantShipList);
+		//this.progressLocal.setValue(30);
+		//this.progressDistant.setValue(55);
 
 		// Labels for progress bars
 		JLabel labelProgressLocal = new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus"));
@@ -505,6 +515,9 @@ public class PanelPlay extends JPanel
 		// If we shot a ship
 		if (occupier != null)
 		{
+			// User shot => local player progression
+			PlayerProgress.getInstance(Player.LOCAL).addProgress();
+			progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
 			final int statisticRemaining = occupier.getRemainingSize();
 			if (occupier instanceof Ship)
 			{
@@ -707,6 +720,8 @@ public class PanelPlay extends JPanel
 		
 		btnNextLevel.setVisible(false);
 		validate();
+		
+		PlayerProgress.getInstance(Player.LOCAL).nextLevel(Settings.FRAME_MAIN.getShips());
 
 		MapType oldMap = currentDistantMap.getType();
 

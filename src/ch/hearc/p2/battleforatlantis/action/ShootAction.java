@@ -1,5 +1,7 @@
 package ch.hearc.p2.battleforatlantis.action;
 
+import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
@@ -8,6 +10,7 @@ import ch.hearc.p2.battleforatlantis.gameengine.Generator;
 import ch.hearc.p2.battleforatlantis.gameengine.MapElement;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 import ch.hearc.p2.battleforatlantis.gameengine.Player;
+import ch.hearc.p2.battleforatlantis.gameengine.PlayerProgress;
 import ch.hearc.p2.battleforatlantis.gameengine.Ship;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
@@ -44,6 +47,11 @@ public class ShootAction extends Action implements NetworkMessage
 		// If we shot a ship
 		if (occupier != null)
 		{
+			PlayerProgress.getInstance(Player.DISTANT).addProgress();
+			int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
+			Settings.PANEL_PLAY.progressDistant.setValue(progress);
+			
 			if (occupier instanceof Ship)
 			{
 				if (occupier.getRemainingSize() > 1)
