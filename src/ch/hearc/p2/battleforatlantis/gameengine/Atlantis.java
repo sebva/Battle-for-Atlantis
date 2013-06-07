@@ -80,10 +80,6 @@ public class Atlantis extends MapElement
 			for (int col = 0; col < width; col++)
 			{
 				this.images[row][col] = ImageShop.loadAtlantisImage(row, col, true);
-				
-				// FIXME: There is a bug in one of the two following lines
-				// this.initialImages[(row * width) + col] = new ImageIcon(this.images[(row * width) + col]);
-				// add(new JLabel(this.initialImages[(row * width) + col]));
 			}
 		}
 		

@@ -505,6 +505,7 @@ public class PanelPlay extends JPanel
 		// If we shot a ship
 		if (occupier != null)
 		{
+			final int statisticRemaining = occupier.getRemainingSize();
 			if (occupier instanceof Ship)
 			{
 				if (occupier.getRemainingSize() > 1)
@@ -559,7 +560,7 @@ public class PanelPlay extends JPanel
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					if (occupier.getRemainingSize() > 1)
+					if (statisticRemaining > 1)
 					{
 						panelStats.addTouchedShot();
 					}
