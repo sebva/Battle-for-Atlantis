@@ -47,10 +47,7 @@ public class ShootAction extends Action implements NetworkMessage
 		// If we shot a ship
 		if (occupier != null)
 		{
-			PlayerProgress.getInstance(Player.DISTANT).addProgress();
-			int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
-			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
-			Settings.PANEL_PLAY.progressDistant.setValue(progress);
+			
 
 			if (occupier instanceof Ship)
 			{
@@ -160,6 +157,10 @@ public class ShootAction extends Action implements NetworkMessage
 				{
 					e.printStackTrace();
 				}
+				PlayerProgress.getInstance(Player.DISTANT).addProgress();
+				int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
+				Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
+				Settings.PANEL_PLAY.progressDistant.setValue(progress);
 				target.shoot();
 				if (!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
 					Settings.PANEL_PLAY.endCurrentTurn();
