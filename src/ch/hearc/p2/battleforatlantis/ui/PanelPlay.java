@@ -507,11 +507,6 @@ public class PanelPlay extends JPanel
 		// If we shot a ship
 		if (occupier != null)
 		{
-			// User shot => local player progression
-			PlayerProgress.getInstance(Player.LOCAL).addProgress();
-			progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
-			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PanelPlay::shoot] Progress : " + PlayerProgress.getInstance(Player.LOCAL).getProgess());
-			
 			final int statisticRemaining = occupier.getRemainingSize();
 			if (occupier instanceof Ship)
 			{
@@ -572,6 +567,11 @@ public class PanelPlay extends JPanel
 					{
 						e.printStackTrace();
 					}
+					// User shot => local player progression
+					PlayerProgress.getInstance(Player.LOCAL).addProgress();
+					progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
+					Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PanelPlay::shoot] Progress : " + PlayerProgress.getInstance(Player.LOCAL).getProgess());
+					
 					if (statisticRemaining > 1)
 					{
 						panelStats.addTouchedShot();
