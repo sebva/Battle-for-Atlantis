@@ -6,12 +6,12 @@ public class SoundPlayer
 	 * First engine for playing odd cues
 	 */
 	private SoundEngine odd;
-	
+
 	/**
 	 * Second engine for playing even cues
 	 */
 	private SoundEngine even;
-	
+
 	/**
 	 * Loop mode
 	 */
@@ -24,6 +24,7 @@ public class SoundPlayer
 
 	/**
 	 * Default constructor
+	 * 
 	 * @param filename : name of file to open
 	 * @param loop : loop mode to apply
 	 */

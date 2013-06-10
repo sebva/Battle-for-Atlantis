@@ -502,8 +502,8 @@ public class Ship extends MapElement implements JSONString
 
 		// Refresh map drawing
 		target.getMap().resizeComponent();
-		
-		for(Box box : occupied)
+
+		for (Box box : occupied)
 			box.repaint();
 	}
 

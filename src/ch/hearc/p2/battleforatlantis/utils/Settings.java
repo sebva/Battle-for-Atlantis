@@ -8,7 +8,7 @@ import ch.hearc.p2.battleforatlantis.ui.PanelHome;
 import ch.hearc.p2.battleforatlantis.ui.PanelPlay;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 
-public class Settings 
+public class Settings
 {
 	public static final String PATH_RESSOURCES = "res/";
 	public static final String PATH_CONFIGURATION = PATH_RESSOURCES + "config/";
@@ -21,24 +21,24 @@ public class Settings
 	public static final String PATH_SUBMARINES = PATH_GAMEITEMS + "submarines/";
 
 	public static FrameMain FRAME_MAIN;
-	
+
 	public static PanelHome PANEL_HOME;
 	public static PanelConnection PANEL_CONNECTIONS;
 	public static PanelPrepare PANEL_PREPARE;
 	public static PanelPlay PANEL_PLAY;
-	
+
 	public static int ATLANTIS_WIDTH;
 	public static int ATLANTIS_HEIGHT;
-	
+
 	public static Color MENU_BORDER_COLOR = new Color(0, 188, 224);
-	
+
 	/**
-	 * Activate specific settings 
+	 * Activate specific settings
 	 */
 	public static void apply()
 	{
 		// Activating Antialiasing
-		System.setProperty("awt.useSystemAAFontSettings","on");
+		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("swing.aatext", "true");
 	}
 }

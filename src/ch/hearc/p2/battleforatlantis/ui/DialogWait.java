@@ -15,11 +15,11 @@ public class DialogWait extends JDialog
 	public DialogWait(String waitMessage, Frame parent)
 	{
 		super(parent, Messages.getString("DialogWait.PleaseWait"), true);
-		
+
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-			
+
 		setSize(350, 200);
-		
+
 		setLayout(new BorderLayout());
 		add(new JLabel(waitMessage, SwingConstants.CENTER), BorderLayout.CENTER);
 		JProgressBar progressBar = new JProgressBar();

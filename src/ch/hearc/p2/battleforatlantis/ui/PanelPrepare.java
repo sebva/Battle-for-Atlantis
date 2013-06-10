@@ -54,8 +54,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * Default constructor
 	 * 
-	 * @param rootFrame
-	 *            Parent frame
+	 * @param rootFrame Parent frame
 	 */
 	public PanelPrepare(FrameMain rootFrame)
 	{
@@ -125,18 +124,8 @@ public class PanelPrepare extends JPanel
 		});
 		boxMenu.add(btn);
 
-		// Add ships to menu
-		ShipType currentType = null;
 		for (Ship ship : rootFrame.getShips())
 		{
-			// Add label
-			/*
-			 * if (currentType == null || currentType != ship.getType()) { currentType = ship.getType(); JLabel label = null;
-			 * 
-			 * switch (currentType) { case SHIP: label = new JLabel(Messages.getString("PanelPrepare.Boats")); break; case SUBMARINE: label = new
-			 * JLabel(Messages.getString("PanelPrepare.Submarines")); break; } label.setAlignmentX(RIGHT_ALIGNMENT); boxMenu.add(label); }
-			 */
-
 			// Add ship
 			ship.setAlignmentX(RIGHT_ALIGNMENT);
 			boxMenu.add(ship);
@@ -155,8 +144,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * A ship has been clicked, either by its button on the right or on the map.
 	 * 
-	 * @param ship
-	 *            Clicked ship
+	 * @param ship Clicked ship
 	 */
 	public void shipClick(Ship ship)
 	{
@@ -183,8 +171,7 @@ public class PanelPrepare extends JPanel
 	/**
 	 * External call for place ship on map
 	 * 
-	 * @param box
-	 *            Center of ship
+	 * @param box Center of ship
 	 */
 	public void place(ch.hearc.p2.battleforatlantis.gameengine.Box box)
 	{
@@ -219,7 +206,7 @@ public class PanelPrepare extends JPanel
 	 */
 	public void start()
 	{
-		/*
+		// *
 		// Check that every ship has been placed
 		for (Ship ship : rootFrame.getShips())
 			if (ship.getCenter() == null)
@@ -228,7 +215,7 @@ public class PanelPrepare extends JPanel
 						Messages.getString("PanelPrepare.ValidateErrorTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		//*/
+		// */
 
 		StartGameAction sga = new StartGameAction();
 		sga.addMap(mapSurface);

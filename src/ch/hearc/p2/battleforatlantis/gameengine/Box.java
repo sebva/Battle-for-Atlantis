@@ -35,7 +35,7 @@ public class Box extends JPanel implements JSONString
 	 * Image for displaying correct part of boat in box
 	 */
 	private Image imageOccupier = null;
-	
+
 	private Image imageOverlay = null;
 
 	/**
@@ -62,7 +62,7 @@ public class Box extends JPanel implements JSONString
 	 * Minimal dimension of box
 	 */
 	private Dimension sizeMinimal;
-	
+
 	/**
 	 * Registered dimension
 	 */
@@ -81,14 +81,10 @@ public class Box extends JPanel implements JSONString
 	/**
 	 * Default constructor for box-in-map instanciation
 	 * 
-	 * @param map
-	 *            Map to which current box belongs
-	 * @param type
-	 *            Type of box to display (surface, submarine, atlantis)
-	 * @param x
-	 *            Horizontal coordinate of box in map (left-side is 0)
-	 * @param y
-	 *            Vertical coordinate of box in map (upper-side is 0)
+	 * @param map Map to which current box belongs
+	 * @param type Type of box to display (surface, submarine, atlantis)
+	 * @param x Horizontal coordinate of box in map (left-side is 0)
+	 * @param y Vertical coordinate of box in map (upper-side is 0)
 	 */
 	public Box(final Map map, MapType type, int x, int y)
 	{
@@ -111,8 +107,8 @@ public class Box extends JPanel implements JSONString
 				this.imageBox = ImageShop.BACKGROUND_ATLANTIS;
 				break;
 		}
-		
-		if(!map.isLocal() || map.getType() == MapType.ATLANTIS)
+
+		if (!map.isLocal() || map.getType() == MapType.ATLANTIS)
 			imageOverlay = ImageShop.STATE_NOT_DISCOVERED;
 
 		// Set size of box to display on screen
@@ -129,7 +125,7 @@ public class Box extends JPanel implements JSONString
 			public void mousePressed(MouseEvent e)
 			{
 				PanelPlay panelPlay = Settings.PANEL_PLAY;
-				if(panelPlay == null)
+				if (panelPlay == null)
 				{
 					PanelPrepare panelPrepare = Settings.PANEL_PREPARE;
 					switch (e.getButton())
@@ -141,43 +137,42 @@ public class Box extends JPanel implements JSONString
 							if (occupier.getClass() == Ship.class)
 								Settings.PANEL_PREPARE.shipClick((Ship) occupier);
 							break;
-	
+
 						// Right button pressed
 						case MouseEvent.BUTTON3:
 							panelPrepare.rotate();
 							break;
-	
+
 					}
 				}
 				else
 				{
-					if(!map.isLocal())
+					if (!map.isLocal())
 					{
-						if(e.getButton() == MouseEvent.BUTTON1)
+						if (e.getButton() == MouseEvent.BUTTON1)
 							panelPlay.shoot(Box.this);
 					}
 					else
 					{
-						if(occupier instanceof Ship)
+						if (occupier instanceof Ship)
 							Settings.PANEL_PLAY.select((Ship) occupier, e.getButton());
-						else if(occupier instanceof ShipControl)
+						else if (occupier instanceof ShipControl)
 							((ShipControl) occupier).execute();
 					}
 				}
 			}
 		});
 
-		
 		addComponentListener(new ComponentAdapter()
 		{
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
-				
+
 			}
 		});
 	}
-	
+
 	public void setSizeFromMap(int size)
 	{
 		this.size = size;
@@ -191,28 +186,26 @@ public class Box extends JPanel implements JSONString
 	 */
 	public void shoot()
 	{
-		if(discovered)
+		if (discovered)
 			return;
 		discovered = true;
-		
-		if(occupier != null)
+
+		if (occupier != null)
 		{
 			imageOverlay = ImageShop.STATE_SHOT;
 			occupier.shoot(this);
 		}
 		else
 			imageOverlay = null;
-		
+
 		repaint();
 	}
 
 	/**
 	 * Set the current occupier of the box
 	 * 
-	 * @param occupier
-	 *            Element that really occupied the box
-	 * @param image
-	 *            Correct image to display in the box to represent part of occupier
+	 * @param occupier Element that really occupied the box
+	 * @param image Correct image to display in the box to represent part of occupier
 	 */
 	public void setOccupier(MapElement occupier, Image image)
 	{
@@ -260,7 +253,7 @@ public class Box extends JPanel implements JSONString
 	{
 		return this.type;
 	}
-	
+
 	/**
 	 * Getter for map in which this box is placed
 	 */
@@ -268,7 +261,7 @@ public class Box extends JPanel implements JSONString
 	{
 		return this.map;
 	}
-	
+
 	protected void setImage(Image img)
 	{
 		this.imageOccupier = img;
@@ -283,21 +276,21 @@ public class Box extends JPanel implements JSONString
 	{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(this.imageBox, 0, 0, this.size+1, this.size+1, null);
-		
-		if(map.isLocal() && map.getType() != MapType.ATLANTIS)
-			g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
+		g2d.drawImage(this.imageBox, 0, 0, this.size + 1, this.size + 1, null);
+
+		if (map.isLocal() && map.getType() != MapType.ATLANTIS)
+			g2d.drawImage(this.imageOccupier, 0, 0, this.size + 1, this.size + 1, null);
 		else
 		{
-			if(discovered && this.imageOccupier != null)
+			if (discovered && this.imageOccupier != null)
 			{
-				if(occupier instanceof Ship && occupier.getRemainingSize() > 0)
-					g2d.drawImage(this.imageOverlay, 0, 0, this.size+1, this.size+1, null);
+				if (occupier instanceof Ship && occupier.getRemainingSize() > 0)
+					g2d.drawImage(this.imageOverlay, 0, 0, this.size + 1, this.size + 1, null);
 				else
-					g2d.drawImage(this.imageOccupier, 0, 0, this.size+1, this.size+1, null);
+					g2d.drawImage(this.imageOccupier, 0, 0, this.size + 1, this.size + 1, null);
 			}
 			else
-				g2d.drawImage(this.imageOverlay, 0, 0, this.size+1, this.size+1, null);
+				g2d.drawImage(this.imageOverlay, 0, 0, this.size + 1, this.size + 1, null);
 		}
 	}
 

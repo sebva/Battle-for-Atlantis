@@ -111,7 +111,6 @@ public class NetworkManager
 
 			while (networkInterfaces.hasMoreElements())
 			{
-				// FIXME: IPv6
 				Iterator<InterfaceAddress> interfaceAddressesIterator = networkInterfaces.nextElement().getInterfaceAddresses().iterator();
 				while (interfaceAddressesIterator.hasNext())
 				{
@@ -214,9 +213,9 @@ public class NetworkManager
 						log.warning("Non-JSON packet received\n" + e.toString());
 					}
 					catch (IOException e)
-					{	
+					{
 						log.severe("Connexion perdue !");
-						if(tcpReceiving)
+						if (tcpReceiving)
 							fatalError(e.getLocalizedMessage());
 						break;
 					}
@@ -224,13 +223,13 @@ public class NetworkManager
 			}
 		}, "TCP Reception Thread").start();
 	}
-	
+
 	public void closeTcpConnection()
 	{
-		if(tcpSocket != null)
+		if (tcpSocket != null)
 		{
 			tcpReceiving = false;
-			
+
 			try
 			{
 				tcpInStream.close();
@@ -324,8 +323,7 @@ public class NetworkManager
 	 * 
 	 * Also verifies that the required fields are present and set the UUID.
 	 * 
-	 * @param j
-	 *            A message that should be sent over the network
+	 * @param j A message that should be sent over the network
 	 * @return The message as byte[] ready to be sent over the network
 	 */
 	private byte[] prepareJsonObjectForTransfer(JSONObject j)
@@ -339,8 +337,7 @@ public class NetworkManager
 	/**
 	 * Set the listener that should be called when a distant host has been detected/has left.
 	 * 
-	 * @param al
-	 *            The object that should be notified.
+	 * @param al The object that should be notified.
 	 */
 	public void setAutodiscoverListener(NetworkAutodiscoverListener al)
 	{
@@ -350,8 +347,7 @@ public class NetworkManager
 	/**
 	 * Remove the autodiscover listener
 	 * 
-	 * @param al
-	 *            The listener to remove
+	 * @param al The listener to remove
 	 */
 	public void removeAutodiscoverListener(NetworkAutodiscoverListener al)
 	{
@@ -361,10 +357,8 @@ public class NetworkManager
 	/**
 	 * Send a tryConnect packet to the remote host
 	 * 
-	 * @param ip
-	 *            The InetAddress to which this packet should be sent
-	 * @param hashConfig
-	 *            The cryptographic hash of the config file
+	 * @param ip The InetAddress to which this packet should be sent
+	 * @param hashConfig The cryptographic hash of the config file
 	 */
 	public void tryConnect(InetAddress ip, final String hashConfig)
 	{
@@ -375,10 +369,8 @@ public class NetworkManager
 	/**
 	 * Send a tryConnect packet to the remote host. If the connection is accepted, PanelPrepare will be shown to the user.
 	 * 
-	 * @param accepted
-	 *            True if the connection is accepted (the game should start)
-	 * @param h
-	 *            The Host to which this packet should be sent
+	 * @param accepted True if the connection is accepted (the game should start)
+	 * @param h The Host to which this packet should be sent
 	 */
 	public void connectionResponse(boolean accepted, Host h)
 	{
@@ -394,8 +386,7 @@ public class NetworkManager
 	/**
 	 * Initialize the TCP connection with a remote host. This method has to be called by the remote host at the same time.
 	 * 
-	 * @param h
-	 *            The remote Host
+	 * @param h The remote Host
 	 */
 	protected void startTcpConnection(Host h)
 	{
@@ -480,15 +471,16 @@ public class NetworkManager
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Host getDistantHost()
 	{
 		return distantHost;
 	}
-	
+
 	private void fatalError(String message)
 	{
-		JOptionPane.showMessageDialog(Settings.FRAME_MAIN, Messages.getString("NetworkManager.FatalErrorMessage") + "\n\n" + message, Messages.getString("NetworkManager.FatalErrorTitle"), JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(Settings.FRAME_MAIN, Messages.getString("NetworkManager.FatalErrorMessage") + "\n\n" + message,
+				Messages.getString("NetworkManager.FatalErrorTitle"), JOptionPane.ERROR_MESSAGE);
 		System.exit(-1);
 	}
 }

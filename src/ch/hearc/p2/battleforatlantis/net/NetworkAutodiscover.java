@@ -27,7 +27,7 @@ public class NetworkAutodiscover
 			jo.put("action", "autodiscover");
 			refreshName();
 		}
-		
+
 		public void refreshName()
 		{
 			jo.put("playerName", nw.localhost.getName());
@@ -138,7 +138,6 @@ public class NetworkAutodiscover
 
 		if (!knownHosts.containsKey(h))
 		{
-			// TODO: Remove Hosts that we haven't heard of during DELAY * 2 seconds
 			listener.hostAppeared(h);
 		}
 		knownHosts.put(h, DELAY * 2);
@@ -158,7 +157,7 @@ public class NetworkAutodiscover
 			listener = null;
 		stopDiscovering();
 	}
-	
+
 	protected void refreshPlayerName()
 	{
 		kAutoDiscoverMessage.refreshName();

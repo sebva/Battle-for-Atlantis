@@ -41,7 +41,7 @@ public class ShootAction extends Action implements NetworkMessage
 	{
 		// Get occupier of the box shot
 		MapElement occupier = this.target.getOccupier();
-		
+
 		int soundDelay = 0;
 
 		// If we shot a ship
@@ -51,7 +51,7 @@ public class ShootAction extends Action implements NetworkMessage
 			int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
 			Settings.PANEL_PLAY.progressDistant.setValue(progress);
-			
+
 			if (occupier instanceof Ship)
 			{
 				if (occupier.getRemainingSize() > 1)
@@ -120,7 +120,7 @@ public class ShootAction extends Action implements NetworkMessage
 			}
 			else if (occupier instanceof Atlantis)
 			{
-				if (((Atlantis)occupier).isDestroyable())
+				if (((Atlantis) occupier).isDestroyable())
 				{
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
@@ -142,13 +142,13 @@ public class ShootAction extends Action implements NetworkMessage
 				soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.MISS);
 			}
 		}
-		
+
 		// Finalize the sound delay
 		final int finalSoundDelay = soundDelay;
-		
+
 		new Thread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -161,7 +161,7 @@ public class ShootAction extends Action implements NetworkMessage
 					e.printStackTrace();
 				}
 				target.shoot();
-				if(!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
+				if (!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
 					Settings.PANEL_PLAY.endCurrentTurn();
 			}
 		}).start();
@@ -175,14 +175,14 @@ public class ShootAction extends Action implements NetworkMessage
 	 */
 	public static ShootAction createFromJson(JSONObject jo)
 	{
-		assert("fire".equals(jo.getString("action")));
-		
+		assert ("fire".equals(jo.getString("action")));
+
 		// Get the map level
 		MapType level = MapType.valueOf(jo.getString("level"));
-		
+
 		// Get the box shot
 		Box target = Settings.FRAME_MAIN.getMapByType(level, Player.LOCAL).getBox(jo.getJSONObject("target"));
-		
+
 		return new ShootAction(target);
 	}
 
@@ -193,11 +193,11 @@ public class ShootAction extends Action implements NetworkMessage
 	public JSONObject getJson()
 	{
 		JSONObject jo = new JSONObject();
-		
+
 		jo.put("action", "fire");
 		jo.put("level", target.getMapType().name());
 		jo.put("target", target);
-		
+
 		return jo;
 	}
 }

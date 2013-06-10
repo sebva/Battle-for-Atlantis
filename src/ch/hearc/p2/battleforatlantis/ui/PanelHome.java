@@ -15,9 +15,9 @@ import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
 public class PanelHome extends JPanel
-{	
+{
 	private FrameMain rootFrame;
-	
+
 	private class PanelMenu extends JPanel
 	{
 		private JButton btnSearchForPlayer;
@@ -27,17 +27,17 @@ public class PanelHome extends JPanel
 		public PanelMenu()
 		{
 			Box box = Box.createVerticalBox();
-			
+
 			btnSearchForPlayer = new CustomButton(Messages.getString("PanelHome.SearchForPlayer"));
 			btnSettings = new CustomButton(Messages.getString("PanelHome.Settings"));
 			btnAbout = new CustomButton(Messages.getString("PanelHome.About"));
-			
+
 			configButtonListeners();
-			
+
 			box.add(btnSearchForPlayer);
 			box.add(btnSettings);
 			box.add(btnAbout);
-			
+
 			add(box, BorderLayout.CENTER);
 		}
 
@@ -51,7 +51,7 @@ public class PanelHome extends JPanel
 					PanelHome.this.searchPlayer();
 				}
 			});
-			
+
 			btnSettings.addActionListener(new ActionListener()
 			{
 				@Override
@@ -60,7 +60,7 @@ public class PanelHome extends JPanel
 					PanelHome.this.settings();
 				}
 			});
-			
+
 			btnAbout.addActionListener(new ActionListener()
 			{
 				@Override
@@ -71,15 +71,15 @@ public class PanelHome extends JPanel
 			});
 		}
 	}
-	
+
 	public PanelHome(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
-		
+
 		setLayout(new BorderLayout());
-		
+
 		JLabel labelMenuImage = new JLabel(new ImageIcon(ImageShop.UI_MENU_BACKGROUND));
-		
+
 		Box boxImage = Box.createVerticalBox();
 		boxImage.add(labelMenuImage);
 		boxImage.add(Box.createVerticalGlue());
@@ -92,7 +92,7 @@ public class PanelHome extends JPanel
 	{
 		rootFrame.searchPlayer();
 	}
-	
+
 	public void settings()
 	{
 		String newName = DialogPlayerName.promptUserForName(this, rootFrame.getPlayerName());

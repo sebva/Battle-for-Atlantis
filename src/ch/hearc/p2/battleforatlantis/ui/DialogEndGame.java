@@ -11,6 +11,7 @@ public class DialogEndGame
 {
 	/**
 	 * Announce the game result to the user
+	 * 
 	 * @param parent The JOptionPane's parent
 	 * @param isWinner true if the local player won the game
 	 */

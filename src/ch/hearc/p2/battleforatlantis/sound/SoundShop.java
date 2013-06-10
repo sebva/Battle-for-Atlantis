@@ -1,7 +1,5 @@
 package ch.hearc.p2.battleforatlantis.sound;
 
-import java.net.StandardProtocolFamily;
-
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
 public final class SoundShop
@@ -24,6 +22,7 @@ public final class SoundShop
 	// Placement
 	private static final String PLACE_SURFACE = FX + "surface_place.wav";
 	private static final String PLACE_SUBMARINE = FX + "submarine_place.wav";
+
 	public static SoundPlayer getPlace(MapType type)
 	{
 		switch (type)
@@ -33,7 +32,7 @@ public final class SoundShop
 			case SUBMARINE:
 				return new SoundPlayer(PLACE_SUBMARINE, SoundPlayer.LoopMode.ONCE);
 			default:
-					return null;
+				return null;
 		}
 	}
 
@@ -58,19 +57,19 @@ public final class SoundShop
 	public static final SoundPlayer ATLANTIS_SEND_SHIELD = new SoundPlayer(FX + "atlantis_send_shield.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer ATLANTIS_SEND_GENERATOR = new SoundPlayer(FX + "atlantis_send_generator.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer ATLANTIS_SEND_CITY = new SoundPlayer(FX + "atlantis_send_city.wav", SoundPlayer.LoopMode.ONCE);
-	
+
 	// Musics
 	public static final SoundPlayer MUSIC_MENU = new SoundPlayer(MUSIC + "menu16.wav", SoundPlayer.LoopMode.LOOP);
 	public static final SoundPlayer MUSIC_CALM = new SoundPlayer(MUSIC + "game_calm_loop.wav", SoundPlayer.LoopMode.LOOP);
 	public static final SoundPlayer MUSIC_TOUCHED = new SoundPlayer(MUSIC + "game_touched_loop.wav", SoundPlayer.LoopMode.LOOP);
 	public static final SoundPlayer MUSIC_FINAL = new SoundPlayer(MUSIC + "game_final_loop.wav", SoundPlayer.LoopMode.LOOP);
-	
+
 	// Voices
 	public static final SoundPlayer VOICE_VICTORY = new SoundPlayer(VOICE + "voice_victory.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer VOICE_DEFEAT = new SoundPlayer(VOICE + "voice_defeat.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer VOICE_SUBMARINE = new SoundPlayer(VOICE + "voice_submarine.wav", SoundPlayer.LoopMode.ONCE);
 	public static final SoundPlayer VOICE_ATLANTIS = new SoundPlayer(VOICE + "voice_atlantis.wav", SoundPlayer.LoopMode.ONCE);
-	
+
 	// Time limits for syncing actions with sounds
 	public static final int TIME_ATLANTIS_SEND_CITY = 1656;
 	public static final int TIME_ATLANTIS_SEND_GENERATOR = 1884;

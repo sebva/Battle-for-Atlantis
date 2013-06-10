@@ -10,18 +10,18 @@ public class Generator extends MapElement
 	private int positionX;
 	private int positionY;
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	
+
 	// Size of Generator
 	private static int sizeX = 1;
 	private static int sizeY = 1;
-	
+
 	private Box box;
 	private Atlantis atlantis;
-	
+
 	// Distance between Atlantis and Generator
 	private static int distanceX = 2;
 	private static int distanceY = 2;
-	
+
 	/**
 	 * Construct a new Generator
 	 * 
@@ -29,14 +29,14 @@ public class Generator extends MapElement
 	public Generator(Box box, Atlantis atlantis)
 	{
 		super(sizeX * sizeY);
-		
+
 		this.box = box;
 		this.atlantis = atlantis;
-		
+
 		// Set Position
 		this.positionX = box.getCoordX();
 		this.positionY = box.getCoordY();
-		
+
 		// Set Image
 		this.images[0] = ImageShop.loadGeneratorImage(false);
 		box.setOccupier(this, images[0]);
@@ -51,7 +51,7 @@ public class Generator extends MapElement
 	{
 		return this.positionX;
 	}
-	
+
 	/**
 	 * Get the Y position of the generator (start at 0)
 	 * 
@@ -61,7 +61,7 @@ public class Generator extends MapElement
 	{
 		return this.positionY;
 	}
-	
+
 	/**
 	 * Get the X size
 	 * 
@@ -71,7 +71,7 @@ public class Generator extends MapElement
 	{
 		return sizeX;
 	}
-	
+
 	/**
 	 * Get the Y size
 	 * 
@@ -81,9 +81,9 @@ public class Generator extends MapElement
 	{
 		return sizeY;
 	}
-	
+
 	/**
-	 * Get the distance in X between Atlantis and Generator 
+	 * Get the distance in X between Atlantis and Generator
 	 * 
 	 * @return Distance in X
 	 */
@@ -91,7 +91,7 @@ public class Generator extends MapElement
 	{
 		return distanceX;
 	}
-	
+
 	/**
 	 * Get the distance in Y between Atlantis and Generator
 	 * 
@@ -105,10 +105,9 @@ public class Generator extends MapElement
 	@Override
 	protected void setCurrentSize(int width, int height)
 	{
-		// TODO Auto-generated method stub
-		
+		// nothing
 	}
-	
+
 	@Override
 	public void shoot(Box target)
 	{

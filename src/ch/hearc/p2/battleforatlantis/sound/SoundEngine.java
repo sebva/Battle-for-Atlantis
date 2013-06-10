@@ -19,52 +19,52 @@ public class SoundEngine
 	 * Thread for running deck play actions
 	 */
 	private Thread deck;
-	
+
 	/**
 	 * Name of file to read
 	 */
 	private String filename;
-	
+
 	/**
 	 * Cue point to use in reading procedure
 	 */
 	private Position cue;
-	
+
 	/**
 	 * Source file to read
 	 */
 	private URL source;
-	
+
 	/**
 	 * Stream generated from source file for read operations
 	 */
 	private AudioInputStream stream;
-	
+
 	/**
 	 * Status of engine
 	 */
 	private Status status;
-	
+
 	/**
 	 * Format of file to pass to output line
 	 */
 	private AudioFormat format;
-	
+
 	/**
 	 * Output line for writing to speakers
 	 */
 	private SourceDataLine line;
-	
+
 	/**
 	 * Informations on line
 	 */
 	private DataLine.Info info;
-	
+
 	/**
 	 * Twin engine semaphore for syncing dual playing
 	 */
 	private Semaphore twin;
-	
+
 	/**
 	 * Loop posistor
 	 */
@@ -87,6 +87,7 @@ public class SoundEngine
 
 	/**
 	 * Default constructor
+	 * 
 	 * @param filename : name of file to open and read
 	 */
 	public SoundEngine(String filename)
@@ -115,7 +116,7 @@ public class SoundEngine
 				{
 					// Open file
 					SoundEngine.this.source = getClass().getResource(SoundEngine.this.filename);
-					
+
 					if (SoundEngine.this.source == null)
 					{
 						System.err.println("Wave file not found : " + SoundEngine.this.filename);
@@ -295,6 +296,7 @@ public class SoundEngine
 	/**
 	 * Switch between PLAYING and PAUSED state
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public void pause()
 	{
 		switch (SoundEngine.this.status)
@@ -313,6 +315,7 @@ public class SoundEngine
 
 	/**
 	 * Getter for engine status
+	 * 
 	 * @return status of engine
 	 */
 	public Status getStatus()
@@ -322,6 +325,7 @@ public class SoundEngine
 
 	/**
 	 * Setter for twin engine
+	 * 
 	 * @param twin : engine to pair with current one
 	 * @return pairing success state
 	 */
@@ -350,6 +354,7 @@ public class SoundEngine
 
 	/**
 	 * Accessor for pairing two engines
+	 * 
 	 * @param engine1 : first engine to pair
 	 * @param engine2 : second engine to pair
 	 */

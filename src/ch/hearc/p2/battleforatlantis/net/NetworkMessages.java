@@ -22,7 +22,7 @@ public class NetworkMessages
 			}
 		};
 	}
-	
+
 	public static NetworkMessage connectionResponse(final String uuid, final boolean accepted, final String playerName)
 	{
 		return new NetworkMessage()
@@ -41,7 +41,7 @@ public class NetworkMessages
 			}
 		};
 	}
-	
+
 	public static NetworkMessage readyToPlay(final String uuid)
 	{
 		return new NetworkMessage()

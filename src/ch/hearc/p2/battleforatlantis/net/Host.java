@@ -10,9 +10,10 @@ public class Host
 	private String name;
 	private InetAddress address;
 	private UUID uuid;
-	
+
 	/**
 	 * Create a new Host object representing a player
+	 * 
 	 * @param name The player's name
 	 * @param address His IP address
 	 * @param uuid His assigned UUID
@@ -23,9 +24,10 @@ public class Host
 		this.address = address;
 		this.uuid = uuid;
 	}
-	
+
 	/**
 	 * Creates a Host object representing the local host.
+	 * 
 	 * @param name The local player's name
 	 */
 	public Host(String name)
@@ -47,11 +49,11 @@ public class Host
 	{
 		return name;
 	}
-	
+
 	// Only for local player !
 	public void setName(String name)
 	{
-		if(name != null && !"".equals(name))
+		if (name != null && !"".equals(name))
 		{
 			this.name = name;
 			NetworkManager.getInstance().autodiscover.refreshPlayerName();
@@ -67,12 +69,12 @@ public class Host
 	{
 		return uuid;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(obj instanceof Host)
-			return equals((Host)obj);
+		if (obj instanceof Host)
+			return equals((Host) obj);
 		else
 			return false;
 	}
@@ -81,7 +83,7 @@ public class Host
 	{
 		return uuid.equals(h.uuid);
 	}
-	
+
 	@Override
 	public int hashCode()
 	{

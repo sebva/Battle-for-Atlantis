@@ -36,7 +36,7 @@ public final class ImageShop
 	public static final Image BACKGROUND_ATLANTIS = loadImage(BACKGOUNDS_FOLDER + "case_fond_atlantide.png");
 	public static final Image BACKGROUND_SUBMARINE = loadImage(BACKGOUNDS_FOLDER + "case_fond_sousmarin.png");
 	public static final Image BACKGROUND_SURFACE = loadImage(BACKGOUNDS_FOLDER + "case_fond_surface.png");
-	
+
 	public static final Image STATE_SHOT = loadImage(BOXSTATE_FOLDER + "fire.png");
 	public static final Image STATE_NOT_DISCOVERED = loadImage(BOXSTATE_FOLDER + "fog.png");
 

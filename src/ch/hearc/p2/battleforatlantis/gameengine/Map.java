@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
@@ -32,11 +31,6 @@ public class Map extends JPanel implements JSONString
 	 * Number of lines
 	 */
 	private int height;
-
-	/**
-	 * Preferred dimension of map in pixels
-	 */
-	private Dimension sizePreferred;
 
 	/**
 	 * Size of boxes
@@ -62,11 +56,6 @@ public class Map extends JPanel implements JSONString
 	 * Listener for click on boxes in game panel
 	 */
 	private MouseListener gameListener;
-
-	/**
-	 * Debug logger
-	 */
-	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
 	 * Internal panel
@@ -383,19 +372,18 @@ public class Map extends JPanel implements JSONString
 
 	public boolean isFinished()
 	{
-		// TODO: Use PlayerProgress to implement this method
 		int total = 0;
-		
-		for(int row = 0; row < height ; row ++)
+
+		for (int row = 0; row < height; row++)
 		{
-			for(int col = 0; col < width; col ++)
+			for (int col = 0; col < width; col++)
 			{
 				MapElement occupier = getBox(col, row).getOccupier();
-				if(occupier != null)
+				if (occupier != null)
 					total += occupier.getRemainingSize();
 			}
 		}
-		
+
 		return total == 0;
 	}
 

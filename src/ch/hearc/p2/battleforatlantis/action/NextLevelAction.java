@@ -12,7 +12,7 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 public class NextLevelAction extends Action implements NetworkMessage
 {
 	private MapType map;
-	
+
 	/**
 	 * NextLevelAction representing the passage to a new level
 	 */
@@ -54,10 +54,10 @@ public class NextLevelAction extends Action implements NetworkMessage
 	 */
 	public static NextLevelAction createFromJson(JSONObject jo)
 	{
-		assert("nextLevel".equals(jo.getString("action")));
-		
+		assert ("nextLevel".equals(jo.getString("action")));
+
 		MapType map = MapType.valueOf(jo.getString("newLevel"));
-		
+
 		return new NextLevelAction(map);
 	}
 
@@ -68,10 +68,10 @@ public class NextLevelAction extends Action implements NetworkMessage
 	public JSONObject getJson()
 	{
 		JSONObject jo = new JSONObject();
-		
+
 		jo.put("action", "nextLevel");
 		jo.put("newLevel", map.name());
-		
+
 		return jo;
 	}
 

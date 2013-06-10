@@ -19,10 +19,10 @@ public abstract class Action implements NetworkMessage
 	{
 		return null;
 	}
-	
+
 	@Override
 	public abstract JSONObject getJson();
-	
+
 	public void send()
 	{
 		NetworkManager.getInstance().send(this);

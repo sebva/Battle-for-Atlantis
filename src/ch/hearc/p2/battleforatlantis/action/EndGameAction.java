@@ -18,27 +18,27 @@ public class EndGameAction extends Action implements NetworkMessage
 	{
 		ATLANTIS_DESTROYED, SURRENDERED
 	}
-	
+
 	/**
 	 * Indicates if the player has won or lost the game
 	 */
 	private boolean won;
-	
+
 	/**
 	 * Indicates the cause of the end of the game
 	 */
 	private EndGameCause cause;
-	
+
 	/**
 	 * Indicates the last shot
 	 */
 	private ShootAction shoot = null;
-	
+
 	/**
 	 * Indicate the map type
 	 */
 	private MapType mapType = null;
-	
+
 	/**
 	 * Indicates the box shot
 	 */
@@ -55,7 +55,7 @@ public class EndGameAction extends Action implements NetworkMessage
 		this.won = gameWon;
 		this.cause = cause;
 	}
-	
+
 	/**
 	 * EndGameAction representing the end of the game with the last shoot
 	 * 
@@ -73,11 +73,11 @@ public class EndGameAction extends Action implements NetworkMessage
 
 	/**
 	 * Execute the last shoot and the end of the game
-	 */ 
+	 */
 	@Override
 	public void execute()
 	{
-		if(shoot != null)
+		if (shoot != null)
 			shoot.execute();
 		Settings.PANEL_PLAY.endGame(won, true);
 	}
@@ -92,12 +92,12 @@ public class EndGameAction extends Action implements NetworkMessage
 	{
 		// Get the won or lost information
 		boolean won = jo.getBoolean("victory");
-		
+
 		// Get the end game cause
 		EndGameCause cause = EndGameCause.valueOf(jo.getString("cause"));
-		
+
 		// If the JSON contains a last shot
-		if(jo.has("level") && jo.has("target"))
+		if (jo.has("level") && jo.has("target"))
 		{
 			MapType level = MapType.valueOf(jo.getString("level"));
 			Map map = Settings.FRAME_MAIN.getMapByType(level, Player.LOCAL);
@@ -118,10 +118,10 @@ public class EndGameAction extends Action implements NetworkMessage
 		jo.put("action", "endGame");
 		jo.put("victory", won);
 		jo.put("cause", cause.name());
-		
+
 		jo.putOpt("level", mapType);
 		jo.putOpt("target", box);
-		
+
 		return jo;
 	}
 }

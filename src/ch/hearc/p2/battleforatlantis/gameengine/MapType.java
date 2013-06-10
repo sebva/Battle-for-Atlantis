@@ -8,10 +8,9 @@ public enum MapType
 {
 	SURFACE, SUBMARINE, ATLANTIS;
 
-	
 	public Image getBackground()
 	{
-		switch(name())
+		switch (name())
 		{
 			default:
 			case "SURFACE":

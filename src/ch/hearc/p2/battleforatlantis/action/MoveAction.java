@@ -15,13 +15,12 @@ public class MoveAction extends Action implements NetworkMessage
 	 * Ship making the action
 	 */
 	private Ship ship;
-	
+
 	/**
-	 * Box on which the operation is performed. 
-	 * Represents the center of the boat
+	 * Box on which the operation is performed. Represents the center of the boat
 	 */
 	private Box center;
-	
+
 	/**
 	 * Orientation of the ship
 	 */
@@ -51,7 +50,7 @@ public class MoveAction extends Action implements NetworkMessage
 		ship.move(center, orientation);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}
-	
+
 	/**
 	 * Make the movement action from a request received by the player
 	 * 
@@ -61,28 +60,28 @@ public class MoveAction extends Action implements NetworkMessage
 	public static MoveAction createFromJson(JSONObject jo)
 	{
 		assert "move".equals(jo.getString("action")) : "This is not a MoveAction";
-		
+
 		// Get the information from the JSON Object
 		int shipId = jo.getInt("shipId");
 		JSONObject center = jo.getJSONObject("center");
 		ShipOrientation orientation = ShipOrientation.valueOf(jo.getString("direction"));
-		
+
 		// Get the current ship
 		Ship finalShip = null;
-		for(Ship ship : Settings.FRAME_MAIN.getDistantShips())
+		for (Ship ship : Settings.FRAME_MAIN.getDistantShips())
 		{
-			if(ship.getId() == shipId)
+			if (ship.getId() == shipId)
 			{
 				finalShip = ship;
 				break;
 			}
 		}
-		
+
 		assert finalShip != null : "The ship with ID " + shipId + " does not exist";
-		
+
 		// Get the center box of the ship
 		Box centerBox = Settings.PANEL_PLAY.getCurrentLevel(Player.DISTANT).getBox(center);
-		
+
 		// Return the MoveAction corresponding to the request
 		return new MoveAction(finalShip, centerBox, orientation);
 	}
@@ -94,12 +93,12 @@ public class MoveAction extends Action implements NetworkMessage
 	public JSONObject getJson()
 	{
 		JSONObject jo = new JSONObject();
-		
+
 		jo.put("action", "move");
 		jo.put("shipId", ship.getId());
 		jo.put("direction", orientation);
 		jo.put("center", center);
-		
+
 		return jo;
 	}
 }

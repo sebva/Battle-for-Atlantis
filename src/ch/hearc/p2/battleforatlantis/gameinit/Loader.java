@@ -35,11 +35,11 @@ import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
- * This class loads the game's configuration from an XML file.
- * The job is done when load() is called.
- * The loaded elements can be be retrieved with the get methods.
+ * This class loads the game's configuration from an XML file. The job is done when load() is called. The loaded elements can be be retrieved with the get
+ * methods.
+ * 
  * @author Sébastien Vaucher
- *
+ * 
  */
 public class Loader extends DefaultHandler
 {
@@ -55,7 +55,7 @@ public class Loader extends DefaultHandler
 	private List<Ship> ships;
 	/** Atlantis **/
 	private Map atlantis;
-	
+
 	/** Current Level tag being treated */
 	private MapType currentLevel = null;
 	/** Current ship id */
@@ -70,6 +70,7 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Create a Loader with the default file paths.
+	 * 
 	 * @throws Exception Thrown if the config file cannot be opened.
 	 */
 	public Loader() throws Exception
@@ -89,6 +90,7 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Starts the XML parser which will fill this object's attributes.
+	 * 
 	 * @throws ParserConfigurationException Impossible to find a SAX parser
 	 * @throws SAXException Malformed XML file
 	 * @throws IOException Error while manipulating the file
@@ -155,7 +157,7 @@ public class Loader extends DefaultHandler
 				int width = Integer.parseInt(attributes.getValue("width"));
 				MapType type = MapType.valueOf(attributes.getValue("type").toUpperCase());
 				currentLevel = type;
-				
+
 				Map map = null;
 				try
 				{
@@ -174,7 +176,7 @@ public class Loader extends DefaultHandler
 				}
 
 				maps.add(map);
-				
+
 				break;
 			}
 			case "Ship":
@@ -189,20 +191,20 @@ public class Loader extends DefaultHandler
 					type = ShipType.SUBMARINE;
 
 				assert (type != null);
-				
+
 				for (int i = 0; i < amount; i++)
 					ships.add(new Ship(length, type, shipId++));
-				
+
 				break;
 			}
 			case "City":
 			{
 				int height = Integer.parseInt(attributes.getValue("height"));
 				int width = Integer.parseInt(attributes.getValue("width"));
-				
+
 				Settings.ATLANTIS_WIDTH = width;
 				Settings.ATLANTIS_HEIGHT = height;
-				
+
 				break;
 			}
 		}
@@ -217,6 +219,7 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Get the SHA-1 hash of the loaded XML file
+	 * 
 	 * @return The SHA-1 hash
 	 * @throws NoSuchAlgorithmException SHA-1 cannot be found
 	 * @throws IOException Error while manipulating the file
@@ -231,7 +234,7 @@ public class Loader extends DefaultHandler
 		DigestInputStream dis = new DigestInputStream(ClassLoader.getSystemResourceAsStream(xml), md);
 		BufferedInputStream bis = new BufferedInputStream(dis);
 
-		// Reading the BufferedInputStream fills the MessageDigest 
+		// Reading the BufferedInputStream fills the MessageDigest
 		while (true)
 		{
 			int b = bis.read();
@@ -248,9 +251,9 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Get the ships loaded from the XML file
+	 * 
 	 * @return An array of Ship. The ships have their type attribute correctly set
 	 */
-	// FIXME: think of a better solution
 	public Ship[] getShips()
 	{
 		Ship[] toRet = new Ship[ships.size()];
@@ -262,9 +265,9 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Get the maps loaded from the XML, without the ones marked as type="atlantis"
+	 * 
 	 * @return An array of Map. The maps have their type attribute correctly set
 	 */
-	// FIXME: think of a better solution
 	public Map[] getMapsWithoutAtlantis()
 	{
 		Map[] toRet = new Map[maps.size() - 1];
@@ -279,9 +282,9 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Get the maps loaded from the XML
+	 * 
 	 * @return An array of Map. The maps have their type attribute correctly set
 	 */
-	// FIXME: think of a better solution
 	public Map[] getMapsWithAtlantis()
 	{
 		Map[] toRet = new Map[maps.size()];
@@ -293,9 +296,10 @@ public class Loader extends DefaultHandler
 
 	/**
 	 * Get the atlantis generated
+	 * 
 	 * @return An Atlantis Object.
 	 */
-	public Map getAtlantis() 
+	public Map getAtlantis()
 	{
 		return this.atlantis;
 	}

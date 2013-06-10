@@ -51,8 +51,7 @@ public abstract class MapElement extends JLabel
 	/**
 	 * Default constructor for element
 	 * 
-	 * @param wholeSize
-	 *            Total amount of boxes occupied by element
+	 * @param wholeSize Total amount of boxes occupied by element
 	 */
 	public MapElement(int wholeSize)
 	{
@@ -95,17 +94,17 @@ public abstract class MapElement extends JLabel
 	{
 		return this.wholeSize;
 	}
-	
+
 	public boolean isTouched()
 	{
 		return touchedSize > 0;
 	}
-	
+
 	public int getRemainingSize()
 	{
 		return this.wholeSize - this.touchedSize;
 	}
-	
+
 	public Box[] getOccupied()
 	{
 		return occupied;

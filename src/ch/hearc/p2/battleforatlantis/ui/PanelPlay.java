@@ -67,10 +67,12 @@ public class PanelPlay extends JPanel
 
 	private PanelStats panelStats;
 
+	private Box boxDistant;
+
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
 	private JButton btnNextLevel;
-	
+
 	private boolean canThreadPlay;
 
 	/**
@@ -138,6 +140,7 @@ public class PanelPlay extends JPanel
 	{
 		private CardLayout cards;
 		private Map atlantis;
+		private Map[] maps;
 
 		/**
 		 * 
@@ -147,6 +150,8 @@ public class PanelPlay extends JPanel
 		public PanelMaps(Map[] maps, Map atlantis)
 		{
 			this.setBorder(BorderFactory.createLineBorder(new Color(97, 173, 233), 1));
+
+			this.maps = maps;
 
 			cards = new CardLayout();
 			setLayout(cards);
@@ -176,6 +181,14 @@ public class PanelPlay extends JPanel
 				add(atlantis, atlantis.getType().name());
 
 			cards.show(this, type.toString());
+		}
+
+		public void clearMaps()
+		{
+			for (Map map : maps)
+			{
+				remove(map);
+			}
 		}
 	}
 
@@ -280,14 +293,6 @@ public class PanelPlay extends JPanel
 			thread.start();
 		}
 
-		/**
-		 * Stops the main loop of label rotation
-		 */
-		public void stopRotation()
-		{
-			this.threadRunning = false;
-		}
-
 		@Override
 		protected void paintComponent(Graphics g)
 		{
@@ -309,11 +314,7 @@ public class PanelPlay extends JPanel
 
 		private void refreshLabel()
 		{
-			this.text = String.format(Messages.getString("PanelPlay.PanelStatsText"),
-					missed,
-					touched,
-					missed + touched,
-					sank);
+			this.text = String.format(Messages.getString("PanelPlay.PanelStatsText"), missed, touched, missed + touched, sank);
 
 			this.repaint();
 		}
@@ -351,7 +352,7 @@ public class PanelPlay extends JPanel
 		// Create canvas
 		setLayout(new BorderLayout(0, 0));
 		Box canvasMaps = Box.createHorizontalBox();
-		Box menuMaps = Box.createVerticalBox();
+		Box.createVerticalBox();
 
 		// Prepare local map box
 		this.infosLocal = new PanelPlayerInfos(rootFrame.getPlayerName(), true);
@@ -367,9 +368,9 @@ public class PanelPlay extends JPanel
 		this.infosDistant.setAlignmentX(LEFT_ALIGNMENT);
 		this.levelsOther = new PanelMaps(rootFrame.getDistantMaps(), atlantis);
 		this.levelsOther.setAlignmentX(LEFT_ALIGNMENT);
-		Box boxDistant = Box.createVerticalBox();
-		boxDistant.add(this.infosDistant);
-		boxDistant.add(this.levelsOther);
+		this.boxDistant = Box.createVerticalBox();
+		this.boxDistant.add(this.infosDistant);
+		this.boxDistant.add(this.levelsOther);
 
 		// Add maps to canvas
 		canvasMaps.add(Box.createHorizontalGlue());
@@ -405,14 +406,17 @@ public class PanelPlay extends JPanel
 		btnNextLevel.setVisible(false);
 
 		// Progress bars
-		// TODO gather total number of occupied boxes on current for maximum value (instead of 100)
 		this.progressLocal = new CustomProgress(0, 100);
 		this.progressDistant = new CustomProgress(0, 100);
-		
+
+		Set<Ship> distantShipSet = Settings.FRAME_MAIN.getDistantShips();
+		MapElement[] distantShipList = new MapElement[distantShipSet.size()];
+		distantShipSet.toArray(distantShipList);
+
 		PlayerProgress.getInstance(Player.LOCAL).calculateTotalProgression(MapType.SURFACE, Settings.FRAME_MAIN.getShips());
 		PlayerProgress.getInstance(Player.DISTANT).calculateTotalProgression(MapType.SURFACE, getDistantShip());
-		//this.progressLocal.setValue(30);
-		//this.progressDistant.setValue(55);
+		// this.progressLocal.setValue(30);
+		// this.progressDistant.setValue(55);
 
 		// Labels for progress bars
 		JLabel labelProgressLocal = new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus"));
@@ -467,12 +471,11 @@ public class PanelPlay extends JPanel
 		add(this.panelStats, BorderLayout.SOUTH);
 
 		// Assign currently playing player
-		// TODO better
 		boolean isLocalPlaying = playerPlaying == Player.LOCAL;
 		infosLocal.setPlaying(isLocalPlaying);
 		infosDistant.setPlaying(!isLocalPlaying);
 		canThreadPlay = true;
-		
+
 		SoundManager.getInstance().playNextLevel(MapType.SURFACE);
 		SoundManager.getInstance().setStream(SoundManager.Stream.SURFACE);
 		SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
@@ -485,17 +488,17 @@ public class PanelPlay extends JPanel
 	 */
 	public void shoot(final ch.hearc.p2.battleforatlantis.gameengine.Box location)
 	{
-		if(location.isDiscovered())
+		if (location.isDiscovered())
 			return;
 		if (playerPlaying != Player.LOCAL)
 			return;
-		if(location.getMapType() == MapType.ATLANTIS && currentDistantMap.getType() != MapType.ATLANTIS)
+		if (location.getMapType() == MapType.ATLANTIS && currentDistantMap.getType() != MapType.ATLANTIS)
 			return;
-		if(!canThreadPlay)
+		if (!canThreadPlay)
 			return;
-		
+
 		canThreadPlay = false;
-		
+
 		int soundDelay = 0;
 
 		// Get occupier of the box shot
@@ -527,7 +530,7 @@ public class PanelPlay extends JPanel
 				final int temporarySoundDelay = soundDelay;
 				new Thread(new Runnable()
 				{
-					
+
 					@Override
 					public void run()
 					{
@@ -545,7 +548,7 @@ public class PanelPlay extends JPanel
 			}
 			else if (occupier instanceof Atlantis)
 			{
-				if (((Atlantis)occupier).isDestroyable())
+				if (((Atlantis) occupier).isDestroyable())
 				{
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
@@ -554,14 +557,19 @@ public class PanelPlay extends JPanel
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
 				}
 			}
-			
+
 			final int statisticSoundDelay = soundDelay;
-			new Thread(new Runnable() {
+			new Thread(new Runnable()
+			{
 				@Override
-				public void run() {
-					try {
+				public void run()
+				{
+					try
+					{
 						Thread.sleep(statisticSoundDelay);
-					} catch (InterruptedException e) {
+					}
+					catch (InterruptedException e)
+					{
 						e.printStackTrace();
 					}
 					if (statisticRemaining > 1)
@@ -586,21 +594,26 @@ public class PanelPlay extends JPanel
 			{
 				soundDelay = SoundManager.getInstance().playShoot(location.getMapType(), SoundManager.Direction.SEND, SoundManager.Target.MISS);
 			}
-			
+
 			final int statisticSoundDelay = soundDelay;
-			new Thread(new Runnable() {
+			new Thread(new Runnable()
+			{
 				@Override
-				public void run() {
-					try {
+				public void run()
+				{
+					try
+					{
 						Thread.sleep(statisticSoundDelay);
-					} catch (InterruptedException e) {
+					}
+					catch (InterruptedException e)
+					{
 						e.printStackTrace();
 					}
 					panelStats.addMissedShot();
 				}
 			}).start();
 		}
-		
+
 		// Finalize the sound delay
 		final int finalSoundDelay = soundDelay;
 
@@ -621,7 +634,7 @@ public class PanelPlay extends JPanel
 				location.shoot();
 				btnNextLevel.setVisible(currentDistantMap.isFinished());
 				validate();
-				if(!(occupier instanceof Generator))
+				if (!(occupier instanceof Generator))
 					endCurrentTurn();
 				canThreadPlay = true;
 			}
@@ -644,7 +657,7 @@ public class PanelPlay extends JPanel
 
 		if (!ship.rotationPossible(clockwise))
 			return;
-		
+
 		if (!canThreadPlay)
 			return;
 
@@ -665,7 +678,7 @@ public class PanelPlay extends JPanel
 	{
 		if (playerPlaying != Player.LOCAL)
 			return;
-		
+
 		if (!canThreadPlay)
 			return;
 
@@ -703,15 +716,15 @@ public class PanelPlay extends JPanel
 	{
 		if (playerPlaying != Player.LOCAL || !currentDistantMap.isFinished())
 			return;
-		
+
 		if (!canThreadPlay)
 			return;
 
 		log.info("Next level");
-		
+
 		btnNextLevel.setVisible(false);
 		validate();
-		
+
 		PlayerProgress.getInstance(Player.LOCAL).nextLevel(Settings.FRAME_MAIN.getShips());
 		progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
 		
@@ -779,17 +792,35 @@ public class PanelPlay extends JPanel
 	 */
 	public void setActiveMap(MapType map, Player player)
 	{
+		int newLevel = 0;
+		switch (map)
+		{
+			case ATLANTIS:
+				newLevel = 3;
+				break;
+			case SUBMARINE:
+				newLevel = 2;
+				break;
+			case SURFACE:
+				newLevel = 1;
+				break;
+		}
+
 		if (player == Player.LOCAL)
+		{
 			currentLocalMap = rootFrame.getMapByType(map, Player.LOCAL);
+			this.infosLocal.setLevelNumber(newLevel);
+		}
 		else
+		{
 			currentDistantMap = rootFrame.getMapByType(map, Player.DISTANT);
+			this.infosDistant.setLevelNumber(newLevel);
+		}
 
 		if (MapType.ATLANTIS == currentDistantMap.getType() && MapType.ATLANTIS == currentLocalMap.getType())
 		{
 			// We play on one panel
-			// for (Component c : distantPlayerView.getComponents())
-			// distantPlayerView.remove(c);
-			// remove(distantPlayerView);
+			this.levelsOther.clearMaps();
 			player = Player.LOCAL;
 		}
 

@@ -18,8 +18,8 @@ public class DialogAbout extends JDialog
 	private static final int kVgap = 15;
 
 	/**
-	 * Create and display the about dialog
-	 * The dialog is modal
+	 * Create and display the about dialog The dialog is modal
+	 * 
 	 * @param parent The JDialog's parent
 	 */
 	public DialogAbout(FrameMain parent)

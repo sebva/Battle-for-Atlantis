@@ -36,7 +36,7 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 	private static final Dimension preferredSize = new Dimension(800, 30);
 	private static final Dimension minimalSize = new Dimension(300, 30);
 	private static final Dimension buttonSize = new Dimension(140, 24);
-	
+
 	private static final Color colorBorderActive = new Color(112, 112, 112);
 	private static final Color colorGreyActive = new Color(67, 67, 67);
 	private static final Color colorBorderNone = new Color(50, 50, 50);
@@ -51,19 +51,19 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 	private class PanelPlayer extends JPanel
 	{
 		private boolean isHover;
-		
+
 		public PanelPlayer(final Host player)
 		{
 			setLayout(new BorderLayout(0, 0));
-			
+
 			JLabel labelPlayer = new JLabel(player.getName());
 			labelPlayer.setBorder(BorderFactory.createEmptyBorder(0, 7, 5, 0));
-			//labelPlayer.setAlignmentY(CENTER_ALIGNMENT);
+			// labelPlayer.setAlignmentY(CENTER_ALIGNMENT);
 			final JButton btnConnect = new ButtonConnect(Messages.getString("PanelConnection.Connect"));
-			
+
 			this.isHover = false;
 			btnConnect.setVisible(false);
-			
+
 			setPreferredSize(PanelConnection.preferredSize);
 			setMaximumSize(PanelConnection.preferredSize);
 			setMinimumSize(PanelConnection.minimalSize);
@@ -99,18 +99,18 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 
 			addMouseListener(mouseAdapter);
 			btnConnect.addMouseListener(mouseAdapter);
-			//btnConnect.setAlignmentY(CENTER_ALIGNMENT);
-			
+			// btnConnect.setAlignmentY(CENTER_ALIGNMENT);
+
 			add(labelPlayer, BorderLayout.WEST);
 			add(btnConnect, BorderLayout.EAST);
 		}
-		
+
 		@Override
 		protected void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
-			Graphics2D g2d = (Graphics2D)g;
-			
+			Graphics2D g2d = (Graphics2D) g;
+
 			// draw the border
 			if (isHover)
 			{
@@ -121,7 +121,7 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 				g2d.setColor(PanelConnection.colorBorderNone);
 			}
 			g2d.drawRect(0, 0, this.getWidth() - 140, 23);
-			
+
 			// draw the content
 			if (isHover)
 			{
@@ -131,8 +131,8 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 			{
 				g2d.setColor(PanelConnection.colorGreyNone);
 			}
-			g2d.fillRect(1,  1, this.getWidth() - 141, 22);
-			
+			g2d.fillRect(1, 1, this.getWidth() - 141, 22);
+
 			// draw the arrow
 			if (isHover)
 			{
@@ -146,25 +146,25 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		public ButtonConnect(String text)
 		{
 			super(text);
-			
+
 			setPreferredSize(PanelConnection.buttonSize);
 			setMinimumSize(PanelConnection.buttonSize);
 			setMaximumSize(PanelConnection.buttonSize);
-			
+
 			setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
-		
+
 		@Override
 		protected void paintComponent(Graphics g)
 		{
-			//super.paintComponent(g);
-			
-			Graphics2D g2d = (Graphics2D)g;
+			// super.paintComponent(g);
+
+			Graphics2D g2d = (Graphics2D) g;
 			g2d.setColor(PanelConnection.colorBlue);
 			g2d.fillRect(5, 0, 134, 24);
-			
+
 			g2d.drawImage(ImageShop.UI_ARROW_LIGHT, 1, 7, null);
-			
+
 			g2d.setColor(Color.WHITE);
 			g2d.drawString(this.getText(), 30, 17);
 		}

@@ -18,6 +18,7 @@ public class SoundManager
 
 	/**
 	 * Instance getter for singleton
+	 * 
 	 * @return current instance
 	 */
 	public static SoundManager getInstance()
@@ -56,7 +57,7 @@ public class SoundManager
 	{
 		MISS, SHIELD, GENERATOR, CITY
 	};
-	
+
 	/**
 	 * Enum of available musics
 	 */
@@ -64,7 +65,7 @@ public class SoundManager
 	{
 		NONE, MENU, CALM, TOUCHED, FINAL
 	};
-	
+
 	/**
 	 * Enum of available voices
 	 */
@@ -75,6 +76,7 @@ public class SoundManager
 
 	/**
 	 * Set the stream song looping in background
+	 * 
 	 * @param stream : stream type to play through
 	 */
 	public void setStream(Stream stream)
@@ -100,9 +102,10 @@ public class SoundManager
 				break;
 		}
 	}
-	
+
 	/**
 	 * Set the music song looping in background
+	 * 
 	 * @param music : music to play loop
 	 */
 	public void setMusic(Music music)
@@ -132,6 +135,7 @@ public class SoundManager
 
 	/**
 	 * Play a song corresponding to a level transition
+	 * 
 	 * @param level : type of new level
 	 */
 	public void playNextLevel(MapType level)
@@ -152,6 +156,7 @@ public class SoundManager
 
 	/**
 	 * Play a song corresponding to a ship's placement
+	 * 
 	 * @param type : type of map on which the ship has been placed
 	 */
 	public void playPlace(MapType type)
@@ -161,6 +166,7 @@ public class SoundManager
 
 	/**
 	 * Play a song corresponding to a shoot on a box in surface or submarine map
+	 * 
 	 * @param level : type of level
 	 * @param direction : direction of shoot (listener is sending or receiving the shoot)
 	 * @param target : type of target shot
@@ -257,6 +263,7 @@ public class SoundManager
 
 	/**
 	 * Play a song corresponding to a shoot on a box in atlantis map
+	 * 
 	 * @param target : type of target shot
 	 * @return delay in ms for audio action to be heard (effective explosion)
 	 */
@@ -286,9 +293,10 @@ public class SoundManager
 		}
 		return soundDelay;
 	}
-	
+
 	/**
 	 * Play a voice corresponding to given event
+	 * 
 	 * @param voice : event
 	 */
 	public void playVoice(Voice voice)

@@ -136,11 +136,11 @@ public class FrameMain extends JFrame
 	public void placeShips(Host h)
 	{
 		this.distantPlayerName = h.getName();
-		
+
 		Settings.PANEL_PREPARE = new PanelPrepare(this);
 		cards.add(Settings.PANEL_PREPARE, PanelPrepare.class.getSimpleName());
 		cards.showCard(PanelPrepare.class.getSimpleName());
-		
+
 		NetworkManager.getInstance().removeAutodiscoverListener(Settings.PANEL_CONNECTIONS);
 		forceResize();
 		SoundManager.getInstance().setStream(SoundManager.Stream.PLACEMENT);
@@ -151,9 +151,6 @@ public class FrameMain extends JFrame
 	{
 		if (distantMaps != null)
 			showGame();
-		else
-			; // TODO: Wait for other player
-
 	}
 
 	private void showGame()
@@ -210,14 +207,14 @@ public class FrameMain extends JFrame
 		{
 			e.printStackTrace();
 		}
-		
+
 		cards.showCard(PanelHome.class.getSimpleName());
-		if(Settings.PANEL_PLAY != null)
+		if (Settings.PANEL_PLAY != null)
 		{
 			cards.remove(Settings.PANEL_PLAY);
 			Settings.PANEL_PLAY = null;
 		}
-		
+
 		SoundManager.getInstance().setMusic(SoundManager.Music.MENU);
 		SoundManager.getInstance().setStream(SoundManager.Stream.NONE);
 	}
