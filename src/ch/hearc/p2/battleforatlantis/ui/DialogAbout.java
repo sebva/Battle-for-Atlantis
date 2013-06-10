@@ -26,10 +26,11 @@ public class DialogAbout extends JDialog
 	{
 		super(parent, true);
 		setTitle(Messages.getString("DialogAbout.Title"));
-		setSize(450, 275);
+		setSize(530, 310);
 		setResizable(false);
 		setLayout(new BorderLayout(kHgap, kVgap));
 
+		JLabel hearc = new JLabel(new ImageIcon(ImageShop.UI_HE_ARC));
 		JLabel img = new JLabel(new ImageIcon(ImageShop.UI_LOGO));
 		JLabel text = new JLabel(Messages.getString("DialogAbout.Text"));
 		JButton btn = new JButton(Messages.getString("DialogAbout.ButtonText"));
@@ -43,6 +44,7 @@ public class DialogAbout extends JDialog
 			}
 		});
 
+		add(hearc, BorderLayout.NORTH);
 		add(img, BorderLayout.WEST);
 		add(text, BorderLayout.CENTER);
 		add(btn, BorderLayout.SOUTH);
