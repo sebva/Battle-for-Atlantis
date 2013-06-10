@@ -60,7 +60,7 @@ public class Atlantis extends MapElement
 		this.mapHeight = map.getMapHeight();
 		
 		// Some verification for Generator
-		if (width < mapWidth - 2 && height < mapHeight - 2)
+		if (width >= mapWidth - 2 && height >= mapHeight - 2)
 			throw new Exception("Can't create Atlantis with this size on this map. Generator can't be created.");
 		
 		// Display settings
