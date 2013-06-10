@@ -23,18 +23,18 @@ public class PlayerProgress
 	
 	public static PlayerProgress getInstance(Player playerType)
 	{
-		PlayerProgress instance = instances.get(playerType);
-		
 		synchronized (PlayerProgress.class)
 		{
+			PlayerProgress instance = instances.get(playerType);
+			
 			if (instance == null)
 			{
 				instance = new PlayerProgress(playerType);
 				instances.put(playerType, instance);
 			}
+			
+			return instance;
 		}
-		
-        return instance;
 	}
 	
 	public void addProgress()

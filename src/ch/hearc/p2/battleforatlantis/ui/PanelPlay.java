@@ -409,12 +409,8 @@ public class PanelPlay extends JPanel
 		this.progressLocal = new CustomProgress(0, 100);
 		this.progressDistant = new CustomProgress(0, 100);
 		
-		Set<Ship> distantShipSet = Settings.FRAME_MAIN.getDistantShips();
-		MapElement[] distantShipList = new MapElement[distantShipSet.size()];
-		distantShipSet.toArray(distantShipList);
-		
 		PlayerProgress.getInstance(Player.LOCAL).calculateTotalProgression(MapType.SURFACE, Settings.FRAME_MAIN.getShips());
-		PlayerProgress.getInstance(Player.DISTANT).calculateTotalProgression(MapType.SURFACE, distantShipList);
+		PlayerProgress.getInstance(Player.DISTANT).calculateTotalProgression(MapType.SURFACE, getDistantShip());
 		//this.progressLocal.setValue(30);
 		//this.progressDistant.setValue(55);
 
@@ -511,6 +507,8 @@ public class PanelPlay extends JPanel
 			// User shot => local player progression
 			PlayerProgress.getInstance(Player.LOCAL).addProgress();
 			progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PanelPlay::shoot] Progress : " + PlayerProgress.getInstance(Player.LOCAL).getProgess());
+			
 			final int statisticRemaining = occupier.getRemainingSize();
 			if (occupier instanceof Ship)
 			{
@@ -715,7 +713,8 @@ public class PanelPlay extends JPanel
 		validate();
 		
 		PlayerProgress.getInstance(Player.LOCAL).nextLevel(Settings.FRAME_MAIN.getShips());
-
+		progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
+		
 		MapType oldMap = currentDistantMap.getType();
 
 		MapType newMap = null;
@@ -818,5 +817,12 @@ public class PanelPlay extends JPanel
 	{
 		return playerPlaying == Player.LOCAL;
 	}
-
+	
+	public MapElement[] getDistantShip()
+	{
+		Set<Ship> distantShipSet = Settings.FRAME_MAIN.getDistantShips();
+		MapElement[] distantShipList = new MapElement[distantShipSet.size()];
+		distantShipSet.toArray(distantShipList);
+		return distantShipList;
+	}
 }

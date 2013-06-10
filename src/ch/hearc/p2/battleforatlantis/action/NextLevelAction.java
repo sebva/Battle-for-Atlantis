@@ -38,7 +38,10 @@ public class NextLevelAction extends Action implements NetworkMessage
 			default:
 				break;
 		}
-		PlayerProgress.getInstance(Player.DISTANT).nextLevel(Settings.FRAME_MAIN.getShips());
+		
+		PlayerProgress.getInstance(Player.DISTANT).nextLevel(Settings.PANEL_PLAY.getDistantShip());
+		Settings.PANEL_PLAY.progressDistant.setValue(PlayerProgress.getInstance(Player.DISTANT).getProgess());
+		
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}
