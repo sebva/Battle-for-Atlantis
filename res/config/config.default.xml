@@ -11,7 +11,7 @@
 	        <Ship length="2" amount="3" />
 	        <Ship length="3" amount="2" />
 	    </Level>
-	    <Level type="atlantis" width="6" height="6">
+	    <Level type="atlantis" width="7" height="7">
 	    	<City shape="roundedSquare" width="4" height="4" />
 		</Level>
 	</Levels>
