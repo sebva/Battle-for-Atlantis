@@ -50,6 +50,7 @@ public final class ImageShop
 
 	// General UI elements
 	public static final Image UI_BUTTON = loadImage(UI_FOLDER + "bouton.png");
+	public static final Image UI_BUTTON_HOVER = loadImage(UI_FOLDER + "bouton_hover.png");
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
 	public static final Image UI_LOGO = loadImage(UI_FOLDER + "logo.png");
 	public static final Image UI_HE_ARC = loadImage(UI_FOLDER + "hearc.png");
