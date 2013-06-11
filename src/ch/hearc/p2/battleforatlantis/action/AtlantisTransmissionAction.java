@@ -35,10 +35,7 @@ public class AtlantisTransmissionAction extends Action
 	{
 		this.atlantis = atlantis;
 	}
-
-	/**
-	 * Execute the action after received the Atlantis
-	 */
+	
 	@Override
 	public void execute()
 	{
@@ -70,6 +67,32 @@ public class AtlantisTransmissionAction extends Action
 			// Next line
 			row++;
 		}
+	}
+	
+	@Override
+	public JSONObject getJson()
+	{
+		// Create a JSON object for Atlantis Transmission
+		JSONObject jo = new JSONObject();
+		jo.put("action", "atlantisTransmission");
+		JSONObject atlantisJo = new JSONObject();
+
+		// Indicates coordinates for Atlantis
+		JSONObject northWest = new JSONObject();
+		northWest.put("x", atlantis.getPositionX());
+		northWest.put("y", atlantis.getPositionY());
+
+		// Indicates coordinates for the Shield Generator
+		JSONObject generator = new JSONObject();
+		generator.put("x", atlantis.getGenerator().getPositionX());
+		generator.put("y", atlantis.getGenerator().getPositionY());
+
+		// Add the coordinates to the message to transmit
+		atlantisJo.put("northWest", northWest);
+		atlantisJo.put("generator", generator);
+
+		jo.put("atlantis", atlantisJo);
+		return jo;
 	}
 
 	/**
@@ -110,35 +133,6 @@ public class AtlantisTransmissionAction extends Action
 		}
 
 		return null;
-	}
-
-	/**
-	 * Create a JSON Object to communicate the Atlantis to the opposing player
-	 */
-	@Override
-	public JSONObject getJson()
-	{
-		// Create a JSON object for Atlantis Transmission
-		JSONObject jo = new JSONObject();
-		jo.put("action", "atlantisTransmission");
-		JSONObject atlantisJo = new JSONObject();
-
-		// Indicates coordinates for Atlantis
-		JSONObject northWest = new JSONObject();
-		northWest.put("x", atlantis.getPositionX());
-		northWest.put("y", atlantis.getPositionY());
-
-		// Indicates coordinates for the Shield Generator
-		JSONObject generator = new JSONObject();
-		generator.put("x", atlantis.getGenerator().getPositionX());
-		generator.put("y", atlantis.getGenerator().getPositionY());
-
-		// Add the coordinates to the message to transmit
-		atlantisJo.put("northWest", northWest);
-		atlantisJo.put("generator", generator);
-
-		jo.put("atlantis", atlantisJo);
-		return jo;
 	}
 
 }

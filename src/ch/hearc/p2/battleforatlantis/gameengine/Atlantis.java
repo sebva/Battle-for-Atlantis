@@ -11,30 +11,59 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class Atlantis extends MapElement
 {
-	// Dimensions of Atlantis
+	/**
+	 * Dimensions of Atlantis
+	 */
 	private int width, height;
 
-	// Destroyable attribute
+	/**
+	 * Destroyable attribute
+	 */
 	private boolean destroyable;
 
-	// Initial images
+	/**
+	 * Initial images
+	 */
 	private BufferedImage[][] images;
 
+	/**
+	 * List of box occupied by element
+	 */
 	private Box[][] occupied;
 
+	/**
+	 * Map on which element is placed
+	 */
 	private Map map;
 
-	// Generator of the shield
+	/**
+	 * Generator of the shield
+	 */
 	private Generator shieldGenerator = null;
 
-	// Positions of Atlantis
+	/**
+	 * Position X of Atlantis
+	 */
 	private int positionX;
+	
+	/**
+	 * Position Y of Atlantis
+	 */
 	private int positionY;
 
-	// Dimensions of the Map
+	/**
+	 * Width of map
+	 */
 	private int mapWidth;
+	
+	/**
+	 * Height of map
+	 */
 	private int mapHeight;
 
+	/**
+	 * Logger
+	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
@@ -99,6 +128,9 @@ public class Atlantis extends MapElement
 		occupy();
 	}
 
+	/**
+	 * Occupy the boxes that must be occupied
+	 */
 	private void occupy()
 	{
 		int row = 0;
@@ -188,6 +220,10 @@ public class Atlantis extends MapElement
 		return this.shieldGenerator;
 	}
 
+	/**
+	 * Set the generator associed with this city
+	 * @param gen Generator to assocy
+	 */
 	public void setGenerator(Generator gen)
 	{
 		this.shieldGenerator = gen;

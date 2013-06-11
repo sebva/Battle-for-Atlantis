@@ -313,9 +313,6 @@ public class Ship extends MapElement implements JSONString
 		return center;
 	}
 
-	/**
-	 * Create a JSON Object to communicate the ship to the opposing player
-	 */
 	@Override
 	public String toJSONString()
 	{
@@ -350,9 +347,6 @@ public class Ship extends MapElement implements JSONString
 		return ship;
 	}
 
-	/**
-	 * Paint method for displaying ship in menus
-	 */
 	@Override
 	protected void paintComponent(Graphics g)
 	{
@@ -382,12 +376,20 @@ public class Ship extends MapElement implements JSONString
 		this.currentSize = new Dimension(min * wholeSize, min);
 	}
 
+	/**
+	 * Set background color for ship displayed in menu
+	 * @param color Color to apply
+	 */
 	public void setBackgroundColor(Color color)
 	{
 		this.backgroundColor = color;
 		repaint();
 	}
 
+	/**
+	 * Place the ship on play panel, using one direction
+	 * @param forward True if ship must move forward, else False
+	 */
 	public void place(boolean forward)
 	{
 		int x = center.getCoordX();
@@ -424,9 +426,6 @@ public class Ship extends MapElement implements JSONString
 		return orientation;
 	}
 
-	/**
-	 * Shoot on the ship
-	 */
 	@Override
 	public void shoot(Box target)
 	{
@@ -507,6 +506,11 @@ public class Ship extends MapElement implements JSONString
 			box.repaint();
 	}
 
+	/**
+	 * Check if rotation is possible
+	 * @param clockwise True if rotation is clockwise, else False
+	 * @return True if rotation is possible, else False
+	 */
 	public boolean rotationPossible(boolean clockwise)
 	{
 		// Get map

@@ -95,16 +95,29 @@ public abstract class MapElement extends JLabel
 		return this.wholeSize;
 	}
 
+	
+	/**
+	 * Check if the element is touched
+	 * @return True if the element is touched
+	 */
 	public boolean isTouched()
 	{
 		return touchedSize > 0;
 	}
 
+	/**
+	 * Get the number of box to shoot to achieve the element
+	 * @return Number of box
+	 */
 	public int getRemainingSize()
 	{
 		return this.wholeSize - this.touchedSize;
 	}
 
+	/**
+	 * Get the boxes occupied by the map element
+	 * @return List of boxes
+	 */
 	public Box[] getOccupied()
 	{
 		return occupied;

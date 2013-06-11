@@ -6,13 +6,36 @@ import java.util.logging.Logger;
 
 public class PlayerProgress
 {
+	/**
+	 * Player type (local or distant)
+	 */
 	private Player playerType;
+	
+	/**
+	 * Map type (surface, submarine, atlantis)
+	 */
 	private MapType levelMap = null;
+	
+	/**
+	 * Total progress needed for the map
+	 */
 	private Map<MapType, Integer> totalProgress;
+	
+	
+	/**
+	 * Achieved progress on the map
+	 */
 	private Map<MapType, Integer> currentProgress;
 
+	/**
+	 * Instances ready to be used
+	 */
 	private static Map<Player, PlayerProgress> instances = new HashMap<Player, PlayerProgress>();
 
+	/**
+	 * Default constructor
+	 * @param playerType Type of player
+	 */
 	public PlayerProgress(Player playerType)
 	{
 		this.playerType = playerType;
@@ -21,6 +44,11 @@ public class PlayerProgress
 		this.currentProgress = new HashMap<MapType, Integer>();
 	}
 
+	/**
+	 * Get the current instance for a player
+	 * @param playerType Type of player
+	 * @return Instance of PanelProgress to use
+	 */
 	public static synchronized PlayerProgress getInstance(Player playerType)
 	{
 		PlayerProgress instance = instances.get(playerType);
@@ -34,6 +62,9 @@ public class PlayerProgress
 		return instance;
 	}
 
+	/**
+	 * Progress into quest
+	 */
 	public void addProgress()
 	{
 		int progress = (currentProgress.get(levelMap) != null) ? currentProgress.get(levelMap) + 1 : 1;
@@ -42,11 +73,20 @@ public class PlayerProgress
 		currentProgress.put(levelMap, progress);
 	}
 
+	/**
+	 * Get current progress
+	 * @return Current progress
+	 */
 	public int getProgess()
 	{
 		return getProgess(levelMap);
 	}
 
+	/**
+	 * Get progress for a given map type
+	 * @param levelMap Map type
+	 * @return Current progress
+	 */
 	public int getProgess(MapType levelMap)
 	{
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PlayerProgress::getProgress/" + levelMap + "] Current : " + currentProgress.get(levelMap));
@@ -55,6 +95,9 @@ public class PlayerProgress
 		return (int) ((currentProgress.get(levelMap) / (double) totalProgress.get(levelMap)) * 100);
 	}
 
+	/**
+	 * Go to next level
+	 */
 	public void nextLevel()
 	{
 		if (levelMap.equals(MapType.SURFACE))
@@ -65,18 +108,31 @@ public class PlayerProgress
 		currentProgress.put(levelMap, 0);
 	}
 
+	/**
+	 * Go to next level
+	 * @param shipList List of ships to consider in computation
+	 */
 	public void nextLevel(MapElement[] shipList)
 	{
 		nextLevel();
 		calculateTotalProgression(levelMap, shipList);
 	}
 
+	/**
+	 * Go to next level
+	 * @param totalProgressionValue Value of total progress to directly consider
+	 */
 	public void nextLevel(int totalProgressionValue)
 	{
 		nextLevel();
 		calculateTotalProgression(levelMap, totalProgressionValue);
 	}
 
+	/**
+	 * Calculate total progression possible
+	 * @param levelMap Type of level
+	 * @param shipList List of ships to consider
+	 */
 	public void calculateTotalProgression(MapType levelMap, MapElement[] shipList)
 	{
 		int progressCalculate = 0;
@@ -115,6 +171,11 @@ public class PlayerProgress
 		calculateTotalProgression(levelMap, progressCalculate);
 	}
 
+	/**
+	 * Calculate total progression possible
+	 * @param levelMap Type of level
+	 * @param totalProgressionValue Value of total progression
+	 */
 	public void calculateTotalProgression(MapType levelMap, int totalProgressionValue)
 	{
 		Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PlayerProgress] totalProgressionValue : " + totalProgressionValue);
@@ -122,6 +183,10 @@ public class PlayerProgress
 		totalProgress.put(levelMap, totalProgressionValue);
 	}
 
+	/**
+	 * Get type of player in current progress instance
+	 * @return Type of player
+	 */
 	public Player getPlayerType()
 	{
 		return playerType;

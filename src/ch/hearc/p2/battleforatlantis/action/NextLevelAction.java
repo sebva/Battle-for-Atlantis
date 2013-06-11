@@ -11,6 +11,9 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class NextLevelAction extends Action implements NetworkMessage
 {
+	/**
+	 * New map type to be applied
+	 */
 	private MapType map;
 
 	/**
@@ -20,10 +23,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 	{
 		this.map = map;
 	}
-
-	/**
-	 * Move to the next level map
-	 */
+	
 	@Override
 	public void execute()
 	{
@@ -45,6 +45,17 @@ public class NextLevelAction extends Action implements NetworkMessage
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}
+	
+	@Override
+	public JSONObject getJson()
+	{
+		JSONObject jo = new JSONObject();
+
+		jo.put("action", "nextLevel");
+		jo.put("newLevel", map.name());
+
+		return jo;
+	}
 
 	/**
 	 * Make the next level action from a request received by the player
@@ -59,20 +70,6 @@ public class NextLevelAction extends Action implements NetworkMessage
 		MapType map = MapType.valueOf(jo.getString("newLevel"));
 
 		return new NextLevelAction(map);
-	}
-
-	/**
-	 * Create a JSON Object to communicate the action to the opposing player
-	 */
-	@Override
-	public JSONObject getJson()
-	{
-		JSONObject jo = new JSONObject();
-
-		jo.put("action", "nextLevel");
-		jo.put("newLevel", map.name());
-
-		return jo;
 	}
 
 }

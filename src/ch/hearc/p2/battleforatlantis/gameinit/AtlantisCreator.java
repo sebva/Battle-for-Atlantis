@@ -7,13 +7,19 @@ import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
 public class AtlantisCreator
 {
-	// Object Atlantis
+	/**
+	 * Atlantis object
+	 */
 	private static Atlantis atlantis = null;
 
-	// Object Generator
+	/**
+	 * Generator object
+	 */
 	private static Generator generator = null;
 
-	// Object Map in the Atlantis Level
+	/**
+	 * Map object containing the Atlantis level
+	 */
 	private static Map map = null;
 
 	/**

@@ -91,6 +91,7 @@ public class Map extends JPanel implements JSONString
 	 * @param width Number of rows
 	 * @param height Number of columns
 	 * @param type Type of map (surface, submarine, atlantis)
+	 * @param isLocal True if map is local, false else
 	 */
 	public Map(int width, int height, MapType type, boolean isLocal)
 	{
@@ -130,13 +131,6 @@ public class Map extends JPanel implements JSONString
 		// Instanciate listeners
 		instanciatePreparationListener();
 		instanciateGameListener();
-
-		/*
-		 * addComponentListener(new ComponentAdapter() {
-		 * 
-		 * @Override public void componentResized(ComponentEvent e) { resizeComponent(); } });
-		 */
-
 	}
 
 	/**
@@ -260,21 +254,38 @@ public class Map extends JPanel implements JSONString
 		};
 	}
 
+	/**
+	 * Get the height of map in boxes
+	 * @return Height of map
+	 */
 	public int getMapHeight()
 	{
 		return this.height;
 	}
 
+	/**
+	 * Get the width of map in boxes
+	 * @return Width of map
+	 */
 	public int getMapWidth()
 	{
 		return this.width;
 	}
 
+	/**
+	 * Check if the map is local
+	 * @return True if the map is local, else false
+	 */
 	public boolean isLocal()
 	{
 		return isLocal;
 	}
 
+	/**
+	 * Get the boxes in which place controls for moving ship
+	 * @param ship Ship to which add controls
+	 * @return List of box
+	 */
 	private Box[] getControlBoxes(Ship ship)
 	{
 		Box[] occupied = ship.getOccupied();
@@ -297,6 +308,10 @@ public class Map extends JPanel implements JSONString
 		}
 	}
 
+	/**
+	 * Add ships controls
+	 * @param ship Ship to which add controls
+	 */
 	public void addShipControls(Ship ship)
 	{
 		if (ship.isTouched())
@@ -311,6 +326,10 @@ public class Map extends JPanel implements JSONString
 			new ShipControl(ship, backwardControl, ShipControlType.PLACE_BACKWARD);
 	}
 
+	/**
+	 * Remove ships controls
+	 * @param ship Ship from which remove controls
+	 */
 	public void removeShipControls(Ship ship)
 	{
 		Box[] controlBoxes = getControlBoxes(ship);
@@ -342,6 +361,11 @@ public class Map extends JPanel implements JSONString
 		return jo.toString();
 	}
 
+	/**
+	 * Create a map from a JSON object
+	 * @param jo JSON object received on network
+	 * @return Map to use
+	 */
 	public static Map createFromJsonObject(JSONObject jo)
 	{
 		MapType type = MapType.valueOf(jo.getString("levelName"));
@@ -370,6 +394,10 @@ public class Map extends JPanel implements JSONString
 		return map;
 	}
 
+	/**
+	 * Check if the map is finished
+	 * @return True if the map is finished
+	 */
 	public boolean isFinished()
 	{
 		int total = 0;
@@ -388,7 +416,7 @@ public class Map extends JPanel implements JSONString
 	}
 
 	/**
-	 * 
+	 * Resize the map, conserving ratio
 	 */
 	public void resizeComponent()
 	{

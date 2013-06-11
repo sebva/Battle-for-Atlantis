@@ -32,27 +32,25 @@ public class ShootAction extends Action implements NetworkMessage
 	{
 		this.target = target;
 	}
-
-	/**
-	 * Performs the shoot on the map
-	 */
+	
 	@Override
 	public void execute()
 	{
 		// Get occupier of the box shot
-		MapElement occupier = this.target.getOccupier();
+		final MapElement occupier = this.target.getOccupier();
 
 		int soundDelay = 0;
 
 		// If we shot a ship
 		if (occupier != null)
 		{
-			
-
+			// If we shot a ship (surface or submarine)
 			if (occupier instanceof Ship)
 			{
+				// Ship is going to be shot (not sank)
 				if (occupier.getRemainingSize() > 1)
 				{
+					// Manage sounds
 					soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.TOUCH);
 					final int temporarySoundDelay = soundDelay;
 					new Thread(new Runnable()
@@ -72,8 +70,11 @@ public class ShootAction extends Action implements NetworkMessage
 						}
 					}).start();
 				}
+				
+				// Ship is going to be sank
 				else
 				{
+					// Manage sounds
 					soundDelay = SoundManager.getInstance().playShoot(this.target.getMapType(), SoundManager.Direction.GET, SoundManager.Target.SINK);
 					final int temporarySoundDelay = soundDelay;
 					new Thread(new Runnable()
@@ -94,8 +95,11 @@ public class ShootAction extends Action implements NetworkMessage
 					}).start();
 				}
 			}
+			
+			// If we shot on the generator
 			else if (occupier instanceof Generator)
 			{
+				// Manage sounds
 				soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.GENERATOR);
 				final int temporarySoundDelay = soundDelay;
 				new Thread(new Runnable()
@@ -115,12 +119,17 @@ public class ShootAction extends Action implements NetworkMessage
 					}
 				}).start();
 			}
+			
+			// If we shot on the atlantis
 			else if (occupier instanceof Atlantis)
 			{
+				// If Atlantis is destroyable (generator has already been destroyed)
 				if (((Atlantis) occupier).isDestroyable())
 				{
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
+				
+				// If Atlantis is not destroyable
 				else
 				{
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.SHIELD);
@@ -143,6 +152,7 @@ public class ShootAction extends Action implements NetworkMessage
 		// Finalize the sound delay
 		final int finalSoundDelay = soundDelay;
 
+		// Do operations after sound delay
 		new Thread(new Runnable()
 		{
 
@@ -157,15 +167,31 @@ public class ShootAction extends Action implements NetworkMessage
 				{
 					e.printStackTrace();
 				}
-				PlayerProgress.getInstance(Player.DISTANT).addProgress();
-				int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
-				Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
-				Settings.PANEL_PLAY.progressDistant.setValue(progress);
+				
+				if (occupier != null)
+				{
+					PlayerProgress.getInstance(Player.DISTANT).addProgress();
+					int progress = PlayerProgress.getInstance(Player.DISTANT).getProgess();
+					Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[ShootAction::execute] Progress : " + progress);
+					Settings.PANEL_PLAY.progressDistant.setValue(progress);
+				}
 				target.shoot();
 				if (!(target.getOccupier() instanceof Generator) && Settings.PANEL_PLAY != null)
 					Settings.PANEL_PLAY.endCurrentTurn();
 			}
 		}).start();
+	}
+
+	@Override
+	public JSONObject getJson()
+	{
+		JSONObject jo = new JSONObject();
+
+		jo.put("action", "fire");
+		jo.put("level", target.getMapType().name());
+		jo.put("target", target);
+
+		return jo;
 	}
 
 	/**
@@ -185,20 +211,5 @@ public class ShootAction extends Action implements NetworkMessage
 		Box target = Settings.FRAME_MAIN.getMapByType(level, Player.LOCAL).getBox(jo.getJSONObject("target"));
 
 		return new ShootAction(target);
-	}
-
-	/**
-	 * Create a JSON Object to communicate the action to the opposing player
-	 */
-	@Override
-	public JSONObject getJson()
-	{
-		JSONObject jo = new JSONObject();
-
-		jo.put("action", "fire");
-		jo.put("level", target.getMapType().name());
-		jo.put("target", target);
-
-		return jo;
 	}
 }

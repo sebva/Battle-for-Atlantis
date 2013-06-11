@@ -6,25 +6,56 @@ import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
 public class Generator extends MapElement
 {
-	// Position of Generator
+	/**
+	 * Position X of generator
+	 */
 	private int positionX;
+
+	/**
+	 * Position Y of generator
+	 */
 	private int positionY;
+
+	/**
+	 * Logger
+	 */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-	// Size of Generator
+	/**
+	 * Size of generator (X)
+	 */
 	private static int sizeX = 1;
+
+	/**
+	 * Size of generator (Y)
+	 */
 	private static int sizeY = 1;
 
+	/**
+	 * Box on which generator is placed
+	 */
 	private Box box;
+
+	/**
+	 * Atlantis that this generator is protecting
+	 */
 	private Atlantis atlantis;
 
-	// Distance between Atlantis and Generator
+	/**
+	 * Distance in X between Atlantis and generator
+	 */
 	private static int distanceX = 2;
+
+	/**
+	 * Distance in Y between Atlantis and generator
+	 */
 	private static int distanceY = 2;
 
 	/**
 	 * Construct a new Generator
 	 * 
+	 * @param box Box in which generator will be placed
+	 * @param atlantis Lost city that this lost generator will protect until it is destroyed by a lost submarine
 	 */
 	public Generator(Box box, Atlantis atlantis)
 	{

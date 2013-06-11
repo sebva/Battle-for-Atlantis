@@ -39,16 +39,26 @@ public class MoveAction extends Action implements NetworkMessage
 		this.center = center;
 		this.orientation = orientation;
 	}
-
-	/**
-	 * Performs the movement
-	 */
+	
 	@Override
 	public void execute()
 	{
 		ship.moveOut();
 		ship.move(center, orientation);
 		Settings.PANEL_PLAY.endCurrentTurn();
+	}
+	
+	@Override
+	public JSONObject getJson()
+	{
+		JSONObject jo = new JSONObject();
+
+		jo.put("action", "move");
+		jo.put("shipId", ship.getId());
+		jo.put("direction", orientation);
+		jo.put("center", center);
+
+		return jo;
 	}
 
 	/**
@@ -84,21 +94,5 @@ public class MoveAction extends Action implements NetworkMessage
 
 		// Return the MoveAction corresponding to the request
 		return new MoveAction(finalShip, centerBox, orientation);
-	}
-
-	/**
-	 * Create a JSON Object to communicate the action to the opposing player
-	 */
-	@Override
-	public JSONObject getJson()
-	{
-		JSONObject jo = new JSONObject();
-
-		jo.put("action", "move");
-		jo.put("shipId", ship.getId());
-		jo.put("direction", orientation);
-		jo.put("center", center);
-
-		return jo;
 	}
 }

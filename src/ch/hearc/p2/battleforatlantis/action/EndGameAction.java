@@ -71,15 +71,26 @@ public class EndGameAction extends Action implements NetworkMessage
 		this.shoot = new ShootAction(target);
 	}
 
-	/**
-	 * Execute the last shoot and the end of the game
-	 */
 	@Override
 	public void execute()
 	{
 		if (shoot != null)
 			shoot.execute();
 		Settings.PANEL_PLAY.endGame(won, true);
+	}
+	
+	@Override
+	public JSONObject getJson()
+	{
+		JSONObject jo = new JSONObject();
+		jo.put("action", "endGame");
+		jo.put("victory", won);
+		jo.put("cause", cause.name());
+
+		jo.putOpt("level", mapType);
+		jo.putOpt("target", box);
+
+		return jo;
 	}
 
 	/**
@@ -106,22 +117,5 @@ public class EndGameAction extends Action implements NetworkMessage
 		// Otherwise
 		else
 			return new EndGameAction(won, cause);
-	}
-
-	/**
-	 * Create a JSON Object to communicate the end game to the opposing player
-	 */
-	@Override
-	public JSONObject getJson()
-	{
-		JSONObject jo = new JSONObject();
-		jo.put("action", "endGame");
-		jo.put("victory", won);
-		jo.put("cause", cause.name());
-
-		jo.putOpt("level", mapType);
-		jo.putOpt("target", box);
-
-		return jo;
 	}
 }

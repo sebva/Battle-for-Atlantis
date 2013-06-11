@@ -36,6 +36,9 @@ public class Box extends JPanel implements JSONString
 	 */
 	private Image imageOccupier = null;
 
+	/**
+	 * Image for war fog
+	 */
 	private Image imageOverlay = null;
 
 	/**
@@ -173,6 +176,10 @@ public class Box extends JPanel implements JSONString
 		});
 	}
 
+	/**
+	 * Set size of box from map size
+	 * @param size New size of box
+	 */
 	public void setSizeFromMap(int size)
 	{
 		this.size = size;
@@ -262,15 +269,16 @@ public class Box extends JPanel implements JSONString
 		return this.map;
 	}
 
+	/**
+	 * Set the image for displaying occupier of box
+	 * @param img New image
+	 */
 	protected void setImage(Image img)
 	{
 		this.imageOccupier = img;
 		update(getGraphics());
 	}
 
-	/**
-	 * Paint method for displaying box and part of element eventually contained in it
-	 */
 	@Override
 	protected void paintComponent(Graphics g)
 	{
@@ -303,6 +311,10 @@ public class Box extends JPanel implements JSONString
 		return jo.toString();
 	}
 
+	/**
+	 * Check if this box has been discovered
+	 * @return True if box is discovered, else false
+	 */
 	public boolean isDiscovered()
 	{
 		return discovered;

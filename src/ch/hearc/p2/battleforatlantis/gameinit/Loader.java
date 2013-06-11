@@ -37,9 +37,6 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 /**
  * This class loads the game's configuration from an XML file. The job is done when load() is called. The loaded elements can be be retrieved with the get
  * methods.
- * 
- * @author Sébastien Vaucher
- * 
  */
 public class Loader extends DefaultHandler
 {

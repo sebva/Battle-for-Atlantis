@@ -5,15 +5,35 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 public class ShipControl extends MapElement
 {
+	/**
+	 * Ship to control
+	 */
 	private Ship ship;
+
+	/**
+	 * Type of ship control
+	 */
 	private ShipControlType type;
+
+	/**
+	 * Center of ship to control
+	 */
 	private Box center;
 
+	/**
+	 * List of types
+	 */
 	public enum ShipControlType
 	{
 		PLACE_FORWARD, PLACE_BACKWARD
 	}
 
+	/**
+	 * Default constructor
+	 * @param ship Ship to control
+	 * @param box Center of ship to control
+	 * @param type Type of control to do
+	 */
 	public ShipControl(Ship ship, Box box, ShipControlType type)
 	{
 		super(1);
@@ -31,11 +51,18 @@ public class ShipControl extends MapElement
 		center.setOccupier(this, ImageShop.loadPlaceArrow(imageOrientation));
 	}
 
+	/**
+	 * Execute the control
+	 */
 	public void execute()
 	{
 		Settings.PANEL_PLAY.place(ship, type == ShipControlType.PLACE_FORWARD);
 	}
 
+	/**
+	 * Get ship controlled
+	 * @return Ship controlled
+	 */
 	public Ship getAssociatedShip()
 	{
 		return ship;
@@ -44,13 +71,13 @@ public class ShipControl extends MapElement
 	@Override
 	public void shoot(Box target)
 	{
-		// Niet
+		// Nothing
 	}
 
 	@Override
 	protected void setCurrentSize(int width, int height)
 	{
-		// Niet
+		// Nothing
 	}
 
 }
