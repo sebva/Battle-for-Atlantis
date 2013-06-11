@@ -29,10 +29,10 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
 public class FrameMain extends JFrame
 {
 	/** Default width of window at opening */
-	private static final int kDefaultWidth = 1024;
+	private static final int kDefaultWidth = 1315;
 
 	/** Default height of window at opening */
-	private static final int kDefaultHeight = 768;
+	private static final int kDefaultHeight = 859;
 
 	/** Title of window */
 	private static final String kWindowTitle = Messages.getString("FrameMain.WindowTitle");
