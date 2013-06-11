@@ -10,8 +10,17 @@ import javax.swing.SwingConstants;
 
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Dialog for wait time during ships placement
+ */
 public class DialogWait extends JDialog
 {
+	/**
+	 * Display the wait dialog to user
+	 * 
+	 * @param waitMessage Message to display
+	 * @param parent Parent frame to assocy with dialog
+	 */
 	public DialogWait(String waitMessage, Frame parent)
 	{
 		super(parent, Messages.getString("DialogWait.PleaseWait"), true);

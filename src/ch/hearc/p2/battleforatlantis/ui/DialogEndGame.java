@@ -7,6 +7,9 @@ import javax.swing.JOptionPane;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Dialog for displaying results of play (win or lost)
+ */
 public class DialogEndGame
 {
 	/**

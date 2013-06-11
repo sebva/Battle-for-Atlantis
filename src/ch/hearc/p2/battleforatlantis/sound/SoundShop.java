@@ -2,8 +2,12 @@ package ch.hearc.p2.battleforatlantis.sound;
 
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
+/**
+ * Static source for songs
+ */
 public final class SoundShop
 {
+	// Strings
 	private static final String SOUND = "/sound/";
 	private static final String FX = SOUND + "fx/";
 	private static final String MUSIC = SOUND + "music/";

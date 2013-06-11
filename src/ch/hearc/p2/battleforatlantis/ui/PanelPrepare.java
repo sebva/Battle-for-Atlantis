@@ -22,33 +22,27 @@ import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Main panel for placing the ships
+ */
 public class PanelPrepare extends JPanel
 {
-	/**
-	 * Main frame displaying the panel
-	 */
+	/** Main frame displaying the panel */
 	private FrameMain rootFrame;
 
-	/**
-	 * Currently selected ship for placement, or null if no ship selected
-	 */
+	/** Currently selected ship for placement, or null if no ship selected */
 	private Ship selectedShip = null;
 
-	/**
-	 * Surface map for placing ships
-	 */
+	/** Surface map for placing ships */
 	private Map mapSurface;
 
-	/**
-	 * Submarine map for placing submarines
-	 */
+	/** Submarine map for placing submarines */
 	private Map mapSubmarine;
 
-	/**
-	 * Debug logger
-	 */
+	/** Debug logger */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+	/** Dialog for wait on the other player */
 	private DialogWait dialogWait;
 
 	/**
@@ -252,6 +246,9 @@ public class PanelPrepare extends JPanel
 		return this.mapSubmarine;
 	}
 
+	/**
+	 * Close the wait dialog
+	 */
 	public void dismissWaitDialog()
 	{
 		if (dialogWait != null)

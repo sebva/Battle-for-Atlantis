@@ -5,47 +5,33 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
 
+/**
+ * Abstract class representing a map element which can be placed on a map
+ */
 public abstract class MapElement extends JLabel
 {
-
-	/**
-	 * Image list for displaying element
-	 */
+	/** Image list for displaying element */
 	protected BufferedImage[] images;
 
-	/**
-	 * Box considered as center of element
-	 */
+	/** Box considered as center of element */
 	protected Box center = null;
 
-	/**
-	 * List of boxes occupied by element
-	 */
+	/** List of boxes occupied by element */
 	protected Box[] occupied;
 
-	/**
-	 * Total amount of boxes occupied by element
-	 */
+	/** Total amount of boxes occupied by element */
 	protected final int wholeSize;
 
-	/**
-	 * Amount of boxes occupied by element that have been shot by ennemy
-	 */
+	/** Amount of boxes occupied by element that have been shot by ennemy */
 	protected int touchedSize;
 
-	/**
-	 * Size in pixels for displaying element
-	 */
+	/** Size in pixels for displaying element */
 	protected Dimension preferredSize;
 
-	/**
-	 * Minimal size in pixels for displaying element
-	 */
+	/** Minimal size in pixels for displaying element */
 	protected Dimension minimumSize;
 
-	/**
-	 * Current size in pixels for element
-	 */
+	/** Current size in pixels for element */
 	protected Dimension currentSize;
 
 	/**
@@ -95,9 +81,9 @@ public abstract class MapElement extends JLabel
 		return this.wholeSize;
 	}
 
-	
 	/**
 	 * Check if the element is touched
+	 * 
 	 * @return True if the element is touched
 	 */
 	public boolean isTouched()
@@ -107,6 +93,7 @@ public abstract class MapElement extends JLabel
 
 	/**
 	 * Get the number of box to shoot to achieve the element
+	 * 
 	 * @return Number of box
 	 */
 	public int getRemainingSize()
@@ -116,6 +103,7 @@ public abstract class MapElement extends JLabel
 
 	/**
 	 * Get the boxes occupied by the map element
+	 * 
 	 * @return List of boxes
 	 */
 	public Box[] getOccupied()

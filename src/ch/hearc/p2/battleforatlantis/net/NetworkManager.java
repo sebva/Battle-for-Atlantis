@@ -27,43 +27,63 @@ import ch.hearc.p2.battleforatlantis.net.NetworkAutodiscover.NetworkAutodiscover
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Management of network communications
+ */
 public class NetworkManager
 {
 	/** UDP and TCP port on which to listen */
 	public static final int NETWORK_PORT = 28526;
+
 	/** Length of the buffer for incoming UDP and TCP packet. For the moment, it MUST be bigger than the biggest packet */
 	public static final int BUFFER_LENGTH = 3000;
+
 	/** How long should we try to open the TCP socket in ms */
 	public static final int TCP_SOCKET_OPENING_TRYING_DURATION = 10000;
+
 	/** Host object representing ourselves */
 	public final Host localhost;
 
 	/** Singleton instance */
 	private static NetworkManager instance = null;
+
 	/** Associated NetworkAutodiscover object */
 	protected NetworkAutodiscover autodiscover;
+
 	/** Associated ActionManager object */
 	private ActionManager actionManager;
+
 	/** Host object representing the other player (after successful connection) */
 	private Host distantHost;
+
 	/** Inbound UDP socket */
 	private DatagramSocket udpInSocket;
+
 	/** Outbound UDP socket (also for broadcasts) */
 	private DatagramSocket udpOutSocket;
+
 	/** TCP Socket (null until opened */
 	private Socket tcpSocket = null;
+
 	/** TCP abstract OutputStream */
 	private OutputStream tcpOutStream;
+
 	/** TCP abstract InputStream */
 	private InputStream tcpInStream;
+
 	/** Logger object */
 	private static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 	/** List of directed IP broadcast addresses of this machine */
 	private List<InetAddress> bcastAddresses;
+
 	/** Flag to stop UDP and TCP receiving threads */
 	private boolean receiving = false;
 	private boolean tcpReceiving = false;
 
+	/**
+	 * Private constructor
+	 */
 	private NetworkManager()
 	{
 		actionManager = new ActionManager(this);
@@ -224,6 +244,9 @@ public class NetworkManager
 		}, "TCP Reception Thread").start();
 	}
 
+	/**
+	 * Close a connexion on TCP socket
+	 */
 	public void closeTcpConnection()
 	{
 		if (tcpSocket != null)
@@ -262,6 +285,13 @@ public class NetworkManager
 		return send(message, distantHost.getAddress());
 	}
 
+	/**
+	 * Send a network message
+	 * 
+	 * @param message Message to send
+	 * @param ip INET adresse of host to which send the message
+	 * @return True if sending is ok, else false
+	 */
 	public boolean send(NetworkMessage message, InetAddress ip)
 	{
 		byte[] data = prepareJsonObjectForTransfer(message.getJson());
@@ -472,11 +502,21 @@ public class NetworkManager
 		}
 	}
 
+	/**
+	 * Obtain the distant host
+	 * 
+	 * @return Distant host
+	 */
 	public Host getDistantHost()
 	{
 		return distantHost;
 	}
 
+	/**
+	 * Call to inform of a fatal error
+	 * 
+	 * @param message Message to display
+	 */
 	private void fatalError(String message)
 	{
 		JOptionPane.showMessageDialog(Settings.FRAME_MAIN, Messages.getString("NetworkManager.FatalErrorMessage") + "\n\n" + message,

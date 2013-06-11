@@ -8,6 +8,9 @@ import javax.swing.JOptionPane;
 
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Dialog for direct connexion to host (using IP address)
+ */
 public class DialogDirectConnect
 {
 	/**

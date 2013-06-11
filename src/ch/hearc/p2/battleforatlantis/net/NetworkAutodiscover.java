@@ -8,8 +8,14 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+/**
+ * Autodiscover management for network connections
+ */
 public class NetworkAutodiscover
 {
+	/**
+	 * Interface for listeners available
+	 */
 	public interface NetworkAutodiscoverListener
 	{
 		public void hostAppeared(Host host);
@@ -17,10 +23,17 @@ public class NetworkAutodiscover
 		public void hostDisappeared(Host host);
 	}
 
+	/**
+	 * Message sent for autodiscover requests
+	 */
 	private class AutodiscoverMessage implements NetworkMessage
 	{
+		/** JSON object to send */
 		private final JSONObject jo;
 
+		/**
+		 * Default contructor
+		 */
 		public AutodiscoverMessage()
 		{
 			jo = new JSONObject();
@@ -28,6 +41,9 @@ public class NetworkAutodiscover
 			refreshName();
 		}
 
+		/**
+		 * Refresh the name of player
+		 */
 		public void refreshName()
 		{
 			jo.put("playerName", nw.localhost.getName());
@@ -40,13 +56,29 @@ public class NetworkAutodiscover
 		}
 	}
 
+	/** Autodiscover type message */
 	private final AutodiscoverMessage kAutoDiscoverMessage;
+
+	/** Delay between two autodiscovers */
 	public static final int DELAY = 3000;
+
+	/** Listener for reception of autodiscover responses */
 	private NetworkAutodiscoverListener listener = null;
+
+	/** List of already discovered hosts */
 	private Map<Host, Integer> knownHosts;
+
+	/** Indicator of discover state */
 	private boolean discovering = false;
+
+	/** Manager used to communicate over network */
 	private NetworkManager nw;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param nw Network manager used for communications
+	 */
 	public NetworkAutodiscover(NetworkManager nw)
 	{
 		this.nw = nw;
@@ -54,6 +86,9 @@ public class NetworkAutodiscover
 		knownHosts = new HashMap<Host, Integer>();
 	}
 
+	/**
+	 * Starts the discovering thread
+	 */
 	private void startDiscovering()
 	{
 		if (discovering)
@@ -116,11 +151,21 @@ public class NetworkAutodiscover
 		}, "Autodiscover cleaning thread").start();
 	}
 
+	/**
+	 * Stop the discovering thread
+	 */
 	private void stopDiscovering()
 	{
 		discovering = false;
 	}
 
+	/**
+	 * Reception of response packet
+	 * 
+	 * @param jo JSON object received
+	 * @param from INET address from sender
+	 * @throws Exception Packet is not correct
+	 */
 	protected void packetReceived(JSONObject jo, InetAddress from) throws Exception
 	{
 		// If no one listens, we don't need to do anything
@@ -143,6 +188,11 @@ public class NetworkAutodiscover
 		knownHosts.put(h, DELAY * 2);
 	}
 
+	/**
+	 * Set the listener for listening to responses
+	 * 
+	 * @param nal Listener to set
+	 */
 	protected void setListener(NetworkAutodiscoverListener nal)
 	{
 		listener = nal;
@@ -151,6 +201,11 @@ public class NetworkAutodiscover
 		startDiscovering();
 	}
 
+	/**
+	 * Remove the listener
+	 * 
+	 * @param nal Listener to remove
+	 */
 	protected void removeListener(NetworkAutodiscoverListener nal)
 	{
 		if (nal == listener)
@@ -158,11 +213,19 @@ public class NetworkAutodiscover
 		stopDiscovering();
 	}
 
+	/**
+	 * Refresh player name in discovering messages
+	 */
 	protected void refreshPlayerName()
 	{
 		kAutoDiscoverMessage.refreshName();
 	}
 
+	/**
+	 * Get the list of discovered hosts
+	 * 
+	 * @return List of hosts
+	 */
 	public Host[] getKnownHosts()
 	{
 		return knownHosts.keySet().toArray(null);

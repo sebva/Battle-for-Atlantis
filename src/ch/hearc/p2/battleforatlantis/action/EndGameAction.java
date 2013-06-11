@@ -9,6 +9,9 @@ import ch.hearc.p2.battleforatlantis.gameengine.Player;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used to end the game
+ */
 public class EndGameAction extends Action implements NetworkMessage
 {
 	/**
@@ -19,29 +22,19 @@ public class EndGameAction extends Action implements NetworkMessage
 		ATLANTIS_DESTROYED, SURRENDERED
 	}
 
-	/**
-	 * Indicates if the player has won or lost the game
-	 */
+	/** Indicates if the player has won or lost the game */
 	private boolean won;
 
-	/**
-	 * Indicates the cause of the end of the game
-	 */
+	/** Indicates the cause of the end of the game */
 	private EndGameCause cause;
 
-	/**
-	 * Indicates the last shot
-	 */
+	/** Indicates the last shot */
 	private ShootAction shoot = null;
 
-	/**
-	 * Indicate the map type
-	 */
+	/** Indicate the map type */
 	private MapType mapType = null;
 
-	/**
-	 * Indicates the box shot
-	 */
+	/** Indicates the box shot */
 	private Box box = null;
 
 	/**
@@ -78,7 +71,7 @@ public class EndGameAction extends Action implements NetworkMessage
 			shoot.execute();
 		Settings.PANEL_PLAY.endGame(won, true);
 	}
-	
+
 	@Override
 	public JSONObject getJson()
 	{

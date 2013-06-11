@@ -42,26 +42,34 @@ public class Loader extends DefaultHandler
 {
 	/** Path to the XML file */
 	private String xml;
+
 	/** Path to the XSD file */
 	private String xsd;
+
 	/** SHA-1 hash of the config file */
 	private String hash = null;
+
 	/** List of the maps described in the XML file */
 	private List<Map> maps;
+
 	/** List of the ships described in the XML file */
 	private List<Ship> ships;
+
 	/** Atlantis **/
 	private Map atlantis;
 
 	/** Current Level tag being treated */
 	private MapType currentLevel = null;
+
 	/** Current ship id */
 	private int shipId = 1;
 
 	/** Path to the default configuration file (in JAR) */
 	private static final String kDefaultConfigFile = "config/config.default.xml";
+
 	/** Path to the XML Schema (in JAR) */
 	private static final String kXsdConfigFile = "config/config.xsd";
+
 	/** Path to the user's XML file (in current directory */
 	private static final String kOverrideConfigFile = "config.xml";
 

@@ -12,9 +12,15 @@ import javax.swing.JLabel;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Dialog for ABOUT display
+ */
 public class DialogAbout extends JDialog
 {
+	/** Horizontal gap between elements */
 	private static final int kHgap = 30;
+
+	/** Vertical gap between elements */
 	private static final int kVgap = 15;
 
 	/**

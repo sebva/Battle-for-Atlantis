@@ -6,20 +6,26 @@ import java.util.logging.Logger;
 
 /**
  * Auto-generated class providing i18n
- * 
- * @author Sébastien Vaucher
- * 
  */
 public class Messages
 {
+	/** Name of bundle containing the messages */
 	private static final String BUNDLE_NAME = "strings.messages";
 
+	/** Bunle ready to be read */
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
+	/** Private constructor */
 	private Messages()
 	{
 	}
 
+	/**
+	 * Get a string from the messages file
+	 * 
+	 * @param key Key to gather from file
+	 * @return String to display on UI
+	 */
 	public static String getString(String key)
 	{
 		try

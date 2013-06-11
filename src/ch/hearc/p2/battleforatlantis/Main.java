@@ -31,6 +31,9 @@ public class Main
 		new FrameMain();
 	}
 
+	/**
+	 * Set the look&feel settings to obtain the black nice window you can yee when the application is not sinking like a lost city... :)
+	 */
 	private static void setLookAndFeel()
 	{
 		Properties props = new Properties();

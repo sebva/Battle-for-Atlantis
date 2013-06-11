@@ -5,21 +5,18 @@ import ch.hearc.p2.battleforatlantis.gameengine.Generator;
 import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
+/**
+ * Holder of generation functions for Atlantis creation (not as true as it seems to be...)
+ */
 public class AtlantisCreator
 {
-	/**
-	 * Atlantis object
-	 */
+	/** Atlantis object */
 	private static Atlantis atlantis = null;
 
-	/**
-	 * Generator object
-	 */
+	/** Generator object */
 	private static Generator generator = null;
 
-	/**
-	 * Map object containing the Atlantis level
-	 */
+	/** Map object containing the Atlantis level */
 	private static Map map = null;
 
 	/**

@@ -38,41 +38,62 @@ import ch.hearc.p2.battleforatlantis.utils.Messages;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
 /**
- * The Panel where the game takes place.
- * 
- * @author sebastie.vaucher
+ * Main panel for playing the game
  */
 public class PanelPlay extends JPanel
 {
-	/** The FrameMain object containing this Panel */
+	/** Main frame displaying the panel */
 	private FrameMain rootFrame;
-	/** The PanelMaps displaying local maps */
+
+	/** Local maps panel */
 	private PanelMaps levelsMe;
-	/** The PanelMaps displaying distant maps */
+
+	/** Distant maps panel */
 	private PanelMaps levelsOther;
 
+	/** Map currently displayed as local map */
 	private Map currentLocalMap;
+
+	/** Map currently displayed as distant map */
 	private Map currentDistantMap;
+
+	/** Logger */
 	private final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+	/** Type of player currently playing */
 	private Player playerPlaying;
 
+	/** Currently selected ship for movement */
 	private Ship selectedShip = null;
 
+	/** Top part of map display for local player */
 	private PanelPlayerInfos infosLocal;
+
+	/** Top part of map display for distant player */
 	private PanelPlayerInfos infosDistant;
 
+	/** Progress bar for local player */
 	public CustomProgress progressLocal;
+
+	/** Progress bar for distant player */
 	public CustomProgress progressDistant;
 
+	/** Bottom stats panel */
 	private PanelStats panelStats;
 
+	/** Box holding the distant player elements for removing them at Atlantis time */
 	private Box boxDistant;
 
+	/** Font for player name */
 	private static final Font fontName = new Font("Arial", Font.BOLD, 20);
+
+	/** Font for level indication */
 	private static final Font fontLevel = new Font("Arial", Font.PLAIN, 14);
+
+	/** Button for going to next level */
 	private JButton btnNextLevel;
 
+	/** Holder preventing a player from shooting 2 times at 1 play tour */
 	private boolean canThreadPlay;
 
 	/**
@@ -80,9 +101,18 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelPlayerInfos extends JPanel
 	{
+		/** Label indicating level number */
 		private JLabel labelLevel;
+
+		/** Indicator of currently playing or not */
 		private boolean playing;
 
+		/**
+		 * Default constructor
+		 * 
+		 * @param playerName Name of player to display
+		 * @param playing True if player is currently playing, else False
+		 */
 		public PanelPlayerInfos(String playerName, boolean playing)
 		{
 			this.setMaximumSize(new Dimension(600, 39));
@@ -104,11 +134,21 @@ public class PanelPlay extends JPanel
 			this.setPlaying(playing);
 		}
 
+		/**
+		 * Set the level number
+		 * 
+		 * @param level New level number to display
+		 */
 		public void setLevelNumber(Integer level)
 		{
 			this.labelLevel.setText(Messages.getString("PanelPlay.Level") + " " + level.toString());
 		}
 
+		/**
+		 * Change the color of the playing indicator (player name background)
+		 * 
+		 * @param playing True if player is playing now, else false
+		 */
 		public void setPlaying(boolean playing)
 		{
 			this.playing = playing;
@@ -138,11 +178,17 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelMaps extends JPanel
 	{
+		/** Layout holding the maps */
 		private CardLayout cards;
+
+		/** Atlanis common map */
 		private Map atlantis;
+
+		/** Player specific maps */
 		private Map[] maps;
 
 		/**
+		 * Default constructor
 		 * 
 		 * @param maps The maps to be shown (usually a reference to FrameMain.getLocal/DistantMaps)
 		 * @param atlantis The Atlantis map object (usually a reference to FrameMain.getAtlantis).
@@ -183,6 +229,9 @@ public class PanelPlay extends JPanel
 			cards.show(this, type.toString());
 		}
 
+		/**
+		 * Remove all maps at Atlantis time
+		 */
 		public void clearMaps()
 		{
 			for (Map map : maps)
@@ -197,32 +246,53 @@ public class PanelPlay extends JPanel
 	 */
 	private class PanelStats extends JPanel
 	{
+		/** Text displayed as statistics informations */
 		private String text;
+
+		/** Number of missed shot */
 		private int missed;
+
+		/** Number of shot that have touched or sank a ship */
 		private int touched;
+
+		/** Number of sank ships */
 		private int sank;
+
+		/** Horizontal cyclic position of text */
 		private int textPosition;
+
+		/** Horizontal cyclic position of border lights */
 		private int lightPosition;
+
+		/** Holds the thread run control */
 		private boolean threadRunning;
 
+		/** Font for displaying the text */
 		private final Font font = new Font("Arial", Font.BOLD, 12);
 
+		/**
+		 * Default constructor
+		 */
 		public PanelStats()
 		{
+			// Initialize values
 			this.missed = 0;
 			this.touched = 0;
 			this.sank = 0;
 
+			// Set visual settings
 			this.setLayout(null);
-
 			this.setBackground(Color.BLACK);
 
+			// Set sizes
 			this.setMinimumSize(new Dimension(100, 100));
 			this.setPreferredSize(new Dimension(2000, 100));
 
+			// Init the rotation
 			this.refreshLabel();
 			this.launchRotation();
 
+			// Place the elements at start position, out of window range
 			this.textPosition = this.getWidth();
 			this.lightPosition = this.getWidth();
 		}
@@ -312,6 +382,9 @@ public class PanelPlay extends JPanel
 			g2d.drawString(this.text, this.textPosition, 57);
 		}
 
+		/**
+		 * Refresh the label content
+		 */
 		private void refreshLabel()
 		{
 			this.text = String.format(Messages.getString("PanelPlay.PanelStatsText"), missed, touched, missed + touched, sank);
@@ -321,9 +394,12 @@ public class PanelPlay extends JPanel
 	}
 
 	/**
-	 * Instantiate a new PanelPlay. All the maps have to be set in FrameMain before calling this constructor !
+	 * <pre>
+	 * Default constructor
+	 * All the maps have to be set in FrameMain before calling this constructor !
+	 * </pre>
 	 * 
-	 * @param rootFrame The application's FrameMain object
+	 * @param rootFrame Main frame in which the panel will be displayed
 	 */
 	public PanelPlay(FrameMain rootFrame)
 	{
@@ -415,8 +491,6 @@ public class PanelPlay extends JPanel
 
 		PlayerProgress.getInstance(Player.LOCAL).calculateTotalProgression(MapType.SURFACE, Settings.FRAME_MAIN.getShips());
 		PlayerProgress.getInstance(Player.DISTANT).calculateTotalProgression(MapType.SURFACE, getDistantShip());
-		// this.progressLocal.setValue(30);
-		// this.progressDistant.setValue(55);
 
 		// Labels for progress bars
 		JLabel labelProgressLocal = new JLabel(Messages.getString("PanelPlay.CurrentLevelStatus"));
@@ -476,6 +550,7 @@ public class PanelPlay extends JPanel
 		infosDistant.setPlaying(!isLocalPlaying);
 		canThreadPlay = true;
 
+		// Set sounds
 		SoundManager.getInstance().playNextLevel(MapType.SURFACE);
 		SoundManager.getInstance().setStream(SoundManager.Stream.SURFACE);
 		SoundManager.getInstance().setMusic(SoundManager.Music.CALM);
@@ -571,7 +646,7 @@ public class PanelPlay extends JPanel
 					PlayerProgress.getInstance(Player.LOCAL).addProgress();
 					progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
 					Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("[PanelPlay::shoot] Progress : " + PlayerProgress.getInstance(Player.LOCAL).getProgess());
-					
+
 					if (statisticRemaining > 1)
 					{
 						panelStats.addTouchedShot();
@@ -691,6 +766,12 @@ public class PanelPlay extends JPanel
 		new MoveAction(ship, ship.getCenter(), ship.getOrientation()).send();
 	}
 
+	/**
+	 * Select a local ship
+	 * 
+	 * @param ship Selected ship
+	 * @param mouseButton Button pressed on mouse
+	 */
 	public void select(Ship ship, int mouseButton)
 	{
 		if (playerPlaying != Player.LOCAL)
@@ -727,7 +808,7 @@ public class PanelPlay extends JPanel
 
 		PlayerProgress.getInstance(Player.LOCAL).nextLevel(Settings.FRAME_MAIN.getShips());
 		progressLocal.setValue(PlayerProgress.getInstance(Player.LOCAL).getProgess());
-		
+
 		MapType oldMap = currentDistantMap.getType();
 
 		MapType newMap = null;
@@ -755,6 +836,9 @@ public class PanelPlay extends JPanel
 		new NextLevelAction(newMap).send();
 	}
 
+	/**
+	 * End the current turn and give the hand to other player
+	 */
 	public void endCurrentTurn()
 	{
 		if (selectedShip != null)
@@ -833,22 +917,41 @@ public class PanelPlay extends JPanel
 		currentDistantMap.resizeComponent();
 	}
 
+	/**
+	 * Get the current level of the given player type
+	 * 
+	 * @param player Player type from which gather current level
+	 * @return Map currently played by player
+	 */
 	public Map getCurrentLevel(Player player)
 	{
 		return player == Player.LOCAL ? currentLocalMap : currentDistantMap;
 	}
 
+	/**
+	 * Init the sizes of maps
+	 */
 	public void initSizes()
 	{
 		currentLocalMap.resizeComponent();
 		currentDistantMap.resizeComponent();
 	}
 
+	/**
+	 * Check if the local player is currently playing
+	 * 
+	 * @return True if the local player is playing, else false
+	 */
 	public boolean isLocalPlayerPlaying()
 	{
 		return playerPlaying == Player.LOCAL;
 	}
-	
+
+	/**
+	 * Get the distant ships collection
+	 * 
+	 * @return Array of distant ships
+	 */
 	public MapElement[] getDistantShip()
 	{
 		Set<Ship> distantShipSet = Settings.FRAME_MAIN.getDistantShips();

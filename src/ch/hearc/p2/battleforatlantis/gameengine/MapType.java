@@ -4,10 +4,18 @@ import java.awt.Image;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
+/**
+ * Enumeration of map types available in game
+ */
 public enum MapType
 {
 	SURFACE, SUBMARINE, ATLANTIS;
 
+	/**
+	 * Get the background of box corresponding to the given map type
+	 * 
+	 * @return Image to put as box background
+	 */
 	public Image getBackground()
 	{
 		switch (name())

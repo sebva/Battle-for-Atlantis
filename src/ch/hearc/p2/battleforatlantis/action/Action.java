@@ -5,6 +5,9 @@ import org.json.JSONObject;
 import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 
+/**
+ * Abstract class for actions management
+ */
 public abstract class Action implements NetworkMessage
 {
 	/**
@@ -19,7 +22,7 @@ public abstract class Action implements NetworkMessage
 	 * Abstract method for action execution, implemented in real actions
 	 */
 	public abstract void execute();
-	
+
 	@Override
 	public abstract JSONObject getJson();
 
@@ -36,6 +39,7 @@ public abstract class Action implements NetworkMessage
 	 * Secondary static constructor for create actions from JSON
 	 * This should be abstract, however a method cannot be static and abstract in Java
 	 * </pre>
+	 * 
 	 * @param jo JSON code to convert to Action
 	 * @return Action ready to be executed
 	 */

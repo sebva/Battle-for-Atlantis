@@ -14,16 +14,15 @@ import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used for Atlantis transmission before the preperation is launched
+ */
 public class AtlantisTransmissionAction extends Action
 {
-	/**
-	 * Atlantis received by network
-	 */
+	/** Atlantis received by network */
 	private Atlantis atlantis;
 
-	/**
-	 * Action name to find the good transmission in network
-	 */
+	/** Action name to find the good transmission in network */
 	public static final String ACTION_NAME = "atlantisTransmission";
 
 	/**
@@ -35,7 +34,7 @@ public class AtlantisTransmissionAction extends Action
 	{
 		this.atlantis = atlantis;
 	}
-	
+
 	@Override
 	public void execute()
 	{
@@ -68,7 +67,7 @@ public class AtlantisTransmissionAction extends Action
 			row++;
 		}
 	}
-	
+
 	@Override
 	public JSONObject getJson()
 	{

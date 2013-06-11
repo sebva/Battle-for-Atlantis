@@ -14,16 +14,31 @@ import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Main panel for displaying the main menu (home page)
+ */
 public class PanelHome extends JPanel
 {
+	/** Main frame in which the panel is displayed */
 	private FrameMain rootFrame;
 
+	/**
+	 * Private panel for right menu display
+	 */
 	private class PanelMenu extends JPanel
 	{
+		/** Button for going to connection panel */
 		private JButton btnSearchForPlayer;
+
+		/** Button for setting player name */
 		private JButton btnSettings;
+
+		/** Button for opening about dialog */
 		private JButton btnAbout;
 
+		/**
+		 * Default constructor
+		 */
 		public PanelMenu()
 		{
 			Box box = Box.createVerticalBox();
@@ -41,6 +56,9 @@ public class PanelHome extends JPanel
 			add(box, BorderLayout.CENTER);
 		}
 
+		/**
+		 * Set the buttons listeners
+		 */
 		private void configButtonListeners()
 		{
 			btnSearchForPlayer.addActionListener(new ActionListener()
@@ -72,6 +90,11 @@ public class PanelHome extends JPanel
 		}
 	}
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param rootFrame Frame in which the panel is displayed
+	 */
 	public PanelHome(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
@@ -88,11 +111,17 @@ public class PanelHome extends JPanel
 		add(boxImage, BorderLayout.WEST);
 	}
 
+	/**
+	 * Go to the connection panel
+	 */
 	public void searchPlayer()
 	{
 		rootFrame.searchPlayer();
 	}
 
+	/**
+	 * Ask for the player name and apply new given value
+	 */
 	public void settings()
 	{
 		String newName = DialogPlayerName.promptUserForName(this, rootFrame.getPlayerName());
@@ -100,14 +129,12 @@ public class PanelHome extends JPanel
 		NetworkManager.getInstance().localhost.setName(newName);
 	}
 
+	/**
+	 * Open the about dialog
+	 */
 	public void about()
 	{
 		new DialogAbout(rootFrame);
-	}
-
-	public void quit()
-	{
-
 	}
 
 }

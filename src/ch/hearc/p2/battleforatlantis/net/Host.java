@@ -7,8 +7,13 @@ import java.util.logging.Logger;
 
 public class Host
 {
+	/** Name given to host */
 	private String name;
+
+	/** INET adress of host */
 	private InetAddress address;
+
+	/** UUID given to host */
 	private UUID uuid;
 
 	/**
@@ -45,12 +50,21 @@ public class Host
 		this.uuid = UUID.randomUUID();
 	}
 
+	/**
+	 * Get the name of host
+	 * 
+	 * @return Host name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
-	// Only for local player !
+	/**
+	 * Defines the name of the player (only for local player)
+	 * 
+	 * @param name New name to set
+	 */
 	public void setName(String name)
 	{
 		if (name != null && !"".equals(name))
@@ -60,11 +74,21 @@ public class Host
 		}
 	}
 
+	/**
+	 * Get adresse of host
+	 * 
+	 * @return Host INET address
+	 */
 	public InetAddress getAddress()
 	{
 		return address;
 	}
 
+	/**
+	 * Get UUID of host
+	 * 
+	 * @return Host UUID
+	 */
 	public UUID getUuid()
 	{
 		return uuid;
@@ -79,6 +103,12 @@ public class Host
 			return false;
 	}
 
+	/**
+	 * Check if this host is the same as another
+	 * 
+	 * @param h Other host
+	 * @return True if the two hosts are the same, else false
+	 */
 	public boolean equals(Host h)
 	{
 		return uuid.equals(h.uuid);

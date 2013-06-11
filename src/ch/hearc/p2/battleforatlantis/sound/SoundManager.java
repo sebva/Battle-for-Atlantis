@@ -2,11 +2,12 @@ package ch.hearc.p2.battleforatlantis.sound;
 
 import ch.hearc.p2.battleforatlantis.gameengine.MapType;
 
+/**
+ * General singleton for management of sounds in application
+ */
 public class SoundManager
 {
-	/**
-	 * Current instance of singleton
-	 */
+	/** Current instance of singleton */
 	private static final SoundManager instance = new SoundManager();
 
 	/**

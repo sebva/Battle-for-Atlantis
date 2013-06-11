@@ -9,16 +9,35 @@ import javax.swing.JComponent;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
+/**
+ * Custom progress bar for the players progression
+ */
 public class CustomProgress extends JComponent
 {
+	/** Minimum value of progress bar (when empty) */
 	private int minimum;
+
+	/** Maximum value of progress bar (when full) */
 	private int maximum;
+
+	/** Current value of progress bar */
 	private int current;
+
+	/** Interval available between min and max */
 	private int interval;
 
+	/** Preferred and standard size */
 	private Dimension preferredSize;
+
+	/** Minmum size for correct display */
 	private Dimension minimumSize;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param minimum Minimum value of bar
+	 * @param maximum Maximum value of bar
+	 */
 	public CustomProgress(int minimum, int maximum)
 	{
 		setBackground(Color.RED);
@@ -36,6 +55,11 @@ public class CustomProgress extends JComponent
 		this.setMaximumSize(preferredSize);
 	}
 
+	/**
+	 * Set the current value of progress
+	 * 
+	 * @param current New progress value
+	 */
 	public void setValue(int current)
 	{
 		if (current >= this.minimum && current <= this.maximum)
@@ -52,11 +76,13 @@ public class CustomProgress extends JComponent
 
 		Graphics2D g2d = (Graphics2D) g;
 
+		// Compute the positions for painting
 		int width = this.getWidth();
 		int filled = this.current - this.minimum;
 		double percent = filled / (double) this.interval;
 		int position = (int) (width * percent);
 
+		// Paint the bar
 		for (int i = 0; i < width - 27; i++)
 		{
 			if (i < position)

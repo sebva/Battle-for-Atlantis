@@ -3,26 +3,21 @@ package ch.hearc.p2.battleforatlantis.gameengine;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Button for managing a ship movement during play
+ */
 public class ShipControl extends MapElement
 {
-	/**
-	 * Ship to control
-	 */
+	/** Ship to control */
 	private Ship ship;
 
-	/**
-	 * Type of ship control
-	 */
+	/** Type of ship control */
 	private ShipControlType type;
 
-	/**
-	 * Center of ship to control
-	 */
+	/** Center of ship to control */
 	private Box center;
 
-	/**
-	 * List of types
-	 */
+	/** List of types */
 	public enum ShipControlType
 	{
 		PLACE_FORWARD, PLACE_BACKWARD
@@ -30,6 +25,7 @@ public class ShipControl extends MapElement
 
 	/**
 	 * Default constructor
+	 * 
 	 * @param ship Ship to control
 	 * @param box Center of ship to control
 	 * @param type Type of control to do
@@ -61,6 +57,7 @@ public class ShipControl extends MapElement
 
 	/**
 	 * Get ship controlled
+	 * 
 	 * @return Ship controlled
 	 */
 	public Ship getAssociatedShip()

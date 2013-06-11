@@ -19,66 +19,45 @@ import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Single box for maps construction
+ */
 public class Box extends JPanel implements JSONString
 {
-	/**
-	 * Discover marker, true when box has been shot by ennemy
-	 */
+	/** Discover marker, true when box has been shot by ennemy */
 	private boolean discovered = false;
 
-	/**
-	 * Image for displaying box content (water)
-	 */
+	/** Image for displaying box content (water) */
 	private Image imageBox;
 
-	/**
-	 * Image for displaying correct part of boat in box
-	 */
+	/** Image for displaying correct part of boat in box */
 	private Image imageOccupier = null;
 
-	/**
-	 * Image for war fog
-	 */
+	/** Image for war fog */
 	private Image imageOverlay = null;
 
-	/**
-	 * Map to which this box belong
-	 */
+	/** Map to which this box belong */
 	private Map map;
 
-	/**
-	 * Occupier of this box, or null if not
-	 */
+	/** Occupier of this box, or null if not */
 	private MapElement occupier;
 
-	/**
-	 * Type of box (surface, submarine, atlantis)
-	 */
+	/** Type of box (surface, submarine, atlantis) */
 	private MapType type;
 
-	/**
-	 * Preferred dimension of box
-	 */
+	/** Preferred dimension of box */
 	private Dimension sizePreferred;
 
-	/**
-	 * Minimal dimension of box
-	 */
+	/** Minimal dimension of box */
 	private Dimension sizeMinimal;
 
-	/**
-	 * Registered dimension
-	 */
+	/** Registered dimension */
 	private int size;
 
-	/**
-	 * Horizontal coordinate of box in map (left-side is 0)
-	 */
+	/** Horizontal coordinate of box in map (left-side is 0) */
 	private int x;
 
-	/**
-	 * Vertical coordinate of box in map (upper-side is 0)
-	 */
+	/** Vertical coordinate of box in map (upper-side is 0) */
 	private int y;
 
 	/**
@@ -178,6 +157,7 @@ public class Box extends JPanel implements JSONString
 
 	/**
 	 * Set size of box from map size
+	 * 
 	 * @param size New size of box
 	 */
 	public void setSizeFromMap(int size)
@@ -271,6 +251,7 @@ public class Box extends JPanel implements JSONString
 
 	/**
 	 * Set the image for displaying occupier of box
+	 * 
 	 * @param img New image
 	 */
 	protected void setImage(Image img)
@@ -313,6 +294,7 @@ public class Box extends JPanel implements JSONString
 
 	/**
 	 * Check if this box has been discovered
+	 * 
 	 * @return True if box is discovered, else false
 	 */
 	public boolean isDiscovered()

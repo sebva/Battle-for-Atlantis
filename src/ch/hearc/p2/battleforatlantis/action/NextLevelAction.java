@@ -9,11 +9,12 @@ import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used to go to the next level
+ */
 public class NextLevelAction extends Action implements NetworkMessage
 {
-	/**
-	 * New map type to be applied
-	 */
+	/** New map type to be applied */
 	private MapType map;
 
 	/**
@@ -23,7 +24,7 @@ public class NextLevelAction extends Action implements NetworkMessage
 	{
 		this.map = map;
 	}
-	
+
 	@Override
 	public void execute()
 	{
@@ -38,14 +39,14 @@ public class NextLevelAction extends Action implements NetworkMessage
 			default:
 				break;
 		}
-		
+
 		PlayerProgress.getInstance(Player.DISTANT).nextLevel(Settings.PANEL_PLAY.getDistantShip());
 		Settings.PANEL_PLAY.progressDistant.setValue(PlayerProgress.getInstance(Player.DISTANT).getProgess());
-		
+
 		Settings.PANEL_PLAY.setActiveMap(map, Player.LOCAL);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}
-	
+
 	@Override
 	public JSONObject getJson()
 	{

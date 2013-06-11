@@ -9,21 +9,18 @@ import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used to move a ship during the play
+ */
 public class MoveAction extends Action implements NetworkMessage
 {
-	/**
-	 * Ship making the action
-	 */
+	/** Ship making the action */
 	private Ship ship;
 
-	/**
-	 * Box on which the operation is performed. Represents the center of the boat
-	 */
+	/** Box on which the operation is performed. Represents the center of the boat */
 	private Box center;
 
-	/**
-	 * Orientation of the ship
-	 */
+	/** Orientation of the ship */
 	private ShipOrientation orientation;
 
 	/**
@@ -39,7 +36,7 @@ public class MoveAction extends Action implements NetworkMessage
 		this.center = center;
 		this.orientation = orientation;
 	}
-	
+
 	@Override
 	public void execute()
 	{
@@ -47,7 +44,7 @@ public class MoveAction extends Action implements NetworkMessage
 		ship.move(center, orientation);
 		Settings.PANEL_PLAY.endCurrentTurn();
 	}
-	
+
 	@Override
 	public JSONObject getJson()
 	{

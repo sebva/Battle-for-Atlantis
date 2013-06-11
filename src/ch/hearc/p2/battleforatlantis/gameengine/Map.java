@@ -20,51 +20,36 @@ import ch.hearc.p2.battleforatlantis.gameengine.ShipControl.ShipControlType;
 import ch.hearc.p2.battleforatlantis.ui.PanelPrepare;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Single resizable map for displaying a map and its contents (boxes, fog, ships...)
+ */
 public class Map extends JPanel implements JSONString
 {
-	/**
-	 * Number of columns
-	 */
+	/** Number of columns */
 	private int width;
 
-	/**
-	 * Number of lines
-	 */
+	/** Number of lines */
 	private int height;
 
-	/**
-	 * Size of boxes
-	 */
+	/** Size of boxes */
 	private int sizeBox;
 
-	/**
-	 * Map type (surface, submarine, atlantis)
-	 */
+	/** Map type (surface, submarine, atlantis) */
 	private MapType type;
 
-	/**
-	 * Array of boxes which compose the map, in order [line, column]
-	 */
+	/** Array of boxes which compose the map, in order [line, column] */
 	private Box[][] boxes;
 
-	/**
-	 * Listener for click on boxes in preparation panel
-	 */
+	/** Listener for click on boxes in preparation panel */
 	private MouseListener preparationListener;
 
-	/**
-	 * Listener for click on boxes in game panel
-	 */
+	/** Listener for click on boxes in game panel */
 	private MouseListener gameListener;
 
-	/**
-	 * Internal panel
-	 */
+	/** Internal panel */
 	private InternalPanel internalPanel;
 
-	/**
-	 * Indicated if this map is a local map. For Atlantis, it should set to true
-	 */
+	/** Indicated if this map is a local map. For Atlantis, it should set to true */
 	private boolean isLocal;
 
 	/**
@@ -256,6 +241,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Get the height of map in boxes
+	 * 
 	 * @return Height of map
 	 */
 	public int getMapHeight()
@@ -265,6 +251,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Get the width of map in boxes
+	 * 
 	 * @return Width of map
 	 */
 	public int getMapWidth()
@@ -274,6 +261,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Check if the map is local
+	 * 
 	 * @return True if the map is local, else false
 	 */
 	public boolean isLocal()
@@ -283,6 +271,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Get the boxes in which place controls for moving ship
+	 * 
 	 * @param ship Ship to which add controls
 	 * @return List of box
 	 */
@@ -310,6 +299,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Add ships controls
+	 * 
 	 * @param ship Ship to which add controls
 	 */
 	public void addShipControls(Ship ship)
@@ -328,6 +318,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Remove ships controls
+	 * 
 	 * @param ship Ship from which remove controls
 	 */
 	public void removeShipControls(Ship ship)
@@ -363,6 +354,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Create a map from a JSON object
+	 * 
 	 * @param jo JSON object received on network
 	 * @return Map to use
 	 */
@@ -396,6 +388,7 @@ public class Map extends JPanel implements JSONString
 
 	/**
 	 * Check if the map is finished
+	 * 
 	 * @return True if the map is finished
 	 */
 	public boolean isFinished()

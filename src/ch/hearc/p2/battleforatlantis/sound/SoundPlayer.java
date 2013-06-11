@@ -1,22 +1,22 @@
 package ch.hearc.p2.battleforatlantis.sound;
 
+/**
+ * Player able to read a looping song without interruption
+ */
 public class SoundPlayer
 {
-	/**
-	 * First engine for playing odd cues
-	 */
+	/** First engine for playing odd cues */
 	private SoundEngine odd;
 
-	/**
-	 * Second engine for playing even cues
-	 */
+	/** Second engine for playing even cues */
 	private SoundEngine even;
 
-	/**
-	 * Loop mode
-	 */
+	/** Loop mode */
 	private LoopMode loop;
 
+	/**
+	 * Enumeration for looping mode
+	 */
 	public enum LoopMode
 	{
 		LOOP, ONCE

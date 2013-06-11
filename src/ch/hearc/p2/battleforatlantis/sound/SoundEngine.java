@@ -13,73 +13,58 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * Low-level sound engine for playing WAV songs
+ */
 public class SoundEngine
 {
-	/**
-	 * Thread for running deck play actions
-	 */
+	/** Thread for running deck play actions */
 	private Thread deck;
 
-	/**
-	 * Name of file to read
-	 */
+	/** Name of file to read */
 	private String filename;
 
-	/**
-	 * Cue point to use in reading procedure
-	 */
+	/** Cue point to use in reading procedure */
 	private Position cue;
 
-	/**
-	 * Source file to read
-	 */
+	/** Source file to read */
 	private URL source;
 
-	/**
-	 * Stream generated from source file for read operations
-	 */
+	/** Stream generated from source file for read operations */
 	private AudioInputStream stream;
 
-	/**
-	 * Status of engine
-	 */
+	/** Status of engine */
 	private Status status;
 
-	/**
-	 * Format of file to pass to output line
-	 */
+	/** Format of file to pass to output line */
 	private AudioFormat format;
 
-	/**
-	 * Output line for writing to speakers
-	 */
+	/** Output line for writing to speakers */
 	private SourceDataLine line;
 
-	/**
-	 * Informations on line
-	 */
+	/** Informations on line */
 	private DataLine.Info info;
 
-	/**
-	 * Twin engine semaphore for syncing dual playing
-	 */
+	/** Twin engine semaphore for syncing dual playing */
 	private Semaphore twin;
 
-	/**
-	 * Loop posistor
-	 */
+	/** Loop posistor */
 	private boolean loop;
 
-	/**
-	 * Size of buffer (do not touch !)
-	 */
+	/** Size of buffer (do not touch !) */
 	private final int EXTERNAL_BUFFER_SIZE = 524288;
 
+	/**
+	 * Enumeration of positions for standard player settings
+	 */
 	enum Position
 	{
 		LEFT, RIGHT, NORMAL
 	};
 
+	/**
+	 * Status of engine
+	 */
 	public enum Status
 	{
 		BLANK, LOADING, READY, PLAYING, PAUSED, FINISHED

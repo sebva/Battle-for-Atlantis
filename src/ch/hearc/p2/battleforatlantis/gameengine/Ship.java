@@ -17,36 +17,27 @@ import org.json.JSONString;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Ship representation for placing, managing and displaying itself (boat or submarine)
+ */
 public class Ship extends MapElement implements JSONString
 {
-	/**
-	 * ID of the ship. Used to identify the ships of the player
-	 */
+	/** ID of the ship. Used to identify the ships of the player */
 	private int id;
 
-	/**
-	 * Type of ship (ship, submarine)
-	 */
+	/** Type of ship (ship, submarine) */
 	private ShipType type;
 
-	/**
-	 * Images list of the ship
-	 */
+	/** Images list of the ship */
 	private Image[] initialImages;
 
-	/**
-	 * Box considered as ship's center
-	 */
+	/** Box considered as ship's center */
 	private Box center = null;
 
-	/**
-	 * Ship orientation, default EAST (front looks on screen's right)
-	 */
+	/** Ship orientation, default EAST (front looks on screen's right) */
 	private ShipOrientation orientation = ShipOrientation.EAST;
 
-	/**
-	 * Color of background
-	 */
+	/** Color of background */
 	private Color backgroundColor;
 
 	/**
@@ -378,6 +369,7 @@ public class Ship extends MapElement implements JSONString
 
 	/**
 	 * Set background color for ship displayed in menu
+	 * 
 	 * @param color Color to apply
 	 */
 	public void setBackgroundColor(Color color)
@@ -388,6 +380,7 @@ public class Ship extends MapElement implements JSONString
 
 	/**
 	 * Place the ship on play panel, using one direction
+	 * 
 	 * @param forward True if ship must move forward, else False
 	 */
 	public void place(boolean forward)
@@ -508,6 +501,7 @@ public class Ship extends MapElement implements JSONString
 
 	/**
 	 * Check if rotation is possible
+	 * 
 	 * @param clockwise True if rotation is clockwise, else False
 	 * @return True if rotation is possible, else False
 	 */

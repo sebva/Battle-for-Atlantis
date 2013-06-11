@@ -10,11 +10,12 @@ import ch.hearc.p2.battleforatlantis.gameengine.Map;
 import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used to start the game after the ships have been placed
+ */
 public class StartGameAction extends Action implements NetworkMessage
 {
-	/**
-	 * Set of maps belonging to the opponent player
-	 */
+	/** Set of maps belonging to the opponent player */
 	private Set<Map> mapSet;
 
 	/**
@@ -34,7 +35,7 @@ public class StartGameAction extends Action implements NetworkMessage
 
 		Settings.PANEL_PREPARE.dismissWaitDialog();
 	}
-	
+
 	@Override
 	public JSONObject getJson()
 	{

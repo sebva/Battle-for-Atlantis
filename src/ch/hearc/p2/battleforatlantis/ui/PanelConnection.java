@@ -28,37 +28,72 @@ import ch.hearc.p2.battleforatlantis.net.NetworkManager;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Main panel for displaying connections options
+ */
 public class PanelConnection extends JPanel implements NetworkAutodiscoverListener
 {
+	/** Default horizontal gap in layouts */
 	private static final int kHgap = 30;
+
+	/** Default vertical gap in layouts */
 	private static final int kVgap = 0;
 
+	/** Preferred standard dimension */
 	private static final Dimension preferredSize = new Dimension(800, 30);
+
+	/** Minimal dimension for correct display */
 	private static final Dimension minimalSize = new Dimension(300, 30);
+
+	/** Size of buttons */
 	private static final Dimension buttonSize = new Dimension(140, 24);
 
+	/** Color of active border */
 	private static final Color colorBorderActive = new Color(112, 112, 112);
+
+	/** Color of grey backgrounds active */
 	private static final Color colorGreyActive = new Color(67, 67, 67);
+
+	/** Color of inactive border */
 	private static final Color colorBorderNone = new Color(50, 50, 50);
+
+	/** Color of inactive grey background */
 	private static final Color colorGreyNone = new Color(24, 24, 24);
+
+	/** Color of standard blue */
 	private static final Color colorBlue = new Color(0, 159, 190);
 
+	/** Main frame containing the panel */
 	private FrameMain rootFrame;
+
+	/** Network manager used for communications */
 	private NetworkManager networkManager;
+
+	/** List of players available in autodiscover */
 	private Map<Host, PanelPlayer> players;
+
+	/** Box layout for displaying players available */
 	private Box boxPlayers;
 
+	/**
+	 * Private class for displaying a player
+	 */
 	private class PanelPlayer extends JPanel
 	{
+		/** Indicates if the mouse is hovering the player line */
 		private boolean isHover;
 
+		/**
+		 * Default constructor
+		 * 
+		 * @param player Player linked to host
+		 */
 		public PanelPlayer(final Host player)
 		{
 			setLayout(new BorderLayout(0, 0));
 
 			JLabel labelPlayer = new JLabel(player.getName());
 			labelPlayer.setBorder(BorderFactory.createEmptyBorder(0, 7, 5, 0));
-			// labelPlayer.setAlignmentY(CENTER_ALIGNMENT);
 			final JButton btnConnect = new ButtonConnect(Messages.getString("PanelConnection.Connect"));
 
 			this.isHover = false;
@@ -99,7 +134,6 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 
 			addMouseListener(mouseAdapter);
 			btnConnect.addMouseListener(mouseAdapter);
-			// btnConnect.setAlignmentY(CENTER_ALIGNMENT);
 
 			add(labelPlayer, BorderLayout.WEST);
 			add(btnConnect, BorderLayout.EAST);
@@ -141,8 +175,16 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		}
 	}
 
+	/**
+	 * Private class for displaying the connection button of a player
+	 */
 	private class ButtonConnect extends JButton
 	{
+		/**
+		 * Default constructor
+		 * 
+		 * @param text Text to display on button
+		 */
 		public ButtonConnect(String text)
 		{
 			super(text);
@@ -170,11 +212,20 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		}
 	}
 
+	/**
+	 * Private class for right menu
+	 */
 	private class PanelMenu extends JPanel
 	{
+		/** Button for access the direct connection dialog */
 		private JButton btnDirectConnect;
+
+		/** Button for going back to the menu */
 		private JButton btnBack;
 
+		/**
+		 * Default constructor
+		 */
 		public PanelMenu()
 		{
 			setLayout(new BorderLayout());
@@ -191,6 +242,9 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 			add(box, BorderLayout.CENTER);
 		}
 
+		/**
+		 * Configure listeners for the buttons
+		 */
 		private void configButtonListeners()
 		{
 			btnDirectConnect.addActionListener(new ActionListener()
@@ -213,8 +267,14 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		}
 	}
 
+	/**
+	 * Private class for top panel display
+	 */
 	private class PanelUp extends JPanel
 	{
+		/**
+		 * Default constructor
+		 */
 		public PanelUp()
 		{
 			setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -227,6 +287,11 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		}
 	}
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param rootFrame Frame in which the panel is displayed
+	 */
 	public PanelConnection(FrameMain rootFrame)
 	{
 		this.rootFrame = rootFrame;
@@ -243,11 +308,19 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 		add(new PanelUp(), BorderLayout.NORTH);
 	}
 
+	/**
+	 * Connect to a given host
+	 * 
+	 * @param host Host to join
+	 */
 	public void connect(Host host)
 	{
 		networkManager.tryConnect(host.getAddress(), rootFrame.getHashConfig());
 	}
 
+	/**
+	 * Open the dialog for direct connection and join given host
+	 */
 	public void directConnect()
 	{
 		InetAddress addr = DialogDirectConnect.promptUserForAddress(this);
@@ -255,6 +328,9 @@ public class PanelConnection extends JPanel implements NetworkAutodiscoverListen
 			networkManager.tryConnect(addr, rootFrame.getHashConfig());
 	}
 
+	/**
+	 * Go back to main menu
+	 */
 	public void backToMenu()
 	{
 		rootFrame.endGame();

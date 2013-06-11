@@ -6,6 +6,9 @@ import javax.swing.JOptionPane;
 
 import ch.hearc.p2.battleforatlantis.utils.Messages;
 
+/**
+ * Dialog for asking the player name when configuring application
+ */
 public class DialogPlayerName
 {
 	/**

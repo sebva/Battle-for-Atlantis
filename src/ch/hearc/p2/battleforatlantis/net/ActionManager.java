@@ -16,11 +16,22 @@ import ch.hearc.p2.battleforatlantis.gameengine.Atlantis;
 import ch.hearc.p2.battleforatlantis.gameinit.AtlantisCreator;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Class responsible of actions execution when received from network
+ */
 public class ActionManager
 {
+	/** Logger */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+	/** Network manager holding network connection */
 	private NetworkManager nw;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param nw Network manager to use for communicate with other PC
+	 */
 	public ActionManager(NetworkManager nw)
 	{
 		this.nw = nw;
@@ -44,6 +55,7 @@ public class ActionManager
 			return;
 
 		log.info("Received : " + jo.toString(2));
+
 		// Routing the packet to the correct object
 		switch (jo.getString("action"))
 		{

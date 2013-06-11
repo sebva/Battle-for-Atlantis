@@ -16,8 +16,13 @@ import ch.hearc.p2.battleforatlantis.utils.Settings;
  */
 public class CustomButton extends JButton
 {
+	/** Text of button */
 	private String text;
+
+	/** Dimension of button */
 	private Dimension dimension;
+
+	/** Font for text on button */
 	private Font font;
 
 	/**

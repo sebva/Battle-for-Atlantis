@@ -4,51 +4,36 @@ import java.util.logging.Logger;
 
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 
+/**
+ * Generator representation for placing, managing and displaying itself
+ */
 public class Generator extends MapElement
 {
-	/**
-	 * Position X of generator
-	 */
+	/** Position X of generator */
 	private int positionX;
 
-	/**
-	 * Position Y of generator
-	 */
+	/** Position Y of generator */
 	private int positionY;
 
-	/**
-	 * Logger
-	 */
+	/** Logger */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-	/**
-	 * Size of generator (X)
-	 */
+	/** Size of generator (X) */
 	private static int sizeX = 1;
 
-	/**
-	 * Size of generator (Y)
-	 */
+	/** Size of generator (Y) */
 	private static int sizeY = 1;
 
-	/**
-	 * Box on which generator is placed
-	 */
+	/** Box on which generator is placed */
 	private Box box;
 
-	/**
-	 * Atlantis that this generator is protecting
-	 */
+	/** Atlantis that this generator is protecting */
 	private Atlantis atlantis;
 
-	/**
-	 * Distance in X between Atlantis and generator
-	 */
+	/** Distance in X between Atlantis and generator */
 	private static int distanceX = 2;
 
-	/**
-	 * Distance in Y between Atlantis and generator
-	 */
+	/** Distance in Y between Atlantis and generator */
 	private static int distanceY = 2;
 
 	/**

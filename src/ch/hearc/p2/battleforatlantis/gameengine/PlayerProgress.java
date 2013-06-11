@@ -4,36 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * Management of player progress into current level
+ */
 public class PlayerProgress
 {
-	/**
-	 * Player type (local or distant)
-	 */
+	/** Player type (local or distant) */
 	private Player playerType;
-	
-	/**
-	 * Map type (surface, submarine, atlantis)
-	 */
+
+	/** Map type (surface, submarine, atlantis) */
 	private MapType levelMap = null;
-	
-	/**
-	 * Total progress needed for the map
-	 */
+
+	/** Total progress needed for the map */
 	private Map<MapType, Integer> totalProgress;
-	
-	
-	/**
-	 * Achieved progress on the map
-	 */
+
+	/** Achieved progress on the map */
 	private Map<MapType, Integer> currentProgress;
 
-	/**
-	 * Instances ready to be used
-	 */
+	/** Instances ready to be used */
 	private static Map<Player, PlayerProgress> instances = new HashMap<Player, PlayerProgress>();
 
 	/**
 	 * Default constructor
+	 * 
 	 * @param playerType Type of player
 	 */
 	public PlayerProgress(Player playerType)
@@ -46,19 +39,20 @@ public class PlayerProgress
 
 	/**
 	 * Get the current instance for a player
+	 * 
 	 * @param playerType Type of player
 	 * @return Instance of PanelProgress to use
 	 */
 	public static synchronized PlayerProgress getInstance(Player playerType)
 	{
 		PlayerProgress instance = instances.get(playerType);
-		
+
 		if (instance == null)
 		{
 			instance = new PlayerProgress(playerType);
 			instances.put(playerType, instance);
 		}
-		
+
 		return instance;
 	}
 
@@ -75,6 +69,7 @@ public class PlayerProgress
 
 	/**
 	 * Get current progress
+	 * 
 	 * @return Current progress
 	 */
 	public int getProgess()
@@ -84,6 +79,7 @@ public class PlayerProgress
 
 	/**
 	 * Get progress for a given map type
+	 * 
 	 * @param levelMap Map type
 	 * @return Current progress
 	 */
@@ -110,6 +106,7 @@ public class PlayerProgress
 
 	/**
 	 * Go to next level
+	 * 
 	 * @param shipList List of ships to consider in computation
 	 */
 	public void nextLevel(MapElement[] shipList)
@@ -120,6 +117,7 @@ public class PlayerProgress
 
 	/**
 	 * Go to next level
+	 * 
 	 * @param totalProgressionValue Value of total progress to directly consider
 	 */
 	public void nextLevel(int totalProgressionValue)
@@ -130,6 +128,7 @@ public class PlayerProgress
 
 	/**
 	 * Calculate total progression possible
+	 * 
 	 * @param levelMap Type of level
 	 * @param shipList List of ships to consider
 	 */
@@ -173,6 +172,7 @@ public class PlayerProgress
 
 	/**
 	 * Calculate total progression possible
+	 * 
 	 * @param levelMap Type of level
 	 * @param totalProgressionValue Value of total progression
 	 */
@@ -185,6 +185,7 @@ public class PlayerProgress
 
 	/**
 	 * Get type of player in current progress instance
+	 * 
 	 * @return Type of player
 	 */
 	public Player getPlayerType()

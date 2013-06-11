@@ -16,11 +16,12 @@ import ch.hearc.p2.battleforatlantis.net.NetworkMessage;
 import ch.hearc.p2.battleforatlantis.sound.SoundManager;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Action used to shoot at a box
+ */
 public class ShootAction extends Action implements NetworkMessage
 {
-	/**
-	 * Box target of the shoot
-	 */
+	/** Box target of the shoot */
 	private Box target;
 
 	/**
@@ -32,7 +33,7 @@ public class ShootAction extends Action implements NetworkMessage
 	{
 		this.target = target;
 	}
-	
+
 	@Override
 	public void execute()
 	{
@@ -70,7 +71,7 @@ public class ShootAction extends Action implements NetworkMessage
 						}
 					}).start();
 				}
-				
+
 				// Ship is going to be sank
 				else
 				{
@@ -95,7 +96,7 @@ public class ShootAction extends Action implements NetworkMessage
 					}).start();
 				}
 			}
-			
+
 			// If we shot on the generator
 			else if (occupier instanceof Generator)
 			{
@@ -119,7 +120,7 @@ public class ShootAction extends Action implements NetworkMessage
 					}
 				}).start();
 			}
-			
+
 			// If we shot on the atlantis
 			else if (occupier instanceof Atlantis)
 			{
@@ -128,7 +129,7 @@ public class ShootAction extends Action implements NetworkMessage
 				{
 					soundDelay = SoundManager.getInstance().playShootAtlantis(SoundManager.Atlantis.CITY);
 				}
-				
+
 				// If Atlantis is not destroyable
 				else
 				{
@@ -167,7 +168,7 @@ public class ShootAction extends Action implements NetworkMessage
 				{
 					e.printStackTrace();
 				}
-				
+
 				if (occupier != null)
 				{
 					PlayerProgress.getInstance(Player.DISTANT).addProgress();

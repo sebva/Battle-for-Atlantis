@@ -9,8 +9,12 @@ import javax.imageio.ImageIO;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipOrientation;
 import ch.hearc.p2.battleforatlantis.gameengine.ShipType;
 
+/**
+ * Static collection of images
+ */
 public final class ImageShop
 {
+	// Folders strings
 	private static final String IMAGES_FOLDER = "img/";
 	private static final String GAMEITEMS_FOLDER = IMAGES_FOLDER + "gameitems/";
 	private static final String UI_FOLDER = IMAGES_FOLDER + "ui/";
@@ -21,6 +25,7 @@ public final class ImageShop
 	private static final String ARROWS_FOLDER = GAMEITEMS_FOLDER + "arrows/";
 	private static final String BOXSTATE_FOLDER = GAMEITEMS_FOLDER + "boxstate/";
 
+	// Files strings
 	private static final String KEYWORD_ATLANTIS = "atlantis";
 	private static final String KEYWORD_SHIELD = "bouclier";
 	private static final String KEYWORD_GENERATOR = "generateur";
@@ -30,32 +35,50 @@ public final class ImageShop
 	private static final String KEYWORD_BROKEN = "cassé";
 	private static final String KEYWORD_INTACT = "entier";
 
+	// Files format strings
 	private static final String EXTENSION = ".png";
 	private static final String SEPARATOR = "_";
 
+	// Backgrounds images
 	public static final Image BACKGROUND_ATLANTIS = loadImage(BACKGOUNDS_FOLDER + "case_fond_atlantide.png");
 	public static final Image BACKGROUND_SUBMARINE = loadImage(BACKGOUNDS_FOLDER + "case_fond_sousmarin.png");
 	public static final Image BACKGROUND_SURFACE = loadImage(BACKGOUNDS_FOLDER + "case_fond_surface.png");
 
+	// War fog states
 	public static final Image STATE_SHOT = loadImage(BOXSTATE_FOLDER + "fire.png");
 	public static final Image STATE_NOT_DISCOVERED = loadImage(BOXSTATE_FOLDER + "fog.png");
 
+	// General UI elements
 	public static final Image UI_BUTTON = loadImage(UI_FOLDER + "bouton.png");
 	public static final Image UI_MENU_BACKGROUND = loadImage(UI_FOLDER + "image_menu.png");
 	public static final Image UI_LOGO = loadImage(UI_FOLDER + "logo.png");
 	public static final Image UI_HE_ARC = loadImage(UI_FOLDER + "hearc.png");
 
+	// Arrows for players list
 	public static final Image UI_ARROW_DARK = loadImage(UI_FOLDER + "connect_arrow_dark.png");
 	public static final Image UI_ARROW_LIGHT = loadImage(UI_FOLDER + "connect_arrow_light.png");
 
+	// Player names markers
 	public static final Image UI_PLAYERNAME_YES = loadImage(UI_FOLDER + "playername_yes.png");
 	public static final Image UI_PLAYERNAME_NO = loadImage(UI_FOLDER + "playername_no.png");
+
+	// Progress bars components
 	public static final Image UI_PROGRESS_YES = loadImage(UI_FOLDER + "progress_yes.png");
 	public static final Image UI_PROGRESS_NO = loadImage(UI_FOLDER + "progress_no.png");
 
+	// Rotative stats components
 	public static final Image UI_DEFIL_BACKGROUND = loadImage(UI_FOLDER + "defil_background.png");
 	public static final Image UI_DEFIL_LIGHT = loadImage(UI_FOLDER + "defil_light.png");
 
+	/**
+	 * Get the image for a ship part
+	 * 
+	 * @param ship Ship type concerned (surface or submarine)
+	 * @param shipNumber Total size of boat
+	 * @param partNumber Current part needed
+	 * @param broken True if the broken part is needed, else false
+	 * @return Image ready to be used
+	 */
 	public static BufferedImage loadShipImage(ShipType ship, int shipNumber, int partNumber, boolean broken)
 	{
 		StringBuilder filename = new StringBuilder();
@@ -82,6 +105,14 @@ public final class ImageShop
 		return loadImage(filename.toString());
 	}
 
+	/**
+	 * Get the image for an Atlantis part
+	 * 
+	 * @param row Row number of atlanis
+	 * @param col Column number of atlantis
+	 * @param shieldActivated True if the image should be loaded with shield over Atlantis, else False
+	 * @return Image ready to be used
+	 */
 	public static BufferedImage loadAtlantisImage(int row, int col, boolean shieldActivated)
 	{
 		StringBuilder filename = new StringBuilder();
@@ -102,6 +133,12 @@ public final class ImageShop
 		return loadImage(filename.toString());
 	}
 
+	/**
+	 * Load the image for the generator
+	 * 
+	 * @param destroyed True if the image should be loaded from a broken generator, else False
+	 * @return Image ready to be used
+	 */
 	public static BufferedImage loadGeneratorImage(boolean destroyed)
 	{
 		StringBuilder filename = new StringBuilder();
@@ -118,6 +155,12 @@ public final class ImageShop
 		return loadImage(filename.toString());
 	}
 
+	/**
+	 * Load an image
+	 * 
+	 * @param filename Name of file containing the image
+	 * @return Image ready to be used
+	 */
 	public static BufferedImage loadImage(String filename)
 	{
 		try
@@ -166,6 +209,12 @@ public final class ImageShop
 		}
 	}
 
+	/**
+	 * Load the image corresponding to a movement arrow
+	 * 
+	 * @param imageOrientation Orientation of the arrow
+	 * @return Image ready to be used
+	 */
 	public static BufferedImage loadPlaceArrow(ShipOrientation imageOrientation)
 	{
 		StringBuilder filename = new StringBuilder();

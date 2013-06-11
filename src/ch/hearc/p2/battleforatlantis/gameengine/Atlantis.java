@@ -9,61 +9,42 @@ import java.util.logging.Logger;
 import ch.hearc.p2.battleforatlantis.utils.ImageShop;
 import ch.hearc.p2.battleforatlantis.utils.Settings;
 
+/**
+ * Atlantis representation for placing, managing and displaying itself
+ */
 public class Atlantis extends MapElement
 {
-	/**
-	 * Dimensions of Atlantis
-	 */
+	/** Dimensions of Atlantis */
 	private int width, height;
 
-	/**
-	 * Destroyable attribute
-	 */
+	/** Destroyable attribute */
 	private boolean destroyable;
 
-	/**
-	 * Initial images
-	 */
+	/** Initial images */
 	private BufferedImage[][] images;
 
-	/**
-	 * List of box occupied by element
-	 */
+	/** List of box occupied by element */
 	private Box[][] occupied;
 
-	/**
-	 * Map on which element is placed
-	 */
+	/** Map on which element is placed */
 	private Map map;
 
-	/**
-	 * Generator of the shield
-	 */
+	/** Generator of the shield */
 	private Generator shieldGenerator = null;
 
-	/**
-	 * Position X of Atlantis
-	 */
+	/** Position X of Atlantis */
 	private int positionX;
-	
-	/**
-	 * Position Y of Atlantis
-	 */
+
+	/** Position Y of Atlantis */
 	private int positionY;
 
-	/**
-	 * Width of map
-	 */
+	/** Width of map */
 	private int mapWidth;
-	
-	/**
-	 * Height of map
-	 */
+
+	/** Height of map */
 	private int mapHeight;
 
-	/**
-	 * Logger
-	 */
+	/** Logger */
 	private Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
@@ -222,6 +203,7 @@ public class Atlantis extends MapElement
 
 	/**
 	 * Set the generator associed with this city
+	 * 
 	 * @param gen Generator to assocy
 	 */
 	public void setGenerator(Generator gen)
