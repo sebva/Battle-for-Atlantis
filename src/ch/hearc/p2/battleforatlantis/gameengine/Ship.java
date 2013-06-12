@@ -73,7 +73,7 @@ public class Ship extends MapElement implements JSONString
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				if (center == null)
+				if (center == null || (center != null && center.getOccupier() != Ship.this))
 					Settings.PANEL_PREPARE.shipClick(Ship.this);
 			}
 		});
